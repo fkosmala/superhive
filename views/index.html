@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ settings.title }}</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.3.0/milligram.min.css">
+  <link rel="stylesheet" href="./style.css">
+
+  <link rel="canonical" href="https://peakd.com/@{{ settings.author }}" />
+</head>
+
+<body>
+  <header class="photo">
+    <div class="container photo-text">
+      <h1 class="iam">{{ settings.title }}</h1>
+      <p>{{ settings.baseline }}</p>
+    </div>
+  </header>
+
+  <div id="hiveblog" class="container">
+    {% for article in articles %}
+      {% if article.author == settings.author %}
+        <article>
+          <small>{{ article.created|date("m/d/Y") }}</small>
+          <h2 class="modal" id="a{{ article.post_id }}"><a href="#a{{ article.post_id }}">{{ article.title }}</a></h2>
+          <div class="full-content">{{ article.body }}</div>
+          <div class="content">
+            {{ article.body|slice(0,250) }}...
+          </div>
+        </article>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  <div class="text-center">
+    <a class="button" href="https://peakd.com/@{{ settings.author }}">{{ settings.nextbutton }}</a>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cash/7.0.1/cash.min.js" integrity="sha256-cP4vwprtrs4i6th5S3ysmrRUfhdEyHA5MlBxaOwQ+/s=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.1/showdown.min.js" integrity="sha256-jl1+DOsSs9uABTKppOJ2GF8kXoc3XQzBtFFyS0i9Xoo=" crossorigin="anonymous"></script>
+  <script>
+  $(function() {
+    converter = new showdown.Converter();
+    $('.full-content').each(function() {
+      text = $(this).text();
+      if (text.indexOf("This is a cross post") >= 0) {
+        tmplink = text.substring(text.indexOf("]("));
+        link = "https://peakd.com"+tmplink.substring(2, tmplink.indexOf(")"))
+        tmpdesc = text.substring(text.indexOf("<br><br>"));
+        desc = tmpdesc.substring(8);
+        $(this).html('<p>'+desc+'</p><div class="text-center"><a target="_blank" href="'+link+'" class="button">Go to article</button></div>');
+        $(this).parents('article').find('.content').text('Cross-post : '+desc);
+      } else {
+        let mdImg = new RegExp(/\]\(https?:\/\/(?:[-a-zA-Z0-9._]*[-a-zA-Z0-9])(?::\d{2,5})?(?:[/?#](?:[^\s"'<>\][()]*[^\s"'<>\][().,])?(?:(?:\.(?:tiff?|jpe?g|gif|png|svg|ico)|ipfs\/[a-z\d]{40,})))/, "ig");
+        if (mdImg.test(text) == false) {
+          text = text.replace(/https?:\/\/(?:[-a-zA-Z0-9._]*[-a-zA-Z0-9])(?::\d{2,5})?(?:[/?#](?:[^\s"'<>\][()]*[^\s"'<>\][().,])?(?:(?:\.(?:tiff?|jpe?g|gif|png|svg|ico)|ipfs\/[a-z\d]{40,})))/gi, function (x) {
+            return '![image]('+x+')';
+          });
+        }
+        $(this).html(converter.makeHtml(text));
+        $(this).append('<div class="text-center"><button class="button close">Fermer</button></div>');
+      };
+    });
+
+    $('.modal, .close').on('click',function () {
+      $(this).parents('article').find('.content').toggle();
+      $(this).parents('article').find('.full-content').toggle();
+    });
+  });
+
+</script>
+</body>
+</html>
