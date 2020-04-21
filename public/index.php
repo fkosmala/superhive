@@ -13,7 +13,9 @@ AppFactory::setContainer($container);
 
 // Set Twig view in container
 $container->set('view', function() {
-    return Twig::create(__DIR__ . '/../views', ['cache' => false]);
+
+    $themeDir = __DIR__ . "/../views/default/";
+    return Twig::create($themeDir, ['cache' => false]);
 });
 
 // Create App
@@ -27,11 +29,14 @@ $app->get('/', function ($request, $response, $args) {
 
   global $settings;
 
+  // Set data from config file to create query
+  $query = '{"jsonrpc":"2.0","method":"condenser_api.get_discussions_by_blog","params":[{"tag":"'.$settings['author'].'","limit":10}],"id":0}';
+
+  // The file with the latest posts.
   $file = __DIR__ . '/../blog.json';
+
   // if the JSON file doesn't exist, take it from API
   if (!file_exists($file)) {
-    // Set data from config file to create query
-    $query = '{"jsonrpc":"2.0","method":"condenser_api.get_discussions_by_blog","params":[{"tag":"'.$settings['author'].'","limit":10}],"id":0}';
     // Go take articles from Hive api
     $ch = curl_init($settings['api']);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $query);

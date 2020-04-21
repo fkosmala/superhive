@@ -6,11 +6,25 @@ All you need is to install SuperHive, set up your author feed... and that's all 
 
 ## How to install SuperHive
 
+### Requirements
+
+To run SuperHive you need :
+
+- PHP 7.2+ with CLI
+- php-zip, php-xml & php-curl packages
+
 ### Clone this repository
 
 Download zip and extract it onto your webserver or use GIT :
 
  ```git clone https://github.com/fkosmala/superhive``` 
+
+### Get Composer & install dependancies
+
+You must install [Composer](https://getcomposer.org/). Aftar that, just run :
+``` php composer.phar update``` 
+
+It will install all the dependancies.
 
 ### Configure your webserver
 
