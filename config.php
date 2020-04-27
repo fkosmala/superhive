@@ -8,3 +8,4 @@ $settings['baseline'] ='Your Hive-based unique blog';
 $settings['nextbutton'] ='See my other articles on peakd';
 
 $settings['cron'] = false;
+$settings['crosspost'] = false;

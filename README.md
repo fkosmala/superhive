@@ -41,7 +41,8 @@ It's really simple : You need to change the settings in ```./config.php``` file 
 | $settings['title']      | The title of your website (can be different than author)     |
 | $settings['baseline']   | The small text below the title and descriptino of the website |
 | $settings['nextbutton'] | The text onto the button at the bottom of the website        |
-| $settings['cron']       | Enable/disable the automatic fetch of author feed            |
+| $settings['cron']       | Enable / disable the automatic fetch of author feed          |
+| $settings['crosspost']  | Enable / disable crosspost display                           |
 
 ### (Optional) Set up Crontab
 
@@ -55,7 +56,7 @@ The website will be updated every 4 hours
 
 ## Demo
 
-You can see a demo on https://hive.florent-kosmala.fr/
+You can see a demo on https://www.florent-kosmala.fr/
 
 ## Showcase
 

@@ -22,14 +22,16 @@
   <div id="hiveblog" class="container">
     {% for article in articles %}
       {% if article.author == settings.author %}
-        <article>
-          <small>{{ article.created|date("m/d/Y") }}</small>
-          <h2 class="modal" id="a{{ article.post_id }}"><a href="#a{{ article.post_id }}">{{ article.title }}</a></h2>
-          <div class="full-content">{{ article.body }}</div>
-          <div class="content">
-            {{ article.body|slice(0,250) }}...
-          </div>
-        </article>
+        {% if 'This is a cross post' not in article.body or 'This is a cross post' in article.body and settings.crosspost == true %}
+            <article>
+              <small>{{ article.created|date("m/d/Y") }}</small>
+              <h2 class="modal" id="a{{ article.post_id }}"><a href="#a{{ article.post_id }}">{{ article.title }}</a></h2>
+              <div class="full-content">{{ article.body }}</div>
+              <div class="content">
+                {{ article.body|slice(0,250) }}...
+              </div>
+            </article>
+        {% endif %}
       {% endif %}
     {% endfor %}
   </div>
