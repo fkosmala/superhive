@@ -13,9 +13,8 @@ AppFactory::setContainer($container);
 
 // Set Twig view in container
 $container->set('view', function() {
-
-    $themeDir = __DIR__ . "/../views/default/";
-    return Twig::create($themeDir, ['cache' => false]);
+    $twig = Twig::create(__DIR__ . "/../views/", ['cache' => false]);
+    return $twig;
 });
 
 // Create App
@@ -60,7 +59,7 @@ $app->get('/', function ($request, $response, $args) {
 
   $blog = json_decode(file_get_contents($file), true);
   $articles = $blog['result'];
-  return $this->get('view')->render($response, 'index.html', [
+  return $this->get('view')->render($response, 'default/index.html', [
       'articles' => $articles,
       'settings' => $settings
   ]);
