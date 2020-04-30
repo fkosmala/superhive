@@ -59,7 +59,7 @@ $app->get('/', function ($request, $response, $args) {
 
   $blog = json_decode(file_get_contents($file), true);
   $articles = $blog['result'];
-  return $this->get('view')->render($response, 'default/index.html', [
+  return $this->get('view')->render($response, $settings['theme'].'/index.html', [
       'articles' => $articles,
       'settings' => $settings
   ]);

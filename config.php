@@ -9,6 +9,7 @@ $settings['nextbutton'] ='See my other articles on peakd';
 
 $settings['cron'] = false;
 $settings['crosspost'] = false;
+$settings['theme'] = 'default';
 
 $settings['social']['description'] = 'Personnal blog made with SuperHive';
 $settings['social']['image'] = 'https://hive.florent-kosmala.fr/photo.png';
