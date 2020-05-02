@@ -5,7 +5,6 @@ use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
 
 require __DIR__ . '/../vendor/autoload.php';
-require __DIR__ . '/../config.php';
 
 // Create Container
 $container = new Container();
@@ -13,7 +12,7 @@ AppFactory::setContainer($container);
 
 // Set Twig view in container
 $container->set('view', function() {
-    $twig = Twig::create(__DIR__ . "/../views/", ['cache' => false]);
+    $twig = Twig::create([__DIR__ . "/../views/", __DIR__ . "/../public/themes/"], ['cache' => false]);
     return $twig;
 });
 
@@ -23,10 +22,46 @@ $app = AppFactory::create();
 // Add Twig-View Middleware
 $app->add(TwigMiddleware::createFromContainer($app));
 
+// Check if password file exist or create a random one for initialize the installation script
+if (!file_exists(__DIR__ . '/../password')) {
+  $user = substr(md5(microtime()),rand(0,26),5);
+  $passwd = substr(md5(microtime()),rand(0,26),5);
+  $cred = array($user => $passwd);
+} else {
+  $cred = unserialize(file_get_contents(__DIR__ . '/../password'));
+}
+
+// Add Basic Auth for admin panel
+$app->add(new Tuupola\Middleware\HttpBasicAuthentication([
+    "path" => "/admin",
+    "secure" => true,
+    "realm" => "SuperHive Protected Area",
+    "relaxed" => ["localhost"],
+    "users" => $cred
+]));
+
+// Post the username/password in the first time
+$app->post('/', function ($request, $response, $args) {
+  $data = $request->getParsedBody();
+  $passwd = password_hash($data['passwd'], PASSWORD_BCRYPT, ['cost' => 10]);
+  $cred = array($data['username'] => $passwd);
+  if (!file_exists(__DIR__ . '/../password')) {
+    file_put_contents(__DIR__ . '/../password', serialize($cred));
+    return $response->withHeader('Location', '/admin')->withStatus(302);
+  } else return $response->withHeader('Location', '/')->withStatus(302);
+})->setName('install');
+
 // Let's go for define the route
 $app->get('/', function ($request, $response, $args) {
 
-  global $settings;
+  //Check if password file exists
+  if (!file_exists(__DIR__ . '/../password')) {
+    return $this->get('view')->render($response, '/install.html');
+  }
+
+  // Create array from config file
+  $config = file_get_contents(__DIR__ . '/../config.json');
+  $settings = json_decode($config, true);
 
   // Set data from config file to create query
   $query = '{"jsonrpc":"2.0","method":"condenser_api.get_discussions_by_blog","params":[{"tag":"'.$settings['author'].'","limit":10}],"id":0}';
@@ -64,6 +99,42 @@ $app->get('/', function ($request, $response, $args) {
       'settings' => $settings
   ]);
 })->setName('index');
+
+$app->get('/admin', function ($request, $response, $args) {
+  // Create array from config file
+  $config = file_get_contents(__DIR__ . '/../config.json');
+  $settings = json_decode($config, true);
+  return $this->get('view')->render($response, '/admin.html', [
+      'settings' => $settings
+  ]);
+})->setName('admin');
+
+$app->post('/admin/save', function ($request, $response, $args) {
+  $data = $request->getParsedBody();
+  $crosspost = (!isset($data["crosspost"])) ? false : true;
+  $cron = (!isset($data["cron"])) ? false : true;
+  $settings = array(
+    'author' => $data["author"],
+    'title' => $data["title"],
+    'baseline' => $data["baseline"],
+    'nextbutton' => $data["nextbutton"],
+    'social' => array(
+      'description' => $data["socialDesc"],
+      'image' => $data["socialImage"],
+      'twittername' => $data["twittername"]
+    ),
+    'theme' => $data["theme"],
+    'crosspost' => $crosspost,
+    'api' => $data["api"],
+    'cron' => $cron
+  );
+  $file = json_encode($settings);
+  // Create array from config file
+  file_put_contents(__DIR__ . '/../config.json', $file);
+  unlink(__DIR__ . '/../blog.json');
+
+  return $response->withHeader('Location', '/admin')->withStatus(302);
+})->setName('save');
 
 // Run app
 $app->run();
