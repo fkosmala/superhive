@@ -1,5 +1,7 @@
 <?php
-require __DIR__ . '/config.php';
+
+$config = file_get_contents(__DIR__ . '/config.json');
+$settings = json_decode($config, true);
 
 // Link to the JSON file who contains all posts
 $file = __DIR__ . '/blog.json';
