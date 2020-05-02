@@ -61,7 +61,9 @@
           <fieldset>
             <label for="theme">Theme</label>
             <select id="theme" name="theme">
-              <option value="default" selected>Default</option>
+              {% for theme in themes %}
+                <option value="{{ theme }}" {% if theme == settings.theme %}selected{% endif %}>{{ theme }}</option>
+              {% endfor %}
             </select>
 
             <label class="label" for="crosspost">Display crosspost ?</label>

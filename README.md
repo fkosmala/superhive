@@ -1,8 +1,8 @@
 # SuperHive - Your Hive unique blog engine
 
-SuperHive is a PHP Small blog engine who fetch all articles from the Hive Blockchain. It' very easy to set up a blog feed with a unique design. You can write article to Hive Blockchain (via PeakD or HiveBlog) and display it to a great personnal website. 
+SuperHive is a PHP Small blog engine who fetch all articles from the Hive Blockchain. It' very easy to set up a blog feed with a unique design. You can write article to Hive Blockchain (via PeakD or HiveBlog) and display it to a great personnal website.
 
-All you need is to install SuperHive, set up your author feed... and that's all ! If you want to change the design, you can change ```views/index.html``` to make your design (you need to know HTML / CSS and JS).
+All you need is to install SuperHive, set up your author feed... and that's all ! If you want to change the design, you can go to ```public/themes/``` and make your design (you need to know HTML / CSS and JS).
 
 ## How to install SuperHive
 
@@ -16,39 +16,35 @@ To run SuperHive you need :
 ### Clone this repository
 
 Download zip and extract it onto your webserver or use GIT :
-
- ```git clone https://github.com/fkosmala/superhive``` 
+```
+git clone https://github.com/fkosmala/superhive
+```
 
 ### Get Composer & install dependancies
 
 You must install [Composer](https://getcomposer.org/). Aftar that, just run :
-``` php composer.phar update``` 
+```
+php composer.phar update
+```
 
 It will install all the dependancies.
 
 ### Configure your webserver
 
-Based on Slim4, the configuration for your webserver is avaiblable on [Slim 4 WebServer documentation](http://www.slimframework.com/docs/v3/start/web-servers.html) 
+Based on Slim4, the configuration for your webserver is avaiblable on [Slim 4 WebServer documentation](http://www.slimframework.com/docs/v3/start/web-servers.html)
 
-### Change settings
+### Create a new username/password
 
-It's really simple : You need to change the settings in ```./config.php``` file :
+It's really simple : go to ```https://YOUR_URL/``` and create a (secure) username/password couple. and click Finish !
 
-| Name of the var         | What is it ?                                                 |
-| ----------------------- | ------------------------------------------------------------ |
-| $settings['author']     | Name of the feed (without @)                                 |
-| $settings['api']        | Link to the Hive API End-point                               |
-| $settings['title']      | The title of your website (can be different than author)     |
-| $settings['baseline']   | The small text below the title and descriptino of the website |
-| $settings['nextbutton'] | The text onto the button at the bottom of the website        |
-| $settings['cron']       | Enable / disable the automatic fetch of author feed          |
-| $settings['crosspost']  | Enable / disable crosspost display                           |
+### Have fun !
+It's finished ! If you want to change settings, go to ```https://YOUR_URL/admin``` & enter your username and password (defined the step before).
 
 ### (Optional) Set up Crontab
 
 For better performances, you can set up your crontab. All you need is to set ```$settings['cron']  ``` to ```true``` and add this line to your crontab :
 
-``` 
+```
 0 */4 * * * /bin/php /path/to/your/folder/update.php > /dev/null 2>&1
 ```
 

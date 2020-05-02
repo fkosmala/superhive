@@ -104,8 +104,10 @@ $app->get('/admin', function ($request, $response, $args) {
   // Create array from config file
   $config = file_get_contents(__DIR__ . '/../config.json');
   $settings = json_decode($config, true);
+  $themes = array_map('basename', glob(__DIR__ . '/themes/*' , GLOB_ONLYDIR));
   return $this->get('view')->render($response, '/admin.html', [
-      'settings' => $settings
+      'settings' => $settings,
+      'themes' => $themes
   ]);
 })->setName('admin');
 
