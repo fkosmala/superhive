@@ -1,9 +1,25 @@
 {
-    "require": {
-        "slim/slim": "4.*",
-        "slim/psr7": "^1.0",
-        "php-di/php-di": "^6.1",
-        "slim/twig-view": "^3.0",
-        "tuupola/slim-basic-auth": "^3.2"
-    }
+	"name": "fkosmala/superhive",
+	"description": "Generate a full real blog with your HIVE author feed",
+	"type": "project",
+	"keywords": ["hive", "blog", "blockchain", "generator"],
+	"homepage": "https://github.com/fkosmala/superhive",
+	"license": "GPL-3.0-only",	
+	"require": {
+		"slim/slim": "4.*",
+		"slim/psr7": "^1.0",
+		"php-di/php-di": "^6.1",
+		"slim/twig-view": "^3.0",
+		"tuupola/slim-basic-auth": "^3.2"
+	},
+	"authors": [
+		{
+			"name": "Florent Kosmala",
+			"email": "contact@florent-kosmala.fr",
+			"homepage": "http://www.florent-kosmala.fr/"
+		}
+	],
+	"scripts": {
+		"start": "php -S localhost:8080 -t public"
+  }
 }

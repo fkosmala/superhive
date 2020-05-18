@@ -89,3 +89,10 @@ ul.items {
 .full-content {
   display: none;
 }
+
+.social {
+	text-align: right;
+}
+.social span {
+	vertical-align: middle;
+}

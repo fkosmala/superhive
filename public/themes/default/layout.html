@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr" prefix="og: http://ogp.me/ns#">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ settings.title }}</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.3.0/milligram.min.css">
+  <link rel="stylesheet" href="/themes/{{ settings.theme }}/style.css">
+  <link rel="stylesheet" href="https://cdn.iconmonstr.com/1.3.0/css/iconmonstr-iconic-font.min.css">
+
+
+{% include '/meta.html' %}
+
+  <link rel="canonical" href="https://peakd.com/@{{ settings.author }}" />
+</head>
+
+<body>
+  <header class="photo">
+    <div class="container photo-text">
+      <h1 class="iam"><a href="{{ url_for('index') }}">{{ settings.title }}</a></h1>
+      <p>{{ settings.baseline }}</p>
+    </div>
+  </header>
+
+  <div id="hiveblog" class="container">
+		<div class="social">Share this page : 
+			<a target="_blank" href="http://twitter.com/share?text=Visit this page&url={{ get_uri() }}&hashtags=superhive,">
+				<span class="im im-twitter"></span>
+			</a>
+			&nbsp;
+			<a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{ get_uri() }}">
+				<span class="im im-facebook"></span>
+			</a>
+		</div>
+
+    {% block content %}{% endblock %}
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cash/7.0.1/cash.min.js" integrity="sha256-cP4vwprtrs4i6th5S3ysmrRUfhdEyHA5MlBxaOwQ+/s=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.1/showdown.min.js" integrity="sha256-jl1+DOsSs9uABTKppOJ2GF8kXoc3XQzBtFFyS0i9Xoo=" crossorigin="anonymous"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

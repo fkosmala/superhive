@@ -8,6 +8,7 @@ require __DIR__ . '/../vendor/autoload.php';
 
 // Create Container
 $container = new Container();
+$container->set('password', __DIR__ . '/../password');
 AppFactory::setContainer($container);
 
 // Set Twig view in container
@@ -51,11 +52,11 @@ $app->post('/', function ($request, $response, $args) {
   } else return $response->withHeader('Location', '/')->withStatus(302);
 })->setName('install');
 
-// Let's go for define the route
+/* Index route */
 $app->get('/', function ($request, $response, $args) {
 
   //Check if password file exists
-  if (!file_exists(__DIR__ . '/../password')) {
+  if (!file_exists($this->get('password'))) {
     return $this->get('view')->render($response, '/install.html');
   }
 
@@ -92,14 +93,42 @@ $app->get('/', function ($request, $response, $args) {
     }
   }
 
+	// Get the JSON 
   $blog = json_decode(file_get_contents($file), true);
   $articles = $blog['result'];
+  
+  // Return view with articles
   return $this->get('view')->render($response, $settings['theme'].'/index.html', [
       'articles' => $articles,
       'settings' => $settings
   ]);
 })->setName('index');
 
+/* View one article */
+$app->get('/post/{permlink}', function ($request, $response, $args) {	
+	// Create array from config file
+  $config = file_get_contents(__DIR__ . '/../config.json');
+  $settings = json_decode($config, true);
+	
+	if (isset($args['permlink'])) {
+		$permlink = $args['permlink'];
+		$file = __DIR__ . '/../blog.json';
+		
+		$blog = json_decode(file_get_contents($file), true);
+		$articles = $blog['result'];
+		foreach($articles AS $index=>$article) {
+        if($article['permlink'] == $permlink) {
+          return $this->get('view')->render($response, $settings['theme'].'/post.html', [
+						'settings' => $settings,
+						'article' => $article
+					]);
+        }
+    }
+		
+	} //else return $response->withHeader('Location', '/')->withStatus(302);
+})->setName('post');
+
+/* Admin panel */
 $app->get('/admin', function ($request, $response, $args) {
   // Create array from config file
   $config = file_get_contents(__DIR__ . '/../config.json');
