@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fr" prefix="og: http://ogp.me/ns#">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ settings.title }}</title>
+  <link rel="stylesheet" href="https://cdn.iconmonstr.com/1.3.0/css/iconmonstr-iconic-font.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.3.0/milligram.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Merriweather&family=Ultra&display=swap">
+  <link rel="stylesheet" href="/themes/{{ settings.theme }}/style.css">
+</head>
+<body>
+	<div class="container center">
+		<h1 class="title"><a class="logo" href="{{ url_for('index') }}">{{ settings.title }}</a></h1>
+		<p class="baseline">{{ settings.baseline }}</p>
+		<hr />
+	</div>
+	<div class="container">
+		{% block content %}{% endblock %}
+	</div>
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/cash/7.0.1/cash.min.js" integrity="sha256-cP4vwprtrs4i6th5S3ysmrRUfhdEyHA5MlBxaOwQ+/s=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.1/showdown.min.js" integrity="sha256-jl1+DOsSs9uABTKppOJ2GF8kXoc3XQzBtFFyS0i9Xoo=" crossorigin="anonymous"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

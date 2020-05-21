@@ -1,0 +1,21 @@
+{% extends "journal/layout.html" %}
+
+{% block content %}
+	<h2>{{article.title}}</h2>
+	<p>Published : {{ article.created|date("m/d/Y") }}</p>
+  <article>{{ article.body }}</article>
+  
+  <div class="center">
+    <a class="button button-black" href="{{ url_for('index') }}">Return to Home</a>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  $(function() {
+    converter = new showdown.Converter();
+    
+    $('article').html(converter.makeHtml($('article').text()));
+  });
+</script>
+{% endblock %}
