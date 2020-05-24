@@ -65,5 +65,9 @@ article p {
 	border: 2px solid #000;
 	font-size: 2rem;
 	padding: 2%;
-	margin-bottom: 2%:
+	margin-bottom: 2%;
+}
+
+.social {
+	float:right;
 }

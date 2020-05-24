@@ -8,11 +8,22 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.3.0/milligram.min.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Merriweather&family=Ultra&display=swap">
   <link rel="stylesheet" href="/themes/{{ settings.theme }}/style.css">
+{% include '/meta.html' %}
 </head>
 <body>
 	<div class="container center">
 		<h1 class="title"><a class="logo" href="{{ url_for('index') }}">{{ settings.title }}</a></h1>
 		<p class="baseline">{{ settings.baseline }}</p>
+		<div class="social">Share this page : 
+			<a target="_blank" href="http://twitter.com/share?text=Visit this page&url={{ get_uri() }}&hashtags=superhive,">
+				<span class="im im-twitter"></span>
+			</a>
+			&nbsp;
+			<a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{ get_uri() }}">
+				<span class="im im-facebook"></span>
+			</a>
+		</div>
+		<div>&nbsp;</div>
 		<hr />
 	</div>
 	<div class="container">
