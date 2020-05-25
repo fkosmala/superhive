@@ -8,6 +8,21 @@
   <div class="text-center">
     <a class="button" href="{{ url_for('index') }}">Return to Home</a>
   </div>
+  
+  <hr />
+  
+  <h2>Comments :</h2>
+  {% for reply in replies %}
+	<dl>
+		<dt><a target="_blank" href="https://peakd.com/@{{reply.author}}">{{reply.author}}</a> :</dt>
+		<dd>{{reply.body}}</dd>
+	</dl>
+  {% endfor %}
+  
+  <div class="center">
+    <a class="button button-black" href="{{ url_for('index') }}">Return to Home</a>
+  </div>
+  
 {% endblock %}
 
 {% block scripts %}

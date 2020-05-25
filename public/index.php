@@ -65,7 +65,12 @@ $app->get('/', function ($request, $response, $args) {
   $settings = json_decode($config, true);
 
   // Set data from config file to create query
-  $query = '{"jsonrpc":"2.0","method":"condenser_api.get_discussions_by_blog","params":[{"tag":"'.$settings['author'].'","limit":10}],"id":0}';
+  $query = '{
+		"jsonrpc":"2.0",
+		"method":"condenser_api.get_discussions_by_blog",
+		"params":[{"tag":"'.$settings['author'].'","limit":10}],
+		"id":0
+	}';
 
   // The file with the latest posts.
   $file = __DIR__ . '/../blog.json';
@@ -112,20 +117,43 @@ $app->get('/post/{permlink}', function ($request, $response, $args) {
 	
 	if (isset($args['permlink'])) {
 		$permlink = $args['permlink'];
-		$file = __DIR__ . '/../blog.json';
 		
+		// Check if comments exists for this post
+		$comments = __DIR__ . '/../comments/'.$permlink;
+		if (!file_exists($comments) || file_exists($comments) && time()-filemtime($comments) > 2 * 3600) {
+		  $query = '{
+				"jsonrpc":"2.0",
+				"method":"condenser_api.get_content_replies",
+				"params":[
+					"'.$settings['author'].'", 
+					"'.$permlink.'"
+				], 
+				"id":1
+			}';
+			$ch = curl_init($settings['api']);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $query);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			$result = curl_exec($ch);
+			curl_close($ch);
+			file_put_contents($comments, $result);
+		}
+		$replies = json_decode(file_get_contents($comments), true);
+		$replies = $replies['result'];
+
+		$file = __DIR__ . '/../blog.json';
 		$blog = json_decode(file_get_contents($file), true);
 		$articles = $blog['result'];
 		foreach($articles AS $index=>$article) {
         if($article['permlink'] == $permlink) {
           return $this->get('view')->render($response, $settings['theme'].'/post.html', [
 						'settings' => $settings,
-						'article' => $article
+						'article' => $article,
+						'replies' => $replies
 					]);
         }
     }
 		
-	} //else return $response->withHeader('Location', '/')->withStatus(302);
+	}
 })->setName('post');
 
 /* Admin panel */
