@@ -17,6 +17,13 @@ $container->set('view', function() {
     return $twig;
 });
 
+// Settings in container for use in all routes
+$container->set('settings', function() {
+	$config = file_get_contents(__DIR__ . '/../config.json');
+  $settings = json_decode($config, true);
+  return $settings;
+});
+
 // Create App
 $app = AppFactory::create();
 
@@ -54,15 +61,12 @@ $app->post('/', function ($request, $response, $args) {
 
 /* Index route */
 $app->get('/', function ($request, $response, $args) {
+	$settings = $this->get('settings');
 
   //Check if password file exists
   if (!file_exists($this->get('password'))) {
     return $this->get('view')->render($response, '/install.html');
   }
-
-  // Create array from config file
-  $config = file_get_contents(__DIR__ . '/../config.json');
-  $settings = json_decode($config, true);
 
   // Set data from config file to create query
   $query = '{
@@ -111,9 +115,7 @@ $app->get('/', function ($request, $response, $args) {
 
 /* View one article */
 $app->get('/post/{permlink}', function ($request, $response, $args) {	
-	// Create array from config file
-  $config = file_get_contents(__DIR__ . '/../config.json');
-  $settings = json_decode($config, true);
+	$settings = $this->get('settings');
 	
 	if (isset($args['permlink'])) {
 		$permlink = $args['permlink'];
@@ -159,8 +161,7 @@ $app->get('/post/{permlink}', function ($request, $response, $args) {
 /* Admin panel */
 $app->get('/admin', function ($request, $response, $args) {
   // Create array from config file
-  $config = file_get_contents(__DIR__ . '/../config.json');
-  $settings = json_decode($config, true);
+  $settings = $this->get('settings');
   $themes = array_map('basename', glob(__DIR__ . '/themes/*' , GLOB_ONLYDIR));
   return $this->get('view')->render($response, '/admin.html', [
       'settings' => $settings,
@@ -192,7 +193,7 @@ $app->post('/admin/save', function ($request, $response, $args) {
   file_put_contents(__DIR__ . '/../config.json', $file);
   unlink(__DIR__ . '/../blog.json');
 
-  return $response->withHeader('Location', '/admin')->withStatus(302);
+  return $response->withHeader('Location', '/')->withStatus(302);
 })->setName('save');
 
 // Run app
