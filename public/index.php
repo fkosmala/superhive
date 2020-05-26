@@ -188,7 +188,7 @@ $app->post('/admin/save', function ($request, $response, $args) {
     'api' => $data["api"],
     'cron' => $cron
   );
-  $file = json_encode($settings);
+  $file = json_encode($settings, JSON_PRETTY_PRINT);
   // Create array from config file
   file_put_contents(__DIR__ . '/../config.json', $file);
   unlink(__DIR__ . '/../blog.json');
