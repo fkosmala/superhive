@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+
+<channel>
+  <title>{{ settings.title }} RSS feed</title>
+  <link>{{ base_url }}</link>
+  <generator>SuperHive - Hive blockchain to real blog</generator>
+  <description>{{ settings.social.description }}</description>
+{% for article in articles %}
+{% if article.author == settings.author %}
+{% if 'This is a cross post' not in article.body or 'This is a cross post' in article.body and settings.crosspost == true %}
+	<item>
+		<title>{{ article.title }}</title>
+		<link>{{ base_url }}{{ url_for('post', { 'permlink': article.permlink }) }}</link>
+		<description>
+			{{ article.body|slice(0,250) }}
+		</description>
+		<pubDate>{{ article.created|date("D, d M Y H:i:s O", "Europe/Paris") }}</pubDate>
+		<guid isPermaLink="false">Article_{{ settings.author }}_{{ article.post_id }}</guid>
+	</item>
+{% endif %}
+{% endif %}
+{% endfor %}
+</channel>
+</rss>

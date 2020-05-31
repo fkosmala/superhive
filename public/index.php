@@ -196,5 +196,26 @@ $app->post('/admin/save', function ($request, $response, $args) {
   return $response->withHeader('Location', '/')->withStatus(302);
 })->setName('save');
 
+$app->get('/feed', function ($request, $response, $args) {
+	$settings = $this->get('settings');
+
+	$file = __DIR__ . '/../blog.json';
+	$blog = json_decode(file_get_contents($file), true);
+  $articles = $blog['result'];
+  
+  if(isset($_SERVER['HTTPS'])){
+		$protocol = ($_SERVER['HTTPS'] && $_SERVER['HTTPS'] != "off") ? "https" : "http";
+	} else {
+		$protocol = 'http';
+	}
+	$url = $protocol . "://" . $_SERVER['HTTP_HOST'];
+  header('Content-Type: text/xml');
+	return $this->get('view')->render($response, '/feed.html', [
+      'articles' => $articles,
+      'settings' => $settings,
+      'base_url' => $url
+  ]);
+})->setName('feed');
+
 // Run app
 $app->run();
