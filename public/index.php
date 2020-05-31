@@ -202,13 +202,7 @@ $app->get('/feed', function ($request, $response, $args) {
 	$file = __DIR__ . '/../blog.json';
 	$blog = json_decode(file_get_contents($file), true);
   $articles = $blog['result'];
-  
-  if(isset($_SERVER['HTTPS'])){
-		$protocol = ($_SERVER['HTTPS'] && $_SERVER['HTTPS'] != "off") ? "https" : "http";
-	} else {
-		$protocol = 'http';
-	}
-	$url = $protocol . "://" . $_SERVER['HTTP_HOST'];
+
   header('Content-Type: text/xml');
 	return $this->get('view')->render($response, '/feed.html', [
       'articles' => $articles,

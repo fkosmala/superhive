@@ -11,7 +11,7 @@
 {% if 'This is a cross post' not in article.body or 'This is a cross post' in article.body and settings.crosspost == true %}
 	<item>
 		<title>{{ article.title }}</title>
-		<link>{{ base_url }}{{ url_for('post', { 'permlink': article.permlink }) }}</link>
+		<link>{{ full_url_for('post', { 'permlink': article.permlink }) }}</link>
 		<description>
 			{{ article.body|slice(0,250) }}
 		</description>
