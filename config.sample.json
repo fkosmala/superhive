@@ -1,0 +1,15 @@
+{
+    "author": "bambukah",
+    "title": "SuperHive",
+    "baseline": "Your Hive-based unique blog",
+    "nextbutton": "See my other articles on peakd",
+    "social": {
+        "description": "Personnal blog made with SuperHive",
+        "image": "https://files.peakd.com/file/peakd-hive/bambukah/FYAgdGHM-photo.png",
+        "twittername": "laruche"
+    },
+    "theme": "journal",
+    "crosspost": false,
+    "api": "https:\/\/api.openhive.network",
+    "cron": false
+}

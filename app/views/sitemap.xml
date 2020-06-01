@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+	<url>
+		<loc>{{ full_url_for('index') }}</loc>
+		<lastmod>{{ articles.0.created|date("D, d M Y H:i:s O", "Europe/Paris") }}</lastmod>
+		<changefreq>weekly</changefreq>
+		<priority>0.8</priority>
+	</url>
+	{% for article in articles %}
+	{% if article.author == settings.author %}
+	{% if 'This is a cross post' not in article.body or 'This is a cross post' in article.body and settings.crosspost == true %}
+	<url>
+		<loc>{{ full_url_for('post', { 'permlink': article.permlink }) }}</loc>
+		<lastmod>{{ article.created|date("D, d M Y H:i:s O", "Europe/Paris") }}</lastmod>
+		<changefreq>weekly</changefreq>
+		<priority>0.8</priority>
+	</url>
+	{% endif %}
+	{% endif %}
+	{% endfor %}
+</urlset> 

@@ -4,14 +4,7 @@
 	"type": "project",
 	"keywords": ["hive", "blog", "blockchain", "generator"],
 	"homepage": "https://github.com/fkosmala/superhive",
-	"license": "GPL-3.0-only",	
-	"require": {
-		"slim/slim": "4.*",
-		"slim/psr7": "^1.0",
-		"php-di/php-di": "^6.1",
-		"slim/twig-view": "^3.0",
-		"tuupola/slim-basic-auth": "^3.2"
-	},
+	"license": "GPL-3.0-only",
 	"authors": [
 		{
 			"name": "Florent Kosmala",
@@ -19,6 +12,18 @@
 			"homepage": "http://www.florent-kosmala.fr/"
 		}
 	],
+	"require": {
+		"slim/slim": "4.*",
+		"slim/psr7": "^1.0",
+		"php-di/php-di": "^6.1",
+		"slim/twig-view": "^3.0",
+		"tuupola/slim-basic-auth": "^3.2"
+	},
+	"autoload": {
+    "psr-4": {
+      "App\\": "app/"
+    }
+  },
 	"scripts": {
 		"start": "php -S localhost:8080 -t public"
   }
