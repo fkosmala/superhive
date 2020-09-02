@@ -8,7 +8,7 @@
 					<small>{{ article.created|date("m/d/Y") }}</small>
 					<h2 class="modal" id="a{{ article.post_id }}"><a href="{{ url_for('post', { 'permlink': article.permlink }) }}">{{ article.title }}</a></h2>
 					<div class="content">
-						{{ article.body|slice(0,250) }}...
+						{{ article.body|striptags|slice(0,250) }}...
 					</div>
 				</article>
 			{% endif %}

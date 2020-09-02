@@ -8,7 +8,7 @@
 					<p class="published">Published : {{ article.created|date("m/d/Y") }} - Upvotes : {{article.active_votes|length}} - Words : {{article.body|split(' ')|length }}</p>
 					<h2><a href="{{ url_for('post', { 'permlink': article.permlink }) }}">{{ article.title }}</a></h2>
 					<p>
-						{{ article.body|slice(0,250) }}...
+						{{ article.body|striptags|slice(0,250) }}...
 					</p>
 					<a href="{{ url_for('post', { 'permlink': article.permlink }) }}" class="right button button-black">Read more</a>
 					<div class="clear">&nbsp;</div>
