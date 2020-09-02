@@ -3,57 +3,49 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Administration {{ settings.title }}</title>
+  <title>Administration dashboard</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.3.0/milligram.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.min.css">
   <style>
-    .column{
-      margin: 2px;
-    }
-    .warning {
-			color: #A00
-		}
-    .center{
-			text-align: center;
-			margin-top: 5px;
-		}
-		.tabs{
-			border-bottom: 6px solid #DDE;
-			margin-bottom: 15px !important;
-			text-align:left;
-			padding: 8px 16px !important;
-		}
+    html, body {margin: 0;padding: 0;}
 
-		.active {
-			border-bottom: 6px solid #9b4dca !important;
-		}
-		
-		.d-none {
-			display:none;
-		}
+		/* Navigation */
+    nav {
+      background-color: #EEE;
+			box-shadow: 0 8px 6px -6px #BBB;
+    }
+    nav ul {list-style-type: none;}
+    nav li {
+      display: inline-block;
+      padding: 1%;
+			cursor: pointer;
+    }
+		nav .active {border-bottom: 3px solid #9b4dca !important;}
+
+		/* Other */
+    .warning {color: #A00;}
+		.d-none {display:none;}
+		.center {text-align:center;}
   </style>
 </head>
 
 <body>
-  <div class="container">
-    <h1 class="center">Administration</h1>
+	<nav class="navigation">
+    <section class="container">
+      <ul>
+        <li data-open="general" class="active">General</li>
+        <li data-open="seo">SEO</li>
+        <li data-open="system">System</li>
+      </ul>
+    </section>
+  </nav>
 
-    <div class="row">
-			<div data-open="global" class="active tabs column">
-				Global
-			</div>
-			<div data-open="seo" class="tabs column">
-				SEO
-			</div>
-			<div data-open="system" class="tabs column">
-				System
-			</div>
-		</div>
+	<main class="container">
     <form method="post" action="{{ url_for('save') }}">
-			<div id="global" class="cat">
+			<section id="general">
 				<div class="row">
 					<div class="column">
-						<h2>Global</h2>
+						<h2>General</h2>
 					</div>
 				</div>
 				<div class="row">
@@ -89,9 +81,9 @@
 					</div>
 					
 				</div>
-      </div>
+			</section>
 
-			<div id="seo" class="cat d-none">
+			<section id="seo" class="d-none">
 				<div class="row">
 					<div class="column">
 							<h2>Social</h2>
@@ -110,11 +102,10 @@
 								<input type="text" placeholder="Twitter name" id="twittername" name="twittername" value="{{ settings.social.twittername }}">
 							</fieldset>
 						</div>
-
 				</div>
-      </div>
-      
-      <div id="system" class="cat d-none">
+			</section>
+
+			<section id="system" class="d-none">
 				<div class="row">
 					<div class="column">
 						<h2>System</h2>
@@ -125,7 +116,7 @@
 					<div class="column">
 						<fieldset>
 							<label for="api">Hive API link</label>
-							<input type="text" placeholder="Description" id="api" name="api" value="{{ settings.api }}">
+							<input type="text" placeholder="Insert Hive API endpoint" id="api" name="api" value="{{ settings.api }}">
 						</fieldset>
 					</div>
 					<div class="column">
@@ -135,24 +126,22 @@
 						</fieldset>
 					</div>
 				</div>
-      </div>
-					
-
-      <div class="center">
+			</section>
+			<div class="center">
           <input class="button-primary" type="submit" value="Send">
       </div>
-
     </form>
-  </div>
+  </main>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/cash/7.0.1/cash.min.js" integrity="sha256-cP4vwprtrs4i6th5S3ysmrRUfhdEyHA5MlBxaOwQ+/s=" crossorigin="anonymous"></script>
 <script>
     $(function() {
       // Tabs for Administration
-      $(".tabs").on('click tap', function() {
+      $("nav li").on('click tap', function() {
         var open = $(this).data('open');
-        $(".tabs").removeClass('active');
+        $("nav li").removeClass('active');
         $(this).addClass('active');
-        $(".cat").addClass("d-none");
+        $("main section").addClass("d-none");
         $("#"+open).removeClass("d-none");
       });
     });

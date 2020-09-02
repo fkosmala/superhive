@@ -32,6 +32,7 @@ final class AdminController
 			$data = $request->getParsedBody();
 			$crosspost = (!isset($data["crosspost"])) ? false : true;
 			$cron = (!isset($data["cron"])) ? false : true;
+			$api = ($data["api"] == "") ? "https://api.hive.blog" : $data["api"] ;
 			$settings = array(
 				'author' => $data["author"],
 				'title' => $data["title"],
@@ -44,7 +45,7 @@ final class AdminController
 				),
 				'theme' => $data["theme"],
 				'crosspost' => $crosspost,
-				'api' => $data["api"],
+				'api' => $api,
 				'cron' => $cron
 			);
 			$file = json_encode($settings, JSON_PRETTY_PRINT);

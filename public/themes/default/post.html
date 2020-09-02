@@ -31,6 +31,9 @@
     converter = new showdown.Converter();
     
     $('article').html(converter.makeHtml($('article').text()));
+	$('dd').each(function( index ) {
+		$(this).html(converter.makeHtml($(this).text()));
+	});
   });
 </script>
 {% endblock %}
