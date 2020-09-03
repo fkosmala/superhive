@@ -8,6 +8,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.min.css">
 	<link rel="stylesheet" href="https://cdn.iconmonstr.com/1.3.0/css/iconmonstr-iconic-font.min.css">
 
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.48.4/codemirror.min.css" />
+  <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+
   <style>
     html, body {margin: 0;padding: 0;}
 
@@ -27,8 +30,15 @@
 
 		/* Other */
     .warning {color: #A00;}
-		.d-none {display:none;}
+		.d-none {display:none !important;}
 		.center {text-align:center;}
+		
+		/* fix for Editor with Milligram */
+		.tui-scrollsync, .te-switch-button {
+			line-height: 0;
+			width: inherit !important;
+		}
+
   </style>
 </head>
 
@@ -40,6 +50,7 @@
         <li data-open="general" class="active">General</li>
         <li data-open="seo">SEO</li>
         <li data-open="system">System</li>
+				<li data-open="article">New article</li>
       </ul>
     </section>
   </nav>
@@ -87,7 +98,7 @@
 				</div>
 			</section>
 
-			<section id="seo" class="d-none">
+			<section id="seo" class="d-none">tui-scrollsync
 				<div class="row">
 					<div class="column">
 							<h2>Social</h2>
@@ -131,18 +142,49 @@
 					</div>
 				</div>
 			</section>
+
+			<section id="article" class="d-none">
+				<div class="row">
+					<div class="column">
+						<h2>New article</h2>
+					</div>
+				</div>
+				<div class="row">
+					<div class="column">
+						<div id="editor"></div>
+					</div>
+				</div>
+			</section>
+
 			<div class="center">
-          <input class="button-primary" type="submit" value="Send">
+          <input id="save" class="button-primary" type="submit" value="Save">
+					<input id="create" class="d-none button-primary" type="button" value="Create">
       </div>
     </form>
   </main>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/cash/7.0.1/cash.min.js" integrity="sha256-cP4vwprtrs4i6th5S3ysmrRUfhdEyHA5MlBxaOwQ+/s=" crossorigin="anonymous"></script>
+	<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+
 <script>
+		const Editor = toastui.Editor; 
+		const editor = new Editor({
+			el: document.querySelector('#editor'),
+			initialEditType: 'markdown',
+		  previewStyle: 'vertical',
+			height: 500
+		});
     $(function() {
       // Tabs for Administration
       $("nav li").on('click tap', function() {
         var open = $(this).data('open');
+				if (open == "article") {
+					$("#save").addClass("d-none");
+					$("#create").removeClass("d-none");
+				} else {
+					$("#create").addClass("d-none");
+					$("#save").removeClass("d-none");
+				}
         $("nav li").removeClass('active');
         $(this).addClass('active');
         $("main section").addClass("d-none");
