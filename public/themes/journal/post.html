@@ -4,16 +4,6 @@
 	<p class="published">Published : {{ article.created|date("m/d/Y") }} - Upvotes : {{article.active_votes|length}} - Words : {{article.body|split(' ')|length }}</p>
 	<h2>{{article.title}}</h2>
 	
-	<div class="social center">Like the content ? Don't forget to share : 
-		<a target="_blank" href="http://twitter.com/share?text=Visit this page&url={{ get_uri() }}&hashtags=superhive,">
-			<span class="im im-twitter"></span>
-		</a>
-		&nbsp;
-		<a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{ get_uri() }}">
-			<span class="im im-facebook"></span>
-		</a>
-	</div>
-	
   <article>{{ article.body }}</article>
   
   <div class="social center">Like the content ? Don't forget to share : 
