@@ -6,7 +6,10 @@
     "social": {
         "description": "Personnal blog made with SuperHive",
         "image": "https://files.peakd.com/file/peakd-hive/bambukah/FYAgdGHM-photo.png",
-        "twittername": "laruche"
+        "twitter": "",
+        "instagram": "",
+        "facebook": "",
+        "linkedin": ""
     },
     "theme": "journal",
     "crosspost": false,

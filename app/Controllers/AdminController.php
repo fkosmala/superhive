@@ -41,7 +41,10 @@ final class AdminController
 				'social' => array(
 					'description' => $data["socialDesc"],
 					'image' => $data["socialImage"],
-					'twittername' => $data["twittername"]
+					'twitter' => $data["twitter"],
+					'facebook' => $data["facebook"],
+					'instagram' => $data["instagram"],
+					'linkedin' => $data["linkedin"]
 				),
 				'theme' => $data["theme"],
 				'crosspost' => $crosspost,

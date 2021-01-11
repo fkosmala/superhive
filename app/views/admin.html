@@ -57,7 +57,7 @@
       <ul>
 				<li><a href="{{ url_for('index') }}"><i class="im im-home"></i></a></li>
         <li data-open="general" class="active">General</li>
-        <li data-open="seo">SEO</li>
+        <li data-open="seo">Social</li>
         <li data-open="system">System</li>
 				<li data-open="article">New article</li>
       </ul>
@@ -115,17 +115,26 @@
 				</div>
 				<div class="row">
 					<div class="column">
-							<fieldset>
-								<label for="socialDesc">Website description (for Facebook and Twitter markup)</label>
-								<input type="text" placeholder="Description" id="socialDesc" name="socialDesc" value="{{ settings.social.description }}">
+						<fieldset>
+							<label for="socialDesc">Website description (for Facebook and Twitter markup)</label>
+							<input type="text" placeholder="Description" id="socialDesc" name="socialDesc" value="{{ settings.social.description }}">
 
-								<label for="socialImage">Link to social Image (for Facebook and Twitter)</label>
-								<input type="text" placeholder="Description" id="socialImage" name="socialImage" value="{{ settings.social.image }}">
-
-								<label for="twittername">Twitter account name (without @)</label>
-								<input type="text" placeholder="Twitter name" id="twittername" name="twittername" value="{{ settings.social.twittername }}">
-							</fieldset>
-						</div>
+							<label for="socialImage">Link to social Image (for Facebook and Twitter)</label>
+							<input type="text" placeholder="Description" id="socialImage" name="socialImage" value="{{ settings.social.image }}">
+						</fieldset>
+					</div>
+					<div class="column">		
+						<fieldset>
+							<label for="twitter">Twitter account name (without @)</label>
+							<input type="text" placeholder="Twitter name" id="twitter" name="twitter" value="{{ settings.social.twitter }}">
+							<label for="facebook">Facebook account name</label>
+							<input type="text" placeholder="Facebook account" id="facebook" name="facebook" value="{{ settings.social.facebook }}">
+							<label for="instagram">Instagram account name</label>
+							<input type="text" placeholder="Instagram account" id="instagram" name="instagram" value="{{ settings.social.instagram }}">
+							<label for="linkedin">LinkedIn account name</label>
+							<input type="text" placeholder="LinkedIn account" id="linkedin" name="linkedin" value="{{ settings.social.linkedin }}">
+						</fieldset>
+					</div>
 				</div>
 			</section>
 
