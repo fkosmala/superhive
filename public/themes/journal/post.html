@@ -1,10 +1,19 @@
 {% extends "journal/layout.html" %}
 
+{% block title %}{{article.title}}{% endblock %}
+
 {% block content %}
 	<p class="published">Published : {{ article.created|date("m/d/Y") }} - Upvotes : {{article.active_votes|length}} - Words : {{article.body|split(' ')|length }}</p>
 	<h2>{{article.title}}</h2>
 	
-  <article>{{ article.body }}</article>
+  <article>{{ article.body }} </article>
+  
+  <div id="tags"> 
+		Tags :
+		{% for tag in metadata.tags %}
+			<span class="tag">{{ tag }}</span>
+		{% endfor %}
+	</div>
   
   <div class="social center">Like the content ? Don't forget to share : 
 		<a target="_blank" href="http://twitter.com/share?text=Visit this page&url={{ get_uri() }}&hashtags=superhive,">

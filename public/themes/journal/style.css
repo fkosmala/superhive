@@ -81,6 +81,25 @@ article p {
 	vertical-align: middle;
 }
 
+#tags {
+	margin: 1%;
+}
+
+.tag {
+	margin: 3px;
+	padding: 5px;
+	border-radius: 5px;
+	background-color: #EEE;
+}
+
+.img-article {
+	max-height: 300px;
+	margin: 5% 1%;
+	padding: 3px;
+	border: 1px solid #000;
+	filter: grayscale(100%);
+}
+
 .social {
 	border-top : 1px solid #000;
 	padding: 1% 0;

@@ -1,15 +1,26 @@
 {% extends "journal/layout.html" %}
 
+{% block title %}Index{% endblock %}
+
 {% block content %}
 	{% for article in articles %}
 		{% if article.author == settings.author %}
 			{% if 'This is a cross post' not in article.body or 'This is a cross post' in article.body and settings.crosspost == true %}
-				<article>
+				<article data-json="{{article.json_metadata|json_encode() }}">
 					<p class="published">Published : {{ article.created|date("m/d/Y") }} - Upvotes : {{article.active_votes|length}} - Words : {{article.body|split(' ')|length }}</p>
-					<h2><a href="{{ url_for('post', { 'permlink': article.permlink }) }}">{{ article.title }}</a></h2>
-					<p class="excerpt">
-						{{ article.body|striptags|slice(0,500) }}...
-					</p>
+					
+					{% set excerpt = article.body|striptags|slice(0,500) %}
+					<div class="row">
+						<div class="column">
+							<img class="img-article" src="" alt="Article illustration picture">
+						</div>
+						<div class="column column-80">
+							<h2><a href="{{ url_for('post', { 'permlink': article.permlink }) }}">{{ article.title }}</a></h2>
+					
+							<p class="excerpt">{{ excerpt }}...</p>
+						</div>
+					</div>
+					
 					<a href="{{ url_for('post', { 'permlink': article.permlink }) }}" class="right button button-black">Read more</a>
 					<div class="clear">&nbsp;</div>
 				</article>
@@ -26,6 +37,13 @@
 {% block scripts %}
 <script>
   $(function() {
+  	$("article").each(function (){
+  		json = JSON.parse($(this).data('json'));
+  		img = $(this).find('.img-article');
+  		img.attr('src', json.image[0]);
+  		console.log(json.image);
+  		
+  	});
    $(".excerpt").each(function (){
    	text = $(this).text();
    	text = text.replace(/!\[[^\]]*\]\((.*?)\s*("(?:.*[^"])")?\s*\)/g, '');

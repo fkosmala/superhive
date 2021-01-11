@@ -116,9 +116,11 @@ final class HomeController
 				$articles = $blog['result'];
 				foreach($articles AS $index=>$article) {
 					if($article['permlink'] == $permlink) {
+						$metadata = json_decode($article['json_metadata'], true);
 						return $this->app->get('view')->render($response, $settings['theme'].'/post.html', [
 							'settings' => $settings,
 							'article' => $article,
+							'metadata' => $metadata,
 							'replies' => $replies
 						]);
 					}
