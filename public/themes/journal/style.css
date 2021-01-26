@@ -1,6 +1,7 @@
 body {
 	margin: 0;
 	padding: 0;
+	background : #f7f3ee;
 	font-family: 'Merriweather', serif;
 }
 .center{
@@ -27,7 +28,7 @@ footer {
 	text-align: left;
 }
 
-a, a:visited {color: #000 !important;}
+a, a:visited, h2 {color: #000 !important;}
 
 h1 {
 	font-family: 'Bebas Neue', sans-serif;
@@ -106,8 +107,9 @@ article p {
 
 .img-article {
 	max-height: 300px;
+	background: #FFF;
 	margin: 5% 1%;
-	padding: 3px;
+	padding: 5px;
 	border: 1px solid #000;
 	filter: grayscale(100%);
 }
