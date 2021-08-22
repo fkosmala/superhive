@@ -30,7 +30,7 @@ final class HomeController
 			$query = '{
 				"jsonrpc":"2.0",
 				"method":"condenser_api.get_discussions_by_blog",
-				"params":[{"tag":"'.$settings['author'].'","limit":10}],
+				"params":[{"tag":"'.$settings['author'].'","limit":15}],
 				"id":0
 			}';
 
