@@ -1,0 +1,49 @@
+{% extends "bambukah/layout.html" %}
+
+{% block title %}{{article.title}}{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded">
+	<div class="text-center pt-16 md:pt-24 pb-2">
+	<p class="text-sm md:text-base font-bold"> Date: {{ article.created|date("m/d/Y") }} - Upvotes : {{article.active_votes|length}} - Words : {{article.body|split(' ')|length }}</p>
+	
+	<h1 class="text-center font-bold break-normal text-3xl md:text-5xl">{{article.title}}</h1>
+	</div>
+	
+  <article id="post" class="p-3 text-sm md:text-base">{{ article.body }} </article>
+</div>
+ 
+  <div id="tags" class="bg-white mt-3 mb-3 p-5 rounded text-sm"> 
+		Tags :
+		{% for tag in metadata.tags %}
+			<span class="bg-gray-800 text-white rounded p-2">{{ tag }}</span>
+		{% endfor %}
+	</div>
+  
+  <div class="bg-white rounded">
+		<div class="text-center pt-8 md:pt-16 pb-2">
+			<h2  class="text-center font-bold break-normal text-2xl md:text-4xl">Comments :</h2>
+		</div>
+			{% for reply in replies %}
+			<dl class="p-3">
+				<dt class="underline font-bold"><a target="_blank" href="https://peakd.com/@{{reply.author}}">{{reply.author}}</a> :</dt>
+				<dd class="pl-5 text-sm">{{reply.body}}</dd>
+			</dl>
+			{% endfor %}
+		</div>
+	</div>
+  
+</div>
+  
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(function() {
+    $('article').html(marked($('article').text()));
+    $('dd').each(function( index ) {
+			$(this).html(marked($(this).text()));
+		});
+  });
+</script>
+{% endblock %}

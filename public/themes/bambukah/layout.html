@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr" prefix="og: http://ogp.me/ns#">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{% endblock %} - {{ settings.title }}</title>
+  <link rel="stylesheet" href="https://cdn.iconmonstr.com/1.3.0/css/iconmonstr-iconic-font.min.css">
+  <link href="https://unpkg.com/tailwindcss/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/themes/{{ settings.theme }}/style.css">
+{% include '/meta.html' %}
+</head>
+<body class="bg-gray-800 font-sans leading-normal tracking-normal">
+
+	<!--Header-->
+	<div class="w-full m-0 p-0 bg-black" style="height: 60vh; max-height:460px;">
+		<div class="container max-w-4xl mx-auto pt-16 md:pt-32 text-center break-normal">
+				<p class="text-white font-extrabold text-3xl md:text-5xl">
+					{{ settings.title|upper }}
+				</p>
+				<p class="text-xl md:text-2xl text-gray-500">{{ settings.baseline }}</p>
+		</div>
+	</div>
+		
+	<!--Container-->
+	<div class="container px-4 md:px-0 max-w-6xl mx-auto -mt-32">
+		<div class="mx-0 sm:mx-6">
+
+			<!--Nav-->
+			<nav class="mt-0 w-full">
+				<div class="container mx-auto flex items-center">
+					
+					<div class="flex w-1/2 pl-4 text-sm">
+						<ul class="list-reset flex justify-between flex-1 md:flex-none items-center">
+							<li class="mr-2">
+							<a class="inline-block py-2 px-2 text-white no-underline hover:underline" href="{{ url_for('index')}}">Home</a>
+							</li>
+						</ul>
+					</div>
+					
+					<div class="flex w-1/2 justify-end content-center">		
+						{% if settings.social.twitter %}<a class="inline-block text-gray-500 no-underline hover:text-white hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 avatar" target="_blank" href="http://twitter.com/{{settings.social.twitter}}"><span class="im im-twitter"></span></a>{% endif %}
+						{% if settings.social.facebook %}<a class="inline-block text-gray-500 no-underline hover:text-white hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 avatar" target="_blank" href="http://facebook.com/{{settings.social.facebook}}"><span class="im im-facebook"></span></a>{% endif %}
+						{% if settings.social.instagram %}<a class="inline-block text-gray-500 no-underline hover:text-white hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 avatar" target="_blank" href="http://instagram.com/{{settings.social.instagram}}/"><span class="im im-instagram"></span></a>{% endif %}
+						{% if settings.social.linkedin %}<a class="inline-block text-gray-500 no-underline hover:text-white hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 avatar" target="_blank" href="http://linkedin.com/in/{{settings.social.linkedin}}"><span class="im im-linkedin"></span></a>{% endif %}
+					</div>
+				</div>
+			</nav>
+		</div>
+		
+		<!--Content-->	
+		<div class="w-full text-xl md:text-2xl text-gray-800 leading-normal rounded-t">
+		{% block content %}{% endblock %}
+		</div>
+	</div>
+	
+	<footer class="bg-gray-900 mt-5">	
+		<div class="container max-w-6xl mx-auto flex items-center px-2 py-8">
+			<div class="w-full mx-auto flex flex-wrap items-center">
+				<div class="flex w-full md:w-1/2 justify-center md:justify-start text-white font-extrabold">
+					<a class="text-gray-900 no-underline hover:text-gray-900 hover:no-underline" href="https://github.com/fkosmala/superhive">
+						<span class="text-base text-gray-200">Powered by SuperHive</span>
+					</a>
+				</div>
+				<div class="flex w-full pt-2 content-center justify-between md:w-1/2 md:justify-end">
+					<ul class="list-reset flex justify-center flex-1 md:flex-none items-center">
+						<li>
+						<a class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:underline py-2 px-3" href="http://peakd.com/@{{settings.author}}">Hive</a>
+					  </li>
+						{% if settings.social.twitter %}
+					  <li>
+						<a class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:underline py-2 px-3" href="http://twitter.com/{{settings.social.twitter}}">Twitter</a>
+					  </li>
+					  {% endif %}
+						{% if settings.social.facebook %}
+					  <li>
+						<a class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:underline py-2 px-3" href="http://facebook.com/{{settings.social.facebook}}">Facebook</a>
+					  </li>
+					  {% endif %}
+						{% if settings.social.instagram %}
+						<li>
+						<a class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:underline py-2 px-3" href="http://instagram.com/{{settings.social.instagram}}/">Instagram</a>
+					  </li>
+					  {% endif %}
+						{% if settings.social.linkedin %}
+						<li>
+						<a class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:underline py-2 px-3" href="http://linkedin.com/in/{{settings.social.linkedin}}/">LinkedIn</a>
+					  </li>
+					  {% endif %}
+					</ul>
+				</div>
+			</div>
+		</div>
+	</footer>
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/cash/7.0.1/cash.min.js" integrity="sha256-cP4vwprtrs4i6th5S3ysmrRUfhdEyHA5MlBxaOwQ+/s=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>
