@@ -1,0 +1,35 @@
+{% extends "admin/admin-layout.html" %}
+
+{% block content %}	
+<div class="w-full px-4 md:px-0 md:mt-8 mb-16 text-gray-100 leading-normal">
+	<div class="flex flex-row flex-wrap flex-grow mt-2">
+		<div class="w-full">
+			<div class="bg-gray-800 border border-gray-800 rounded shadow p-1">
+			  <div class="border-b border-gray-800 p-3">
+			    <h3 class="font-bold uppercase text-gray-300">Pages</h3>
+			  </div>
+			  
+			  <div class="md:flex md:items-center mb-6">
+			  	<div class="w-full text-center">
+						<a href="{{ url_for('admin-newpage') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded">Create new page</a>
+					</div>
+				</div>
+				
+				<div class="md:flex md:items-center mb-6">
+					<div class="md:w-1/4 block text-gray-300 font-bold md:text-right mb-1 md:mb-0 pr-4">
+							List of pages
+					</div>
+					<div class="md:w-3/4">
+						{% if pages %}
+						{% else %}
+							Start to create a Page (off-chain content) by clicking on the "Create new page" button
+						{% endif %}
+					</div>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+
+</div>
+{% endblock %}

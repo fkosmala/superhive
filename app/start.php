@@ -6,11 +6,15 @@ use App\Controllers\HomeController;
 use App\Controllers\AdminController;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+
 use DI\Container;
+
 use Slim\Factory\AppFactory;
 use Slim\Routing\RouteContext;
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
+use Slim\Middleware\Minify as Minify;
+
 use Tuupola\Middleware\HttpBasicAuthentication as BasicAuth;
 
 require __DIR__ . '/../vendor/autoload.php';
@@ -19,6 +23,7 @@ require __DIR__ . '/../vendor/autoload.php';
 $container = new Container();
 // Set all dirs & files paths
 $container->set('basedir', __DIR__ . '/../');
+$container->set('cachedir', __DIR__ . '/../cache/');
 $container->set('themesdir', __DIR__ . '/../public/themes/');
 $container->set('commentsdir', __DIR__ . '/../app/comments/');
 $container->set('pagesdir', __DIR__ . '/../pages/');
@@ -31,31 +36,69 @@ $container->set('settings', function() {
   $settings = json_decode($config, true);
   return $settings;
 });
+
+$settings = $container->get('settings');
+
+// Create folders that doesn't exist
+if ((!file_exists($container->get('cachedir'))) && ($settings["devMode"] == false)) {
+	mkdir($container->get('cachedir'), 0755, true);
+} else {
+	// Flush Cache folder if disabled
+	if ((file_exists($container->get('cachedir'))) && ($settings["devMode"] == true )) {
+		function removeDirectory($path) {
+			$files = glob($path . '/*');
+			foreach ($files as $file) {
+				is_dir($file) ? removeDirectory($file) : unlink($file);
+			}
+			rmdir($path);
+			return;
+		}
+		removeDirectory($container->get('cachedir'));
+	}
+}
+
+
+// Set container in App factory
+AppFactory::setContainer($container);
+
 // Set Twig engine for templating
 $container->set('view', function() {
+	$settings = json_decode(file_get_contents(__DIR__ . '/../config.json'), true);
+	$tpls = [
+		__DIR__ . "/../app/views/",
+		__DIR__ . "/../pages/",
+		__DIR__ . "/../public/themes/"
+	];
+	// Disable Cache on DevMode
+	if ($settings['devMode'] == true ) {
     $twig = Twig::create(
-			[
-				__DIR__ . "/../app/views/",
-				__DIR__ . "/../pages/",
-				__DIR__ . "/../public/themes/"
-			],
+			$tpls,
 			[
 				'cache' => false
 			]
 		);
     return $twig;
+   } else {
+   	$twig = Twig::create(
+			$tpls,
+			[
+				'cache' => __DIR__ . '/../cache/'
+			]
+		);
+    return $twig;
+   }
 });
-
-// Set container in App factory
-AppFactory::setContainer($container);
 
 // Create App
 $app = AppFactory::create();
+$app->add(TwigMiddleware::createFromContainer($app));
 
-// Add Twig-View Middleware
-$app->add(
-	TwigMiddleware::createFromContainer($app)
-);
+// Add some tweaking middlewares
+if ($settings['devMode'] == true ) {
+	$app->add(new Minify(false) );
+} else {
+	$app->add(new Minify() );
+}
 
 // Check if password file exist or create a random one for initialize the installation script
 if (!file_exists($container->get('password'))) {
@@ -87,7 +130,11 @@ $app->get('/sitemap', HomeController::class . ":sitemap")->setName('sitemap');
 
 // Admin routes
 $app->get('/admin', AdminController::class . ":adminIndex")->setName('admin');
-$app->post('/admin/save', AdminController::class . ":save")->setName('save');
+$app->get('/admin/social', AdminController::class . ":adminSocial")->setName('admin-social');
+$app->get('/admin/pages', AdminController::class . ":adminPages")->setName('admin-pages');
+$app->get('/admin/newpage', AdminController::class . ":adminNewPage")->setName('admin-newpage');
+$app->post('/admin/save', AdminController::class . ":save")->setName('admin-save');
+$app->get('/admin/logout', AdminController::class . ":logout")->setName('admin-logout');
 
 // generate routes from static pages
 $pagesDir = $container->get('pagesdir');

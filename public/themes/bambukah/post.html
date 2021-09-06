@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="bg-white rounded">
-	<div class="text-center pt-16 md:pt-24 pb-2">
+	<div class="text-center pt-4 md:pt-8 pb-2">
 	<p class="text-sm md:text-base font-bold"> Date: {{ article.created|date("m/d/Y") }} - Upvotes : {{article.active_votes|length}} - Words : {{article.body|split(' ')|length }}</p>
 	
 	<h1 class="text-center font-bold break-normal text-3xl md:text-5xl">{{article.title}}</h1>

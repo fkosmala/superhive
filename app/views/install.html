@@ -4,38 +4,37 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SuperHive Installation</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.3.0/milligram.min.css">
-  <style>
-    .warning {color: #A00}
-    .center{text-align: center;margin-top: 5px;}
-    form{border: 1px solid #CCD;padding: 10px;border-radius: 5px;}
-  </style>
+  <link href="https://unpkg.com/tailwindcss/dist/tailwind.min.css" rel="stylesheet">
 </head>
+<body class="bg-gray-800 font-sans leading-normal tracking-normal">
 
-<body>
-  <div class="container center">
-    <h1>SuperHive</h1>
-    <hr/>
-    <h2>Congratulations !</h2>
+	<!--Header-->
+	<div class="w-full m-0 p-10 bg-black">
+		<div class="container max-w-4xl mx-auto text-center break-normal">
+				<h1 class="text-white font-extrabold text-3xl md:text-5xl">
+					SuperHive
+				</h1>
+				<p class="text-xl md:text-2xl text-gray-500">Installation</p>
+		</div>
+	</div>
+
+	<div class="w-full text-center text-gray-100 leading-normal rounded-t">
+		<h2 class="text-3xl p-5">Congratulations !</h2>
     <p>Welcome to your new fresh installation of SuperHive. Please choose a username and a password to finish the installation :</p>
     <form action="{{ url_for('install') }}" method="post">
-      <div class="row">
-        <div class="column">
-          <label for="username">Usename</label>
-          <input type="text" placeholder="Choose your username" id="username" name="username">
-        </div>
-        <div class="column">
-          <label for="passwd">Password</label>
-          <input type="password" placeholder="Choose a good password" id="passwd" name="passwd">
-        </div>
+    	<div class="m-2">
+      	<label for="username">Username : </label>
+      	<input type="text" placeholder="Choose your username" id="username" name="username" class="bg-gray-700 appearance-none border-2 border-gray-500 rounded py-2 px-4 text-gray-100 leading-tight focus:outline-none focus:bg-black focus:border-gray-500">
       </div>
-      <div>
-          <input class="button-primary" type="submit" value="Finish">
+      <div class="m-2">
+      	<label for="passwd">Password : </label>
+      	<input type="password" placeholder="Choose a good password" id="passwd" name="passwd" class="bg-gray-700 appearance-none border-2 border-gray-500 rounded py-2 px-4 text-gray-100 leading-tight focus:outline-none focus:bg-black focus:border-gray-500">
+      </div>
+      <div class="m-2">
+      	<input class="bg-gray-600 text-white p-2" type="submit" value="Finish">
       </div>
     </form>
+	</div>
 
-  </div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/cash/7.0.1/cash.min.js" integrity="sha256-cP4vwprtrs4i6th5S3ysmrRUfhdEyHA5MlBxaOwQ+/s=" crossorigin="anonymous"></script>
 </body>
 </html>

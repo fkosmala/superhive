@@ -1,18 +1,18 @@
 {
     "author": "bambukah",
     "title": "SuperHive",
-    "baseline": "Your Hive-based unique blog",
-    "nextbutton": "See my other articles on peakd",
+    "baseline": "Next-Gen Blog Engine",
     "social": {
         "description": "Personnal blog made with SuperHive",
-        "image": "https://files.peakd.com/file/peakd-hive/bambukah/FYAgdGHM-photo.png",
+        "image": "",
         "twitter": "",
-        "instagram": "",
         "facebook": "",
+        "instagram": "",
         "linkedin": ""
     },
-    "theme": "journal",
+    "theme": "bambukah",
     "crosspost": false,
-    "api": "https:\/\/api.openhive.network",
-    "cron": false
+    "api": "https:\/\/api.hive.blog",
+    "cron": false,
+    "devMode": true
 }
