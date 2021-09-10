@@ -45,7 +45,7 @@
 		      </a>
 		    </li>
 				<li class="mr-6 my-2 md:my-0">
-		      <a href="#" class="block py-1 md:py-3 pl-1 align-middle text-gray-200 no-underline hover:text-gray-100 border-b-2 border-gray-900 hover:border-blue-400">
+		      <a href="{{ url_for('admin-posts') }}" class="block py-1 md:py-3 pl-1 align-middle text-gray-200 no-underline hover:text-gray-100 border-b-2 border-gray-900 hover:border-blue-400">
 		        <i class="fas fa-paste fa-fw mr-3"></i><span class="pb-1 md:pb-0 text-sm">Posts</span>
 		      </a>
 		    </li>
@@ -64,11 +64,6 @@
 		        <i class="fa fa-wallet fa-fw mr-3"></i><span class="pb-1 md:pb-0 text-sm">Wallet</span>
 		      </a>
 		    </li>
-		    <!--<li class="mr-6 my-2 md:my-0">
-		      <a href="{{ url_for('admin-logout') }}" class="block py-1 md:py-3 pl-1 align-middle text-red-300 no-underline hover:text-gray-100 border-b-2 border-gray-900 hover:border-blue-400">
-		        <i class="text-red-300 fas fa-window-close fa-fw mr-3"></i><span class="pb-1 md:pb-0 text-sm">Logout</span>
-		      </a>
-		    </li>-->
 			</ul>		
 		</div>
 		
@@ -120,7 +115,7 @@
 	</div>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cash/8.1.0/cash.min.js"></script>
+<script src="https://unpkg.com/jquery@3.6.0/dist/jquery.min.js"></script>
 <script>
 	/*Toggle dropdown list*/
 	/*https://gist.github.com/slavapas/593e8e50cf4cc16ac972afcbad4f70c8*/

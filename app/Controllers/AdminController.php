@@ -36,24 +36,6 @@ final class AdminController
 			]);
 		}
 		
-		public function adminPages(Request $request, Response $response) : Response {
-			$pagesDir = $this->app->get('pagesdir');
-			$settings = $this->app->get('settings');
-			
-			return $this->app->get('view')->render($response, '/admin/admin-pages.html', [
-					'settings' => $settings,
-					'pages' => array()
-			]);
-		}
-		
-		public function adminNewPage(Request $request, Response $response) : Response {
-			$settings = $this->app->get('settings');
-			
-			return $this->app->get('view')->render($response, '/admin/admin-newpage.html', [
-					'settings' => $settings
-			]);
-		}
-		
 		public function save(Request $request, Response $response, $args) : Response {
 			$data = $request->getParsedBody();
 			$redirect = $data["redirect"];
@@ -94,20 +76,8 @@ final class AdminController
 			// Create array from config file
 			file_put_contents($this->app->get('configfile'), $file);
 			unlink($this->app->get('blogfile'));
-			
 
 			return $response->withHeader('Location',  $redirect)->withStatus(302);
 		}
 		
-		/*public function logout(Request $request, Response $response) : Response {
-			$routeContext = RouteContext::fromRequest($request);
-    	$routeParser = $routeContext->getRouteParser();
-      $url = $routeParser->fullUrlFor($request->getUri(),'index');
-      $url= "//logout:lol".strstr($url, "@");
-      
-      unset($_COOKIE[session_name()]);
-    	session_destroy();
-		
-			return $response->withHeader('Location',  $url)->withStatus(302);
-		}*/
 }

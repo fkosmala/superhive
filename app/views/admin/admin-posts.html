@@ -6,29 +6,21 @@
 		<div class="w-full">
 			<div class="bg-gray-800 border border-gray-800 rounded shadow p-1">
 			  <div class="border-b border-gray-800 p-3">
-			    <h3 class="font-bold uppercase text-gray-300">Pages</h3>
+			    <h3 class="font-bold uppercase text-gray-300">Posts</h3>
 			  </div>
 			  
 			  <div class="md:flex md:items-center mb-6">
 			  	<div class="w-full text-center">
-						<a href="{{ url_for('admin-newpage') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded">Create new page</a>
+						<a href="{{ url_for('admin-newpost') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded">Create new post on Blockchain</a>
 					</div>
 				</div>
 				
 				<div class="md:flex md:items-center mb-6">
 					<div class="md:w-1/4 block text-gray-300 font-bold md:text-right mb-1 md:mb-0 pr-4">
-							List of pages
+							Last posts
 					</div>
 					<div class="md:w-3/4">
-						{% if pages %}
-						<ul>
-							{% for page in pages %}
-								<li><a href="{{ url_for('admin-editpage', {'file': page}) }}">{{ page }}</a></li>
-							{% endfor %}
-						</ul>
-						{% else %}
-							Start to create a Page (off-chain content) by clicking on the "Create new page" button
-						{% endif %}
+						Wait for new version to have lsit of your psot (to edit them), sorry :(
 					</div>
 				</div>
 				

@@ -4,6 +4,8 @@ namespace App;
 
 use App\Controllers\HomeController;
 use App\Controllers\AdminController;
+use App\Controllers\PagesController;
+use App\Controllers\PostsController;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -24,12 +26,14 @@ $container = new Container();
 // Set all dirs & files paths
 $container->set('basedir', __DIR__ . '/../');
 $container->set('cachedir', __DIR__ . '/../cache/');
+$container->set('datadir', __DIR__ . '/../data/');
 $container->set('themesdir', __DIR__ . '/../public/themes/');
-$container->set('commentsdir', __DIR__ . '/../app/comments/');
+$container->set('commentsdir', __DIR__ . '/../data/comments/');
 $container->set('pagesdir', __DIR__ . '/../pages/');
 $container->set('configfile', __DIR__ . '/../config.json');
-$container->set('blogfile', __DIR__ . '/../app/blog.json');
+$container->set('blogfile', __DIR__ . '/../data/blog.json');
 $container->set('password', __DIR__ . '/../password');
+
 // Set settings array in container for use in all routes
 $container->set('settings', function() {
 	$config = file_get_contents(__DIR__ . '/../config.json');
@@ -40,6 +44,23 @@ $container->set('settings', function() {
 $settings = $container->get('settings');
 
 // Create folders that doesn't exist
+
+// Pages Dir
+if (!file_exists($container->get('pagesdir'))) {
+	mkdir($container->get('pagesdir'), 0755, true);
+}
+
+// Data dir (to store blockchain data)
+if (!file_exists($container->get('datadir'))) {
+	mkdir($container->get('datadir'), 0755, true);
+}
+
+// Comments
+if (!file_exists($container->get('commentsdir'))) {
+	mkdir($container->get('commentsdir'), 0755, true);
+}
+
+// Create Cache dir only in Production mode
 if ((!file_exists($container->get('cachedir'))) && ($settings["devMode"] == false)) {
 	mkdir($container->get('cachedir'), 0755, true);
 } else {
@@ -56,7 +77,6 @@ if ((!file_exists($container->get('cachedir'))) && ($settings["devMode"] == fals
 		removeDirectory($container->get('cachedir'));
 	}
 }
-
 
 // Set container in App factory
 AppFactory::setContainer($container);
@@ -93,6 +113,11 @@ $container->set('view', function() {
 $app = AppFactory::create();
 $app->add(TwigMiddleware::createFromContainer($app));
 
+// Add Error Middleware on DevMode
+if ($settings['devMode'] == true ) {
+	$app->addErrorMiddleware(true, false, false);
+}
+
 // Add some tweaking middlewares
 if ($settings['devMode'] == true ) {
 	$app->add(new Minify(false) );
@@ -121,20 +146,29 @@ $app->add(
  )
 );
 
-// Normal user routes
+// Global routes
 $app->get('/', HomeController::class . ":index")->setName('index');
 $app->post('/', HomeController::class . ":install")->setName('install');
-$app->get('/post/{permlink}', HomeController::class . ":post")->setName('post');
 $app->get('/feed', HomeController::class . ":feed")->setName('feed');
 $app->get('/sitemap', HomeController::class . ":sitemap")->setName('sitemap');
 
 // Admin routes
 $app->get('/admin', AdminController::class . ":adminIndex")->setName('admin');
 $app->get('/admin/social', AdminController::class . ":adminSocial")->setName('admin-social');
-$app->get('/admin/pages', AdminController::class . ":adminPages")->setName('admin-pages');
-$app->get('/admin/newpage', AdminController::class . ":adminNewPage")->setName('admin-newpage');
 $app->post('/admin/save', AdminController::class . ":save")->setName('admin-save');
-$app->get('/admin/logout', AdminController::class . ":logout")->setName('admin-logout');
+
+// Posts routes
+$app->get('/post/{permlink}', PostsController::class . ":post")->setName('post');
+
+$app->get('/admin/posts', PostsController::class . ":adminPosts")->setName('admin-posts');
+$app->get('/admin/newpost', PostsController::class . ":adminNewPost")->setName('admin-newpost');
+
+// Admin Pages
+$app->get('/admin/pages', PagesController::class . ":adminPages")->setName('admin-pages');
+$app->get('/admin/newpage', PagesController::class . ":adminNewPage")->setName('admin-newpage');
+$app->get('/admin/editpage/{file}', PagesController::class . ":adminEditPage")->setName('admin-editpage');
+$app->get('/admin/delpage/{file}', PagesController::class . ":adminDelPage")->setName('admin-delpage');
+$app->post('/admin/savepage', PagesController::class . ":adminSavePage")->setName('admin-savepage');
 
 // generate routes from static pages
 $pagesDir = $container->get('pagesdir');
@@ -144,12 +178,10 @@ foreach ($pages as $page) {
 	$route = substr($page, 0, strrpos($page, "."));
 	$app->get('/'.$route, function ($request, $response) {
 		$settings = $this->get('settings');
-		$theme = $settings['theme'].'/layout.html';
 		$uri = $request->getUri();
 		$route = substr(strrchr($uri, "/"), 1);
 		return $this->get('view')->render($response, $route.'.html', [
-			"settings"=>$settings,
-			"theme"=>$theme
+			"settings"=>$settings
 		]);
 	})->setName($route);
 

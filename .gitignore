@@ -2,6 +2,5 @@ composer.phar
 composer.lock
 config.json
 password
-app/blog.json
-app/comments/*.comments
 /vendor/
+/data/

@@ -83,52 +83,6 @@ final class HomeController
 			}
 		}
 		
-		public function post(Request $request, Response $response, $args) : Response {
-			$settings = $this->app->get('settings');
-	
-			if (isset($args['permlink'])) {
-				$permlink = $args['permlink'];
-				
-				// Check if comments exists for this post
-				$comments = $this->app->get('commentsdir').$permlink.'.comments';
-				if ((!file_exists($comments)) || (file_exists($comments)) && (time()-filemtime($comments) > 1 * 3600)) {
-					$query = '{
-						"jsonrpc":"2.0",
-						"method":"condenser_api.get_content_replies",
-						"params":[
-							"'.$settings['author'].'", 
-							"'.$permlink.'"
-						], 
-						"id":1
-					}';
-					$ch = curl_init($settings['api']);
-					curl_setopt($ch, CURLOPT_POSTFIELDS, $query);
-					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-					$result = curl_exec($ch);
-					curl_close($ch);
-					file_put_contents($comments, $result);
-				}
-				$replies = json_decode(file_get_contents($comments), true);
-				$replies = $replies['result'];
-
-				$file = $this->app->get('blogfile');
-				$blog = json_decode(file_get_contents($file), true);
-				$articles = $blog['result'];
-				foreach($articles AS $index=>$article) {
-					if($article['permlink'] == $permlink) {
-						$metadata = json_decode($article['json_metadata'], true);
-						return $this->app->get('view')->render($response, $settings['theme'].'/post.html', [
-							'settings' => $settings,
-							'article' => $article,
-							'metadata' => $metadata,
-							'replies' => $replies
-						]);
-					}
-				}
-				
-			}
-		}
-		
 		public function feed(Request $request, Response $response) : Response {
 			$settings = $this->app->get('settings');
 
