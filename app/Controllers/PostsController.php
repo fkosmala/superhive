@@ -89,45 +89,46 @@ final class PostsController
 			]);
 		}
 		
-		/*public function adminEditPage(Request $request, Response $response, array $args) : Response {
-			$file = $args['file'];
+		public function adminEditPost(Request $request, Response $response, array $args) : Response {
+			$posted = $args['post'];
 			
-			$pagesDir = $this->app->get('pagesdir');
+			$file = $this->app->get('blogfile');
 			$settings = $this->app->get('settings');
+
+			$blog = json_decode(file_get_contents($file), true);
+			$posts = $blog['result'];
 			
-			$content = file_get_contents($pagesDir.$file.'.html');
+			$permlinks = array();
 			
-			
-			$pageTitle = preg_match('/\{% block title %\}(.*?)\{% endblock %\}/s', $content, $match);
-			$pageTitle = $match[1];
-			$pageContent = strstr($content, '{% block page %}');
-			$pageContent = preg_replace("/\{%(.*?)%\}/", "", $pageContent);
-			
-			return $this->app->get('view')->render($response, '/admin/admin-newpage.html', [
-				'pageTitle' => $pageTitle,
-				'pageFile' => $file,
-				'pageContent' => $pageContent,
-				'settings' => $settings
-			]);
-		}
-		
-		public function adminDelPage(Request $request, Response $response, array $args) : Response {
-			$name = $args['file'];
-			
-			$pagesDir = $this->app->get('pagesdir');
-			
-			$filePath = $pagesDir.$name.'.html';
-					
-			if (unlink($filePath)) {
-				$response->getBody()->write('OK');
-			} else {
-				$response->getBody()->write('Error');
+			foreach($posts as $post) {
+				$permlinks[] = $post["permlink"];
 			}
 			
-			return $response;
+			$column = array_column($posts, 'permlink');
+			$postIndex = array_search($posted, $column);
+			
+			if (is_numeric($postIndex)) {
+				$post = $posts[$postIndex];
+				$postTitle = $post['title'];
+				$permlink = $post['permlink'];
+				$content = $post['body'];
+				$metadata = json_decode($post['json_metadata']);
+				
+				return $this->app->get('view')->render($response, '/admin/admin-newpost.html', [
+					'settings' => $settings,
+					'postTitle' => $postTitle,
+					'postContent' => $content,
+					'postPermlink' => $permlink,
+					'postTags' => $metadata->tags
+			]);
+				
+			} else {	
+				$response->getBody()->write("No Post Found");
+				return $response;
+			}
 		}
 		
-		public function adminSavePage(Request $request, Response $response) : Response {
+		/*public function adminSavePage(Request $request, Response $response) : Response {
 			$data = $request->getParsedBody();
 			$settings = $this->app->get('settings');
 			$pagesDir = $this->app->get('pagesdir');

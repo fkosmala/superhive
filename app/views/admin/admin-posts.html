@@ -16,11 +16,22 @@
 				</div>
 				
 				<div class="md:flex md:items-center mb-6">
-					<div class="md:w-1/4 block text-gray-300 font-bold md:text-right mb-1 md:mb-0 pr-4">
-							Last posts
-					</div>
-					<div class="md:w-3/4">
-						Wait for new version to have lsit of your psot (to edit them), sorry :(
+					<div class="px-5">
+						<h3 class="text-2xl">Last posts:</h3>
+						<p class="mb-6 text-sm">Click on a title to edit your post</p>
+						<div class="mx-6">
+						{% if posts %}
+						<ul>
+						{% for post in posts %}
+						{% if post.author == settings.author %}
+							<li><a href="{{ url_for('admin-editpost', {post : post.permlink}) }}">{{ post.title }}</a></li>
+						{% endif %}
+						{% endfor %}
+						</ul>
+						{% else %}
+						No posts found. You can create one by press "Create new post" button
+						{% endif %}
+						</div>
 					</div>
 				</div>
 				

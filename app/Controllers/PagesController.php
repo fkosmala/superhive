@@ -88,7 +88,7 @@ final class PagesController
 			$pageTitle = $data['title'];
 			$pageContent = $data['mde'];
 			
-			// Some funcitons to slugify title to create very cool URL
+			// Some functions to slugify title to create very cool URL
 			$slug = mb_strtolower(strtr(utf8_decode($pageTitle), utf8_decode('àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ'), 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY'));
 			$slug = preg_replace('~[^\pL\d]+~u', "-", $slug);
 			$slug = preg_replace('~[^-\w]+~', '', $slug);

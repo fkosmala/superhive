@@ -94,7 +94,11 @@
 						</label>
 					</div>
 					<div class="md:w-3/4">
-						<input name="postTags" id="postTags" class="bg-gray-700 appearance-none border-2 border-gray-500 rounded w-3/4 py-2 px-4 text-gray-100 leading-tight focus:outline-none focus:bg-black focus:border-gray-500" type="text" placeholder="Find some tags" {% if postTags %}value="{{ postTags }}"{% endif %}>
+						{% if postTags %}
+						<span id="tag1">{{ postTags[0] }}</span> <input name="postTags" id="postTags" class="bg-gray-700 appearance-none border-2 border-gray-500 rounded w-3/4 py-2 px-4 text-gray-100 leading-tight focus:outline-none focus:bg-black focus:border-gray-500" type="text" placeholder="Find some tags" value="{% for tag in postTags %}{% if loop.index > 1 %}{{ tag }} {% endif %}{% endfor %}">
+						{% else %}
+						<input name="postTags" id="postTags" class="bg-gray-700 appearance-none border-2 border-gray-500 rounded w-3/4 py-2 px-4 text-gray-100 leading-tight focus:outline-none focus:bg-black focus:border-gray-500" type="text" placeholder="Find some tags">
+						{% endif %}
 					</div>
 				</div>
 				
@@ -102,12 +106,11 @@
 				
 				{% if postContent %}
 				<div id="actions" class="w-full text-center">
-					<button id="postDelete" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 border border-red-700 rounded">Delete</button>
 					<button id="postUpdate" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded">Update</button>
 				</div>
 				{% else %}
 				<div id="actions" class="w-full text-center">
-					<button id="pageCreate" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded">Create</button>
+					<button id="ppstCreate" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded">Create</button>
 				</div>
 				{% endif %}
 				
@@ -132,7 +135,34 @@
 	}
 	
 	$(function() {
-    $('#pageCreate').on('click tap', function(event) {
+		{% if postPermlink %}
+    $('#postUpdate').on('click tap', function(event) {
+    	event.preventDefault();
+    	account = $('#postAuthor').val();
+			title = $('#postTitle').val();
+			slug = "{{ postPermlink }}";
+			body = easyMDE.value();
+			tags = $('#tag1').text()+" "+$('#postTags').val();
+			taglist = tags.split(' ');
+			json_metadata = JSON.stringify({ tags: taglist, app: "SuperHive", format: "markdown" });
+			hive_keychain.requestHandshake(function() {
+				hive_keychain.requestPost(
+					account,
+					title,
+					body,
+					taglist[0],
+					'',
+					json_metadata,
+					slug,
+					"", // Comment_options TO DO
+					function(response) {
+						$('#results').text(response.message);
+					}
+				);
+			});
+    });
+    {% else %}
+    $('#postCreate').on('click tap', function(event) {
     	event.preventDefault();
     	account = $('#postAuthor').val();
 			title = $('#postTitle').val();
@@ -157,24 +187,7 @@
 				);
 			});
     });
-    
-    /*$('#pageDelete').on('click tap', function(event) {
-    	event.preventDefault();
-    	var title = $('#pageTitle').val();
-    	var mde = easyMDE.value();
-    	$.get(
-    		"{{ url_for('admin-delpage', {'file': pageFile }) }}", 
-    		{ title: title, mde: mde },
-    		function(data) {
-    			if (data == "Error") {
-    				$('#results').text('An error has occured !');
-    			} else {
-    				$('#results').html('Congrats! Your page is now deleted from your server');
-    			}
-    		}
-    	);
-    });*/
-    
+    {% endif %}
 	});
 </script>
 {% endblock %}

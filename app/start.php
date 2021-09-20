@@ -162,8 +162,9 @@ $app->get('/post/{permlink}', PostsController::class . ":post")->setName('post')
 
 $app->get('/admin/posts', PostsController::class . ":adminPosts")->setName('admin-posts');
 $app->get('/admin/newpost', PostsController::class . ":adminNewPost")->setName('admin-newpost');
+$app->get('/admin/editpost/{post}', PostsController::class . ":adminEditPost")->setName('admin-editpost');
 
-// Admin Pages
+// Other Admin Pages
 $app->get('/admin/pages', PagesController::class . ":adminPages")->setName('admin-pages');
 $app->get('/admin/newpage', PagesController::class . ":adminNewPage")->setName('admin-newpage');
 $app->get('/admin/editpage/{file}', PagesController::class . ":adminEditPage")->setName('admin-editpage');
