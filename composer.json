@@ -9,7 +9,7 @@
 		{
 			"name": "Florent Kosmala",
 			"email": "contact@florent-kosmala.fr",
-			"homepage": "http://www.florent-kosmala.fr/"
+			"homepage": "http://florent-kosmala.fr/"
 		}
 	],
 	"require": {
@@ -18,7 +18,8 @@
 		"php-di/php-di": "^6.1",
 		"slim/twig-view": "^3.0",
 		"tuupola/slim-basic-auth": "^3.2",
-		"christianklisch/slim-minify": "^0.7.0"
+		"christianklisch/slim-minify": "^0.7.0",
+		"dragos-roua/php-hive-tools": "dev-master"
 	},
 	"autoload": {
     "psr-4": {
@@ -27,5 +28,6 @@
   },
 	"scripts": {
 		"start": "php -S localhost:8080 -t public"
-  }
+  },
+	"minimum-stability": "dev"
 }

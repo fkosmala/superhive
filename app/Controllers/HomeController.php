@@ -8,6 +8,8 @@ use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Container\ContainerInterface;
 use \Slim\Factory\AppFactory;
 
+use DragosRoua\PHPHiveTools\HiveApi as HiveApi;
+
 final class HomeController
 {
 		
@@ -25,44 +27,33 @@ final class HomeController
 			if (!file_exists($this->app->get('password'))) {
 				return $this->app->get('view')->render($response, '/install.html');
 			}
+			
+			$apiConfig = ["webservice_url" => $settings['api'], "debug" => false];
 
-			// Set data from config file to create query
-			$query = '{
-				"jsonrpc":"2.0",
-				"method":"condenser_api.get_discussions_by_blog",
-				"params":[{"tag":"'.$settings['author'].'","limit":15}],
-				"id":0
-			}';
+			$api = new HiveApi($apiConfig);
+			$params = [[
+				"tag" => $settings['author'], 
+				"limit" => 15
+			]];
 
 			// The file with the latest posts.
 			$file = $this->app->get('blogfile');
 
 			// if the JSON file doesn't exist, take it from API
 			if (!file_exists($file)) {
-				// Go take articles from Hive api
-				$ch = curl_init($settings['api']);
-				curl_setopt($ch, CURLOPT_POSTFIELDS, $query);
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-				$result = curl_exec($ch);
-				curl_close($ch);
+				$result = json_encode($api->getDiscussionsByBlog($params), JSON_PRETTY_PRINT);
 				file_put_contents($file, $result);
 			} else {
 				if ($settings['cron'] == false) {
 					if (time()-filemtime($file) > 1 * 3600) {
-						file_put_contents($file, '');
-						$ch = curl_init($settings['api']);
-						curl_setopt($ch, CURLOPT_POSTFIELDS, $query);
-						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-						$result = curl_exec($ch);
-						curl_close($ch);
+						$result = json_encode($api->getDiscussionsByBlog($params), JSON_PRETTY_PRINT);
 						file_put_contents($file, $result);
 					}
 				}
 			}
-
-			// Get the JSON 
-			$blog = json_decode(file_get_contents($file), true);
-			$articles = $blog['result'];
+			
+		// Get the JSON 
+			$articles = json_decode(file_get_contents($file), true);
 
 			// Return view with articles
 			return $this->app->get('view')->render($response, $settings['theme'].'/index.html', [

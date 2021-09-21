@@ -32,6 +32,7 @@ $container->set('commentsdir', __DIR__ . '/../data/comments/');
 $container->set('pagesdir', __DIR__ . '/../pages/');
 $container->set('configfile', __DIR__ . '/../config.json');
 $container->set('blogfile', __DIR__ . '/../data/blog.json');
+$container->set('accountfile', __DIR__ . '/../data/account.json');
 $container->set('password', __DIR__ . '/../password');
 
 // Set settings array in container for use in all routes
