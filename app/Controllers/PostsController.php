@@ -66,11 +66,10 @@ final class PostsController
 		
 		$file = $this->app->get('blogfile');
 		$blog = json_decode(file_get_contents($file), true);
-		$posts = $blog['result'];
 		
 		return $this->app->get('view')->render($response, '/admin/admin-posts.html', [
 				'settings' => $settings,
-				'posts' => $posts
+				'posts' => $blog
 		]);
 	}
 	

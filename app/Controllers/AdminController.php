@@ -26,7 +26,7 @@ final class AdminController
 			$settings = $this->app->get('settings');
 			$accountFile = $this->app->get('accountfile');
 			
-			$apiConfig = ["webservice_url" => $settings['api'],"debug" => true];
+			$apiConfig = ["webservice_url" => $settings['api'],"debug" => false];
 			$api = new HiveApi($apiConfig);
 			
 			$cache_interval = 300;
