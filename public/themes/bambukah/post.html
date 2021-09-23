@@ -28,7 +28,7 @@
 			<form>
 				<div class="mb-4">
 				  <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
-				    Username
+				    Your HIVE Username (without @)
 				  </label>
 				  <input class="px-2 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="username "id="username" type="text" placeholder="Username">
 				</div>
@@ -36,10 +36,11 @@
 				  <label class="block text-gray-700 text-sm font-bold mb-2" for="comment">
 				    Your comment
 				  </label>
-				  <textarea class="px-2 shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="comment "id="comment" type="text" placeholder="Write your comment here"></textarea>
+				  <textarea class="px-2 shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="comment" id="comment" type="text" placeholder="Write your comment here"></textarea>
 				</div>
 				<button id="sendComment" class="bg-blue-500 text-sm hover:bg-blue-700 text-white py-2 px-4 rounded">Send your comment</button>
 			</form>
+			<div id="results" class="w-full text-center mb-6"></div>
 		</div>
 		{% for reply in replies %}
 		{% if reply.author_reputation > 0 %}
@@ -71,9 +72,35 @@ window.onload = function () {
 	if (typeof hive_keychain === 'undefined') {
 		$('#writeComment').addClass('text-red-400 mb-6').html('You don\'t have Hive Keychain please install it for <a target="_blank" href="https://chrome.google.com/webstore/detail/hive-keychain/jcacnejopjdphbnjgfaaobbfafkihpep">Brave/Chrome</a> or <a target="_blank" href="https://addons.mozilla.org/en-GB/firefox/addon/hive-keychain/">Firefox</a>. Don\'t forget you need also a <a target="_blank" href="https://hive.io">HIVE</a> account')
 	} else {
-		$('#sendComment').on ("click tap", function(event) {
+		$('#sendComment').on("click tap", function(event) {
 			event.preventDefault();
-			console.log("lol");
+			hive_keychain.requestHandshake(function() {
+			
+				// Define vars
+				account = $('#username').val();
+				title = '';
+				body = $('#comment').val();
+				parent_permlink = '{{ article.permlink }}';
+				parent_author = '{{ article.author }}';
+				json_metadata = JSON.stringify({app: "SuperHive"});
+				permlink = 'sh'+Math.random().toString(36).substring(2);
+				comment_options = '';
+				
+				// Post them !
+				hive_keychain.requestPost(
+					account,
+					title,
+					body,
+					parent_permlink,
+					parent_author,
+					json_metadata,
+					permlink,
+					comment_options,
+					function(response) {
+						$('#results').text(response.message);
+					}
+				);
+			});
 		});
 	}
 }
