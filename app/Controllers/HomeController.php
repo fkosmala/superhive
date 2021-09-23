@@ -33,7 +33,8 @@ final class HomeController
 			$api = new HiveApi($apiConfig);
 			$params = [[
 				"tag" => $settings['author'], 
-				"limit" => 15
+				"limit" => 100,
+				"select_authors" => $settings['author']
 			]];
 
 			// The file with the latest posts.
@@ -44,11 +45,9 @@ final class HomeController
 				$result = json_encode($api->getDiscussionsByBlog($params), JSON_PRETTY_PRINT);
 				file_put_contents($file, $result);
 			} else {
-				if ($settings['cron'] == false) {
-					if (time()-filemtime($file) > 1 * 3600) {
-						$result = json_encode($api->getDiscussionsByBlog($params), JSON_PRETTY_PRINT);
-						file_put_contents($file, $result);
-					}
+				if (time()-filemtime($file) > 1 * 600) {
+					$result = json_encode($api->getDiscussionsByBlog($params), JSON_PRETTY_PRINT);
+					file_put_contents($file, $result);
 				}
 			}
 			

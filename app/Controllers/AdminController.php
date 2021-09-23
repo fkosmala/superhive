@@ -27,7 +27,7 @@ final class AdminController
 			$accountFile = $this->app->get('accountfile');
 			
 			$apiConfig = ["webservice_url" => $settings['api'],"debug" => true];
-			$api = new HiveApi($config);
+			$api = new HiveApi($apiConfig);
 			
 			$cache_interval = 300;
 			$params = [$settings['author']];
@@ -60,9 +60,9 @@ final class AdminController
 			$redirect = $data["redirect"];
 			$settings = $this->app->get('settings');
 			$crosspost = (!isset($data["crosspost"])) ? false : true;
-			$cron = (!isset($data["cron"])) ? false : true;
 			$devMode = (!isset($data["devMode"])) ? false : true;
 			$api = ($data["api"] == "") ? "https://api.hive.blog" : $data["api"];
+			$displayedPosts = ($data["displayedPosts"] == "") ? 15 : (int)$data["displayedPosts"];
 			$author = ($data["author"] == "") ? $settings["author"] : $data["author"];
 			$title = ($data["title"] == "") ? $settings["title"] : $data["title"];
 			$baseline = ($data["baseline"] == "") ? $settings["baseline"] : $data["baseline"];
@@ -88,8 +88,8 @@ final class AdminController
 				'theme' => $theme,
 				'crosspost' => $crosspost,
 				'api' => $api,
-				'cron' => $cron,
-				'devMode' => $devMode
+				'devMode' => $devMode,
+				'displayedPosts' => (int)$displayedPosts
 			);
 			$file = json_encode($newSettings, JSON_PRETTY_PRINT);
 			// Create array from config file

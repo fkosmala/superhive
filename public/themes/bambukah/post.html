@@ -21,15 +21,34 @@
 	</div>
   
   <div class="bg-white rounded">
-		<div class="text-center pt-8 md:pt-16 pb-2">
+		<div class="text-center pt-4 pb-2">
 			<h2  class="text-center font-bold break-normal text-2xl md:text-4xl">Comments :</h2>
 		</div>
-			{% for reply in replies %}
-			<dl class="p-3">
-				<dt class="underline font-bold"><a target="_blank" href="https://peakd.com/@{{reply.author}}">{{reply.author}}</a> :</dt>
-				<dd class="pl-5 text-sm">{{reply.body}}</dd>
-			</dl>
-			{% endfor %}
+		<div id="writeComment" class="w-full text-center p-2">
+			<form>
+				<div class="mb-4">
+				  <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
+				    Username
+				  </label>
+				  <input class="px-2 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="username "id="username" type="text" placeholder="Username">
+				</div>
+				<div class="mb-4">
+				  <label class="block text-gray-700 text-sm font-bold mb-2" for="comment">
+				    Your comment
+				  </label>
+				  <textarea class="px-2 shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="comment "id="comment" type="text" placeholder="Write your comment here"></textarea>
+				</div>
+				<button id="sendComment" class="bg-blue-500 text-sm hover:bg-blue-700 text-white py-2 px-4 rounded">Send your comment</button>
+			</form>
+		</div>
+		{% for reply in replies %}
+		{% if reply.author_reputation > 0 %}
+		<dl class="p-3">
+			<dt class="underline font-bold"><a target="_blank" href="https://peakd.com/@{{reply.author}}">{{reply.author}}</a> :</dt>
+			<dd class="pl-5 text-sm">{{reply.body}}</dd>
+		</dl>
+		{% endif %}
+		{% endfor %}
 		</div>
 	</div>
   
@@ -45,5 +64,18 @@ $(function() {
 			$(this).html(marked($(this).text()));
 		});
   });
+</script>
+
+<script>
+window.onload = function () {
+	if (typeof hive_keychain === 'undefined') {
+		$('#writeComment').addClass('text-red-400 mb-6').html('You don\'t have Hive Keychain please install it for <a target="_blank" href="https://chrome.google.com/webstore/detail/hive-keychain/jcacnejopjdphbnjgfaaobbfafkihpep">Brave/Chrome</a> or <a target="_blank" href="https://addons.mozilla.org/en-GB/firefox/addon/hive-keychain/">Firefox</a>. Don\'t forget you need also a <a target="_blank" href="https://hive.io">HIVE</a> account')
+	} else {
+		$('#sendComment').on ("click tap", function(event) {
+			event.preventDefault();
+			console.log("lol");
+		});
+	}
+}
 </script>
 {% endblock %}

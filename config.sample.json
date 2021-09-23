@@ -12,7 +12,7 @@
     },
     "theme": "bambukah",
     "crosspost": false,
-    "api": "https:\/\/api.hive.blog",
-    "cron": false,
-    "devMode": true
+    "api": "api.hive.blog",
+    "devMode": true,
+    "displayedPosts": 15
 }
