@@ -6,7 +6,7 @@
 
 {% block content %}
 	{% for article in articles %}
-		{% if article.author == settings.author and nbPosts < settings.displayedPosts %}
+		{% if nbPosts < settings.displayedPosts %}
 			{% if 'This is a cross post' not in article.body or 'This is a cross post' in article.body and settings.crosspost == true %}
 			
 				{% set nbPosts = nbPosts + 1 %}
