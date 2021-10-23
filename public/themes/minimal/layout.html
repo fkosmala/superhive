@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr" prefix="og: http://ogp.me/ns#">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{% endblock %} - {{ settings.title }}</title>
+  <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura-dark.css" type="text/css">
+  <link rel="stylesheet" href="https://cdn.iconmonstr.com/1.3.0/css/iconmonstr-iconic-font.min.css">
+  <link rel="stylesheet" href="/themes/{{ settings.theme }}/style.css">
+{% include '/meta.html' %}
+</head>
+<body class="">
+
+	<!--Header-->
+	<header>
+		
+		{% if current_url() == url_for('index') %}
+			<h1><a href="{{ url_for('index')}}">{{ settings.title|upper }}</a></h1>
+		{% else %}
+			<p class="title"><a href="{{ url_for('index')}}">{{ settings.title|upper }}</a></p>
+		{% endif %}
+		<p class="subtitle">{{ settings.baseline }}</p>		
+		<nav>
+			<div class="social">
+				{% if settings.social.twitter %}<a target="_blank" href="http://twitter.com/{{settings.social.twitter}}" aria-label="Twitter"><span class="im im-twitter"></span></a>{% endif %}
+				{% if settings.social.facebook %}<a target="_blank" href="http://facebook.com/{{settings.social.facebook}}" aria-label="facebook"><span class="im im-facebook"></span></a>{% endif %}
+				{% if settings.social.instagram %}<a target="_blank" href="http://instagram.com/{{settings.social.instagram}}/" aria-label="Instagram"><span class="im im-instagram"></span></a>{% endif %}
+				{% if settings.social.linkedin %}<a target="_blank" href="http://linkedin.com/in/{{settings.social.linkedin}}" aria-label="LinkedIn"><span class="im im-linkedin"></span></a>{% endif %}
+			</div>
+		</nav>
+	</header>
+	
+	<hr>
+
+	<main class="container">{% block content %}{% endblock %}</main>
+	
+	<footer>	
+		<p>Find me on :
+			<a href="http://peakd.com/@{{settings.author}}">Hive</a>
+			{% if settings.social.twitter %}- <a href="http://twitter.com/{{settings.social.twitter}}">Twitter</a>{% endif %}
+			{% if settings.social.facebook %}- <a href="http://facebook.com/{{settings.social.facebook}}">Facebook</a>{% endif %}
+			{% if settings.social.instagram %}- <a href="http://instagram.com/{{settings.social.instagram}}/">Instagram</a>{% endif %}
+			{% if settings.social.linkedin %}- <a href="http://linkedin.com/in/{{settings.social.linkedin}}/">LinkedIn</a>{% endif %}
+		</p>
+		<p>
+			This website is powered by <a href="https://github.com/fkosmala/superhive">SuperHive</a>
+		</p>
+	</footer>
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/cash/7.0.1/cash.min.js" integrity="sha256-cP4vwprtrs4i6th5S3ysmrRUfhdEyHA5MlBxaOwQ+/s=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

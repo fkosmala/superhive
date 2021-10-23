@@ -1,0 +1,108 @@
+{% extends settings.theme ~ "/layout.html" %}
+
+{% block title %}{{article.title}}{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded">
+	<div class="text-center pt-4 md:pt-8 pb-2">
+	<p class="text-sm md:text-base font-bold"> Date: {{ article.created|date("m/d/Y") }} - Upvotes : {{article.active_votes|length}} - Words : {{article.body|split(' ')|length }}</p>
+	
+	<h1 class="text-center font-bold break-normal text-3xl md:text-5xl">{{article.title}}</h1>
+	</div>
+	
+  <article id="post" class="p-3 text-sm md:text-base">{{ article.body }} </article>
+</div>
+ 
+  <div id="tags" class="bg-white mt-3 mb-3 p-5 rounded text-sm"> 
+		Tags :
+		{% for tag in metadata.tags %}
+			<span class="bg-gray-800 text-white rounded p-2">{{ tag }}</span>
+		{% endfor %}
+	</div>
+  
+  <div class="bg-white rounded">
+		<div class="text-center pt-4 pb-2">
+			<h2  class="text-center font-bold break-normal text-2xl md:text-4xl">Comments :</h2>
+		</div>
+		<div id="writeComment" class="w-full text-center p-2">
+			<form>
+				<div class="mb-4">
+				  <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
+				    Your HIVE Username (without @)
+				  </label>
+				  <input class="px-2 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="username "id="username" type="text" placeholder="Username">
+				</div>
+				<div class="mb-4">
+				  <label class="block text-gray-700 text-sm font-bold mb-2" for="comment">
+				    Your comment
+				  </label>
+				  <textarea class="px-2 shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="comment" id="comment" type="text" placeholder="Write your comment here"></textarea>
+				</div>
+				<button id="sendComment" class="bg-blue-500 text-sm hover:bg-blue-700 text-white py-2 px-4 rounded">Send your comment</button>
+			</form>
+			<div id="results" class="w-full text-center mb-6"></div>
+		</div>
+		{% for reply in replies %}
+		{% if reply.author_reputation > 0 %}
+		<dl class="p-3">
+			<dt class="underline font-bold"><a target="_blank" href="https://peakd.com/@{{reply.author}}">{{reply.author}}</a> :</dt>
+			<dd class="pl-5 text-sm">{{reply.body}}</dd>
+		</dl>
+		{% endif %}
+		{% endfor %}
+		</div>
+	</div>
+  
+</div>
+  
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(function() {
+    $('article').html(marked($('article').text()));
+    $('dd').each(function( index ) {
+			$(this).html(marked($(this).text()));
+		});
+  });
+</script>
+
+<script>
+window.onload = function () {
+	if (typeof hive_keychain === 'undefined') {
+		$('#writeComment').addClass('text-red-400 mb-6').html('You don\'t have Hive Keychain please install it for <a target="_blank" href="https://chrome.google.com/webstore/detail/hive-keychain/jcacnejopjdphbnjgfaaobbfafkihpep">Brave/Chrome</a> or <a target="_blank" href="https://addons.mozilla.org/en-GB/firefox/addon/hive-keychain/">Firefox</a>. Don\'t forget you need also a <a target="_blank" href="https://hive.io">HIVE</a> account')
+	} else {
+		$('#sendComment').on("click tap", function(event) {
+			event.preventDefault();
+			hive_keychain.requestHandshake(function() {
+			
+				// Define vars
+				account = $('#username').val();
+				title = '';
+				body = $('#comment').val();
+				parent_permlink = '{{ article.permlink }}';
+				parent_author = '{{ article.author }}';
+				json_metadata = JSON.stringify({app: "SuperHive"});
+				permlink = 'sh'+Math.random().toString(36).substring(2);
+				comment_options = '';
+				
+				// Post them !
+				hive_keychain.requestPost(
+					account,
+					title,
+					body,
+					parent_permlink,
+					parent_author,
+					json_metadata,
+					permlink,
+					comment_options,
+					function(response) {
+						$('#results').text(response.message);
+					}
+				);
+			});
+		});
+	}
+}
+</script>
+{% endblock %}
