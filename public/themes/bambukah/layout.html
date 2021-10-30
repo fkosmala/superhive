@@ -12,19 +12,20 @@
 <body class="bg-gray-800 font-sans leading-normal tracking-normal">
 
 	<!--Header-->
-	<div class="w-full m-0 p-0 bg-black" style="height: 60vh; max-height:460px;">
+	<header class="w-full m-0 p-0 bg-black" style="height: 60vh; max-height:460px;">
 		<div class="container max-w-4xl mx-auto pt-16 md:pt-32 text-center break-normal">
-				<p class="text-white font-extrabold text-3xl md:text-5xl">
-					{{ settings.title|upper }}
-				</p>
-				<p class="text-xl md:text-2xl text-gray-500">{{ settings.baseline }}</p>
+			{% if current_url() == url_for('index') %}
+				<h1 class="text-white font-extrabold text-3xl md:text-5xl">{{ settings.title|upper }}</h1>
+			{% else %}
+				<p class="text-white font-extrabold text-3xl md:text-5xl">{{ settings.title|upper }}</p>
+			{% endif %}
+			<p class="text-xl md:text-2xl text-gray-500">{{ settings.baseline }}</p>
 		</div>
-	</div>
+	</header>
 		
 	<!--Container-->
-	<div class="container px-4 md:px-0 max-w-6xl mx-auto -mt-32">
+	<main class="container px-4 md:px-0 max-w-6xl mx-auto -mt-32">
 		<div class="mx-0 sm:mx-6">
-
 			<!--Nav-->
 			<nav class="mt-0 w-full">
 				<div class="container mx-auto flex items-center">
@@ -38,10 +39,10 @@
 					</div>
 					
 					<div class="flex w-1/2 justify-end content-center">		
-						{% if settings.social.twitter %}<a class="inline-block text-gray-500 no-underline hover:text-white hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 avatar" target="_blank" href="http://twitter.com/{{settings.social.twitter}}"><span class="im im-twitter"></span></a>{% endif %}
-						{% if settings.social.facebook %}<a class="inline-block text-gray-500 no-underline hover:text-white hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 avatar" target="_blank" href="http://facebook.com/{{settings.social.facebook}}"><span class="im im-facebook"></span></a>{% endif %}
-						{% if settings.social.instagram %}<a class="inline-block text-gray-500 no-underline hover:text-white hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 avatar" target="_blank" href="http://instagram.com/{{settings.social.instagram}}/"><span class="im im-instagram"></span></a>{% endif %}
-						{% if settings.social.linkedin %}<a class="inline-block text-gray-500 no-underline hover:text-white hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 avatar" target="_blank" href="http://linkedin.com/in/{{settings.social.linkedin}}"><span class="im im-linkedin"></span></a>{% endif %}
+						{% if settings.social.twitter %}<a class="inline-block text-gray-500 no-underline hover:text-white hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 avatar" target="_blank" href="http://twitter.com/{{settings.social.twitter}}" aria-label="Twitter"><span class="im im-twitter"></span></a>{% endif %}
+						{% if settings.social.facebook %}<a class="inline-block text-gray-500 no-underline hover:text-white hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 avatar" target="_blank" href="http://facebook.com/{{settings.social.facebook}}" aria-label="Facebook"><span class="im im-facebook"></span></a>{% endif %}
+						{% if settings.social.instagram %}<a class="inline-block text-gray-500 no-underline hover:text-white hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 avatar" target="_blank" href="http://instagram.com/{{settings.social.instagram}}/" aria-label="Instagram"><span class="im im-instagram"></span></a>{% endif %}
+						{% if settings.social.linkedin %}<a class="inline-block text-gray-500 no-underline hover:text-white hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 avatar" target="_blank" href="http://linkedin.com/in/{{settings.social.linkedin}}" aria-label="LinkedIn"><span class="im im-linkedin"></span></a>{% endif %}
 					</div>
 				</div>
 			</nav>
@@ -51,42 +52,22 @@
 		<div class="w-full text-xl md:text-2xl text-gray-800 leading-normal rounded-t">
 		{% block content %}{% endblock %}
 		</div>
-	</div>
+	</main>
 	
-	<footer class="bg-gray-900 mt-5">	
+	<footer class="bg-black mt-5">	
 		<div class="container max-w-6xl mx-auto flex items-center px-2 py-8">
 			<div class="w-full mx-auto flex flex-wrap items-center">
-				<div class="flex w-full md:w-1/2 justify-center md:justify-start text-white font-extrabold">
-					<a class="text-gray-900 no-underline hover:text-gray-900 hover:no-underline" href="https://github.com/fkosmala/superhive">
+				<div class="flex w-full md:w-1/2 justify-center md:justify-start text-white font-extrabold pb-2">
+					<a class="text-gray-100 no-underline hover:underline" href="https://github.com/fkosmala/superhive">
 						<span class="text-base text-gray-200">Powered by SuperHive</span>
 					</a>
 				</div>
-				<div class="flex w-full pt-2 content-center justify-between md:w-1/2 md:justify-end">
-					<ul class="list-reset flex justify-center flex-1 md:flex-none items-center">
-						<li>
-						<a class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:underline py-2 px-3" href="http://peakd.com/@{{settings.author}}">Hive</a>
-					  </li>
-						{% if settings.social.twitter %}
-					  <li>
-						<a class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:underline py-2 px-3" href="http://twitter.com/{{settings.social.twitter}}">Twitter</a>
-					  </li>
-					  {% endif %}
-						{% if settings.social.facebook %}
-					  <li>
-						<a class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:underline py-2 px-3" href="http://facebook.com/{{settings.social.facebook}}">Facebook</a>
-					  </li>
-					  {% endif %}
-						{% if settings.social.instagram %}
-						<li>
-						<a class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:underline py-2 px-3" href="http://instagram.com/{{settings.social.instagram}}/">Instagram</a>
-					  </li>
-					  {% endif %}
-						{% if settings.social.linkedin %}
-						<li>
-						<a class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:underline py-2 px-3" href="http://linkedin.com/in/{{settings.social.linkedin}}/">LinkedIn</a>
-					  </li>
-					  {% endif %}
-					</ul>
+				<div class="w-full bg-black text-gray-100 text-center">
+					<a class="text-gray-100 no-underline hover:underline" href="http://peakd.com/@{{settings.author}}">Hive</a>
+					{% if settings.social.twitter %} - <a class="text-gray-100 no-underline hover:underline" href="http://twitter.com/{{settings.social.twitter}}">Twitter</a>{% endif %}
+					{% if settings.social.facebook %} - <a class="text-gray-100 no-underline hover:underline" href="http://facebook.com/{{settings.social.facebook}}">Facebook</a>{% endif %}
+					{% if settings.social.instagram %} - <a class="text-gray-100 no-underline hover:underline" href="http://instagram.com/{{settings.social.instagram}}/">Instagram</a>{% endif %}
+					{% if settings.social.linkedin %} - <a class="text-gray-100 no-underline hover:underline" href="http://linkedin.com/in/{{settings.social.linkedin}}/">LinkedIn</a>{% endif %}
 				</div>
 			</div>
 		</div>

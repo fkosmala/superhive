@@ -76,6 +76,11 @@
 						<input name="postTitle" id="postTitle" class="bg-gray-700 appearance-none border-2 border-gray-500 rounded w-3/4 py-2 px-4 text-gray-100 leading-tight focus:outline-none focus:bg-black focus:border-gray-500" type="text" placeholder="Make a great title for this post :)" {% if postTitle %}value="{{ postTitle }}"{% endif %}>
 					</div>
 				</div>
+				
+				<input type="file" name="imgupload" id="imgupload" style="display:none"/>
+				<div class="border-2 upload-area text-center text-2xl p-6">
+                <p id="uplText">Drag and Drop image here / Click to select image</p>
+            </div>
 			  
 			  <div class="w-full text-center mb-2">
 			  	<label class="text-gray-300 font-bold" for="mde">
@@ -124,11 +129,8 @@
 
 {% block scripts %}
 <script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
+<script src="https://bundle.run/buffer@6.0.3"></script>
 <script>
-	var easyMDE = new EasyMDE({
-		element: $('#mde')[0],
-		spellChecker: false
-	});
 	window.onload = function () {
 		if (typeof hive_keychain === 'undefined') {
 			$('#actions').addClass('text-red-400 mb-6').html('You don\'t have Hive Keychain please install it for <a target="_blank" href="https://chrome.google.com/webstore/detail/hive-keychain/jcacnejopjdphbnjgfaaobbfafkihpep">Brave/Chrome</a> or <a target="_blank" href="https://addons.mozilla.org/en-GB/firefox/addon/hive-keychain/">Firefox</a>')
@@ -136,6 +138,114 @@
 	}
 	
 	$(function() {
+		var easyMDE = new EasyMDE({
+			element: $('#mde')[0],
+			autofocus: true,
+			spellChecker: false,
+			imageUpload: true,
+			autosave: {
+				enabled: true,
+				unique_id: 'SuperHive_Draft'
+			},
+		});
+		
+		// Prevent redirect
+		$("html").on("drop", function(e) { e.preventDefault(); e.stopPropagation(); });
+		$("html").on("dragover", function(e) {
+		  e.preventDefault();
+		  e.stopPropagation();
+		  $("#uplText").text("Drag here");
+		});
+		
+		// Click to open upload window
+			$(".upload-area").click(function(){
+		      $("#imgupload").click();
+		  });
+	 
+		// Drag enter
+		$('.upload-area').on('dragenter', function (e) {
+		    e.stopPropagation();
+		    e.preventDefault();
+		    $("#uplText").text("Drop");
+		});
+
+		// Drag over
+		$('.upload-area').on('dragover', function (e) {
+		    e.stopPropagation();
+		    e.preventDefault();
+		    $("#uplText").text("Drop");
+		});
+		
+		$('.upload-area').on('drop', function (e) {
+		  e.stopPropagation();
+		  e.preventDefault();
+
+		  $("#uplText").text("Verify before image hosting...");
+			file = e.originalEvent.dataTransfer.files;
+			image = file[0];
+
+			reader = new FileReader();
+			reader.readAsBinaryString(image);
+			reader.onload = function(e) {
+		  	hive_keychain.requestHandshake(function() {
+					account = '{{ settings.author }}';
+
+					// Use Buffer from NodeJS to the browser to create message for Hive Keychain
+					Buffer = new Uint32Array();
+					data = buffer.Buffer.from(reader.result, 'binary');
+					prefix = buffer.Buffer.from('ImageSigningChallenge');
+		  		message = buffer.Buffer.concat([prefix, data]);
+					
+					// Sign this with Keychain
+					hive_keychain.requestSignBuffer(
+						account,
+						JSON.stringify(message),
+						'Posting',
+						function (response) {
+							if(response.result != null) {
+								fd = new FormData();
+								fd.append('file', image);
+								url = 'https://images.hive.blog/'+account+'/'+response.result;
+								$.ajax({
+									url: url,
+									data: fd,
+									processData: false,
+									contentType: false,
+									type: 'POST',
+									success: function(data){
+										$("#uplText").text("Hosting OK ! You can upload another image :)");
+										str = '![Legend of '+image.name+']('+data.url+')';
+										insertString(easyMDE.codemirror,str);
+									}
+								});
+							}
+						},
+						null,
+						null
+					);
+				});
+		  };
+
+		});
+		
+		function insertString(editor,str){
+			var selection = editor.getSelection();
+
+		  if(selection.length>0){
+		      editor.replaceSelection(str);
+		  } else {
+		    var doc = editor.getDoc();
+		    var cursor = doc.getCursor();
+
+		    var pos = {
+		       line: cursor.line,
+		       ch: cursor.ch
+		    }
+
+		    doc.replaceRange(str, pos);
+		  }
+		}
+		
 		{% if postPermlink %}
     $('#postUpdate').on('click tap', function(event) {
     	event.preventDefault();

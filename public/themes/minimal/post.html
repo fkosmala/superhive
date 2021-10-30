@@ -3,50 +3,50 @@
 {% block title %}{{article.title}}{% endblock %}
 
 {% block content %}
-<div class="bg-white rounded">
-	<div class="text-center pt-4 md:pt-8 pb-2">
-	<p class="text-sm md:text-base font-bold"> Date: {{ article.created|date("m/d/Y") }} - Upvotes : {{article.active_votes|length}} - Words : {{article.body|split(' ')|length }}</p>
+<div>
+	<div>
+	<p> Date: {{ article.created|date("m/d/Y") }} - Upvotes : {{article.active_votes|length}} - Words : {{article.body|split(' ')|length }}</p>
 	
-	<h1 class="text-center font-bold break-normal text-3xl md:text-5xl">{{article.title}}</h1>
+	<h1>{{article.title}}</h1>
 	</div>
 	
-  <article id="post" class="p-3 text-sm md:text-base">{{ article.body }} </article>
+  <article id="post">{{ article.body }} </article>
 </div>
  
-  <div id="tags" class="bg-white mt-3 mb-3 p-5 rounded text-sm"> 
+  <div id="tags"> 
 		Tags :
 		{% for tag in metadata.tags %}
-			<span class="bg-gray-800 text-white rounded p-2">{{ tag }}</span>
+			<span>{{ tag }}</span>
 		{% endfor %}
 	</div>
   
-  <div class="bg-white rounded">
-		<div class="text-center pt-4 pb-2">
-			<h2  class="text-center font-bold break-normal text-2xl md:text-4xl">Comments :</h2>
+  <div>
+		<div>
+			<h2>Comments :</h2>
 		</div>
-		<div id="writeComment" class="w-full text-center p-2">
+		<div id="writeComment">
 			<form>
-				<div class="mb-4">
-				  <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
+				<div>
+				  <label for="username">
 				    Your HIVE Username (without @)
 				  </label>
-				  <input class="px-2 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="username "id="username" type="text" placeholder="Username">
+				  <input name="username" id="username" type="text" placeholder="Username">
 				</div>
-				<div class="mb-4">
-				  <label class="block text-gray-700 text-sm font-bold mb-2" for="comment">
+				<div>
+				  <label>
 				    Your comment
 				  </label>
-				  <textarea class="px-2 shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="comment" id="comment" type="text" placeholder="Write your comment here"></textarea>
+				  <textarea name="comment" id="comment" type="text" placeholder="Write your comment here"></textarea>
 				</div>
-				<button id="sendComment" class="bg-blue-500 text-sm hover:bg-blue-700 text-white py-2 px-4 rounded">Send your comment</button>
+				<button id="sendComment">Send your comment</button>
 			</form>
-			<div id="results" class="w-full text-center mb-6"></div>
+			<div id="results"></div>
 		</div>
 		{% for reply in replies %}
 		{% if reply.author_reputation > 0 %}
-		<dl class="p-3">
-			<dt class="underline font-bold"><a target="_blank" href="https://peakd.com/@{{reply.author}}">{{reply.author}}</a> :</dt>
-			<dd class="pl-5 text-sm">{{reply.body}}</dd>
+		<dl>
+			<dt><a target="_blank" href="https://peakd.com/@{{reply.author}}">{{reply.author}}</a> :</dt>
+			<dd>{{reply.body}}</dd>
 		</dl>
 		{% endif %}
 		{% endfor %}

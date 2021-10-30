@@ -87,8 +87,7 @@ final class PostsController
 		$file = $this->app->get('blogfile');
 		$settings = $this->app->get('settings');
 
-		$blog = json_decode(file_get_contents($file), true);
-		$posts = $blog['result'];
+		$posts = json_decode(file_get_contents($file), true);
 		
 		$permlinks = array();
 		
