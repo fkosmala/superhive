@@ -13,22 +13,23 @@ use DragosRoua\PHPHiveTools\HiveApi as HiveApi;
 
 final class AdminController
 {
-		
+
 		private $app;
 
     public function __construct(ContainerInterface $app)
     {
         $this->app = $app;
     }
-    
+
     public function adminIndex(Request $request, Response $response) : Response {
 			// Create array from config file
 			$settings = $this->app->get('settings');
 			$accountFile = $this->app->get('accountfile');
-			
+			$langFile = $this->app->get('basedir').'app/languages.json';
+
 			$apiConfig = ["webservice_url" => $settings['api'],"debug" => false];
 			$api = new HiveApi($apiConfig);
-			
+
 			$cache_interval = 300;
 			$params = [$settings['author']];
 
@@ -39,12 +40,14 @@ final class AdminController
 			}
 
 			$account = json_decode(file_get_contents($accountFile), true);
-			
+			$langs = json_decode(file_get_contents($langFile), true);
+
 			$themes = array_map('basename', glob($this->app->get('themesdir').'*' , GLOB_ONLYDIR));
 			return $this->app->get('view')->render($response, '/admin/admin-index.html', [
 					'settings' => $settings,
 					'account' => $account[0],
-					'themes' => $themes
+					'themes' => $themes,
+					'languages' => $langs
 			]);
 		}
 
@@ -54,7 +57,7 @@ final class AdminController
 					'settings' => $settings
 			]);
 		}
-		
+
 		public function save(Request $request, Response $response, $args) : Response {
 			$data = $request->getParsedBody();
 			$redirect = $data["redirect"];
@@ -72,6 +75,7 @@ final class AdminController
 			$facebook = ($data["facebook"] == "") ? $settings["social"]["facebook"] : $data["facebook"];
 			$instagram = ($data["instagram"] == "") ? $settings["social"]["instagram"] : $data["instagram"];
 			$linkedin = ($data["linkedin"] == "") ? $settings["social"]["linkedin"] : $data["linkedin"];
+			$language = ($data["lang"] == "") ? "mul" : $data["lang"];
 			$theme = ($data["theme"] == "") ? "default" : $data["theme"];
 			$newSettings = array(
 				'author' => $author,
@@ -86,6 +90,7 @@ final class AdminController
 					'linkedin' => $linkedin
 				),
 				'theme' => $theme,
+				'lang' => $language,
 				'crosspost' => $crosspost,
 				'api' => $api,
 				'devMode' => $devMode,
@@ -98,5 +103,5 @@ final class AdminController
 
 			return $response->withHeader('Location',  $redirect)->withStatus(302);
 		}
-		
+
 }

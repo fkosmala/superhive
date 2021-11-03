@@ -6,20 +6,20 @@
 <div class="bg-white rounded">
 	<div class="text-center pt-4 md:pt-8 pb-2">
 	<p class="text-sm md:text-base font-bold"> Date: {{ article.created|date("m/d/Y") }} - Upvotes : {{article.active_votes|length}} - Words : {{article.body|split(' ')|length }}</p>
-	
+
 	<h1 class="text-center font-bold break-normal text-3xl md:text-5xl">{{article.title}}</h1>
 	</div>
-	
+
   <article id="post" class="p-3 text-sm md:text-base">{{ article.body }} </article>
 </div>
- 
-  <div id="tags" class="bg-white mt-3 mb-3 p-5 rounded text-sm"> 
+
+  <div id="tags" class="bg-white mt-3 mb-3 p-5 rounded text-sm">
 		Tags :
 		{% for tag in metadata.tags %}
 			<span class="bg-gray-800 text-white rounded p-2">{{ tag }}</span>
 		{% endfor %}
 	</div>
-  
+
   <div class="bg-white rounded">
 		<div class="text-center pt-4 pb-2">
 			<h2  class="text-center font-bold break-normal text-2xl md:text-4xl">Comments :</h2>
@@ -52,17 +52,17 @@
 		{% endfor %}
 		</div>
 	</div>
-  
+
 </div>
-  
+
 {% endblock %}
 
 {% block scripts %}
 <script>
 $(function() {
-    $('article').html(marked($('article').text()));
+    $('article').html(marked.parse($('article').text()));
     $('dd').each(function( index ) {
-			$(this).html(marked($(this).text()));
+			$(this).html(marked.parse($(this).text()));
 		});
   });
 </script>
@@ -75,7 +75,7 @@ window.onload = function () {
 		$('#sendComment').on("click tap", function(event) {
 			event.preventDefault();
 			hive_keychain.requestHandshake(function() {
-			
+
 				// Define vars
 				account = $('#username').val();
 				title = '';
@@ -85,7 +85,7 @@ window.onload = function () {
 				json_metadata = JSON.stringify({app: "SuperHive"});
 				permlink = 'sh'+Math.random().toString(36).substring(2);
 				comment_options = '';
-				
+
 				// Post them !
 				hive_keychain.requestPost(
 					account,

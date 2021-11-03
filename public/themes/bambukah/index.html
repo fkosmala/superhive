@@ -8,13 +8,13 @@
 	{% for article in articles %}
 		{% if nbPosts < settings.displayedPosts %}
 			{% if 'This is a cross post' not in article.body or 'This is a cross post' in article.body and settings.crosspost == true %}
-			
+
 				{% set nbPosts = nbPosts + 1 %}
-				
+
 				{% if nbPosts == 1 %}
 					<article class="flex h-full bg-white rounded overflow-hidden shadow-lg" data-json="{{ article.json_metadata }}">
 						<a href="{{ url_for('post', { 'permlink': article.permlink }) }}" class="flex flex-wrap no-underline hover:no-underline">
-							<div class="w-full md:w-2/3 rounded-t">	
+							<div class="w-full md:w-2/3 rounded-t">
 								<img src="" alt="Picture of {{ article.title }}" class="img-article object-cover w-full shadow">
 							</div>
 
@@ -61,33 +61,34 @@
 		{% endif %}
 	{% endfor %}
 	</div>
-	
+
 	<div class="text-center">
 		<a href="https://peakd.com/@{{ settings.author }}" class="p-4 mt-4 mb-2 md:mt-0 block md:inline-block appearance-none bg-green-800 text-white text-base font-semibold tracking-wider rounded hover:bg-green-600">See my older posts on PeakD</a>
 	</div>
-    
+
 {% endblock %}
 
 {% block scripts %}
 <script>
   $(function() {
-  	$(".excerpt").each(function (){
-			text = $(this).text();
-			text = text.replace(/!\[[^\]]*\]\((.*?)\s*("(?:.*[^"])")?\s*\)/g, '');
-			text = marked(text);
-			$(this).html(text);
-		});
-		
   	$("article").each(function (){
   		metadata = $(this).data('json');
   		if (metadata.image == null) {
   			head = "/themes/{{ settings.theme }}/no-img.png"
   		} else {
+				console.log(metadata.image[0]);
   			head = metadata.image[0];
   		}
   		img = $(this).find('.img-article');
   		img.attr('src', head);
   	});
+
+		$(".excerpt").each(function (){
+			text = $(this).text();
+			text = text.replace(/!\[[^\]]*\]\((.*?)\s*("(?:.*[^"])")?\s*\)/g, '');
+			text = marked.parse(text);
+			$(this).html(text);
+		});
   });
 </script>
 {% endblock %}

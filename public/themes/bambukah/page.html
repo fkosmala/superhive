@@ -9,7 +9,7 @@
 {% block scripts %}
 <script>
 $(function() {
-    $('article').html(marked($('article').text()));
+    $('article').html(marked.parse($('article').text()));
   });
 </script>
 {% endblock %}

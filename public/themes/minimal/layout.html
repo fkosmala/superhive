@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr" prefix="og: http://ogp.me/ns#">
+<html lang="{{ settings.lang }}" prefix="og: http://ogp.me/ns#">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,13 +13,13 @@
 
 	<!--Header-->
 	<header>
-		
+
 		{% if current_url() == url_for('index') %}
 			<h1><a href="{{ url_for('index')}}">{{ settings.title|upper }}</a></h1>
 		{% else %}
 			<p class="title"><a href="{{ url_for('index')}}">{{ settings.title|upper }}</a></p>
 		{% endif %}
-		<p class="subtitle">{{ settings.baseline }}</p>		
+		<p class="subtitle">{{ settings.baseline }}</p>
 		<nav>
 			<div class="social">
 				{% if settings.social.twitter %}<a target="_blank" href="http://twitter.com/{{settings.social.twitter}}" aria-label="Twitter"><span class="im im-twitter"></span></a>{% endif %}
@@ -29,12 +29,12 @@
 			</div>
 		</nav>
 	</header>
-	
+
 	<hr>
 
 	<main class="container">{% block content %}{% endblock %}</main>
-	
-	<footer>	
+
+	<footer>
 		<p>Find me on :
 			<a href="http://peakd.com/@{{settings.author}}">Hive</a>
 			{% if settings.social.twitter %}- <a href="http://twitter.com/{{settings.social.twitter}}">Twitter</a>{% endif %}
@@ -46,9 +46,9 @@
 			This website is powered by <a href="https://github.com/fkosmala/superhive">SuperHive</a>
 		</p>
 	</footer>
-	
+
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/cash/7.0.1/cash.min.js" integrity="sha256-cP4vwprtrs4i6th5S3ysmrRUfhdEyHA5MlBxaOwQ+/s=" crossorigin="anonymous"></script>
-	<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.0.0/marked.min.js" integrity="sha512-hzyXu3u+VDu/7vpPjRKFp9w33Idx7pWWNazPm+aCMRu26yZXFCby1gn1JxevVv3LDwnSbyKrvLo3JNdi4Qx1ww==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   {% block scripts %}{% endblock %}
 </body>
 </html>

@@ -22,11 +22,11 @@
 			{% endif %}
 		{% endif %}
 	{% endfor %}
-	
+
 	<div>
 		<a class="button" href="https://peakd.com/@{{ settings.author }}">See my older posts on PeakD</a>
 	</div>
-    
+
 {% endblock %}
 
 {% block scripts %}
@@ -35,10 +35,10 @@
   	$(".excerpt").each(function (){
 			text = $(this).text();
 			text = text.replace(/!\[[^\]]*\]\((.*?)\s*("(?:.*[^"])")?\s*\)/g, '');
-			text = marked(text);
+			text = marked.parse(text);
 			$(this).html(text);
 		});
-		
+
   	$("article").each(function (){
   		metadata = $(this).data('json');
   		if (metadata.image == null) {

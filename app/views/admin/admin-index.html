@@ -1,7 +1,7 @@
 {% extends "admin/admin-layout.html" %}
 
-{% block content %}	
-	<div class="w-full px-4 md:px-0 md:mt-8 mb-16 text-gray-800 leading-normal">	
+{% block content %}
+	<div class="w-full px-4 md:px-0 md:mt-8 mb-16 text-gray-800 leading-normal">
 		<!--Console Content-->
 		<div class="flex flex-wrap">
       <div class="w-full md:w-1/2 xl:w-1/3 p-3">
@@ -61,7 +61,7 @@
 		      <div class="border-b border-gray-800 p-3">
 		          <h5 class="font-bold uppercase text-gray-300">Global settings</h5>
 		      </div>
-		      
+
 		      <div class="p-5">
 		        <div class="md:flex md:items-center mb-6">
 							<div class="md:w-1/4">
@@ -73,7 +73,7 @@
 								<input name="author" id="author" class="bg-gray-700 appearance-none border-2 border-gray-500 rounded w-full py-2 px-4 text-gray-100 leading-tight focus:outline-none focus:bg-black focus:border-gray-500" type="text" value="{{ settings.author }}">
 							</div>
 						</div>
-						
+
 						<div class="md:flex md:items-center mb-6">
 							<div class="md:w-1/4">
 								<label class="block text-gray-300 font-bold md:text-right mb-1 md:mb-0 pr-4" for="title">
@@ -84,7 +84,7 @@
 								<input name="title" id="title" class="bg-gray-700 appearance-none border-2 border-gray-500 rounded w-full py-2 px-4 text-gray-100 leading-tight focus:outline-none focus:bg-black focus:border-gray-500" type="text" value="{{ settings.title }}">
 							</div>
 						</div>
-						
+
 						<div class="md:flex md:items-center mb-6">
 							<div class="md:w-1/4">
 								<label class="block text-gray-300 font-bold md:text-right mb-1 md:mb-0 pr-4" for="baseline">
@@ -95,7 +95,22 @@
 								<input name="baseline" id="baseline" class="bg-gray-700 appearance-none border-2 border-gray-500 rounded w-full py-2 px-4 text-gray-100 leading-tight focus:outline-none focus:bg-black focus:border-gray-500" type="text" value="{{ settings.baseline }}">
 							</div>
 						</div>
-						
+
+						<hr class="mb-6">
+
+						<div class="md:flex md:items-center mb-6">
+							<div class="md:w-1/4">
+								<label class="block text-gray-300 font-bold md:text-right mb-1 md:mb-0 pr-4" for="lang">
+									Content Language
+								</label>
+							</div>
+							<div class="md:w-3/4">
+								<select name="lang" id="lang" class="bg-gray-700 border-2 border-gray-500 rounded w-full py-2 px-4 text-gray-100 leading-tight focus:outline-none focus:bg-black focus:border-gray-500">
+									{% for language in languages %}<option value="{{ language.code }}" {% if language.code == settings.lang %}selected{% endif %}>{{ language.name }}</option>{% endfor %}
+								</select>
+							</div>
+						</div>
+
 						<div class="md:flex md:items-center mb-6">
 							<div class="md:w-1/4">
 								<label class="block text-gray-300 font-bold md:text-right mb-1 md:mb-0 pr-4" for="theme">
@@ -108,20 +123,20 @@
 								</select>
 							</div>
 						</div>
-						
+
 		      </div>
-		      
+
 		    </div>
 		  </div>
-		  
+
 		  <div class="w-full md:w-1/2 p-3 text-gray-300">
 		    <div class="bg-gray-900 border border-gray-800 rounded shadow">
 		      <div class="border-b border-gray-800 p-3">
 		          <h5 class="font-bold uppercase">System settings</h5>
 		      </div>
-		      
+
 		      <div class="p-5">
-		      
+
 		      	<div class="md:flex md:items-center mb-6">
 							<div class="md:w-1/4">
 								<label class="block font-bold md:text-right mb-1 md:mb-0 pr-4" for="displayedPosts">
@@ -132,9 +147,9 @@
 								<input name="displayedPosts" id="displayedPosts" class="bg-gray-700 appearance-none border-2 border-gray-500 rounded w-full py-2 px-4 text-gray-100 leading-tight focus:outline-none focus:bg-black focus:border-gray-500" type="number" value="{{ settings.displayedPosts }}">
 							</div>
 						</div>
-		      
+
 		      	<p class="text-center mb-6 text-red-500">The following settings are for power users ONLY. Change it at your own risk !</p>
-						
+
 						<div class="md:flex md:items-center mb-6">
 							<div class="md:w-1/4">
 								<label class="block font-bold md:text-right mb-1 md:mb-0 pr-4" for="api">
@@ -145,7 +160,7 @@
 								<input name="api" id="api" class="bg-gray-700 appearance-none border-2 border-gray-500 rounded w-full py-2 px-4 text-gray-100 leading-tight focus:outline-none focus:bg-black focus:border-gray-500" type="text" value="{{ settings.api }}">
 							</div>
 						</div>
-						
+
 						<div class="md:flex md:items-center mb-6">
 							<div class="md:w-1/4">
 								<label class="block font-bold md:text-right mb-1 md:mb-0 pr-4" for="crosspost">
@@ -156,7 +171,7 @@
 								<input type="checkbox" class="form-checkbox h-5 w-5 text-green-600" id="crosspost" name="crosspost" {% if settings.cron == true %}checked{% endif %}>&nbsp;Check if you want to display crossposting
 							</div>
 						</div>
-						
+
 						<div class="md:flex md:items-center mb-6">
 							<div class="md:w-1/4">
 								<label class="block font-bold md:text-right mb-1 md:mb-0 pr-4" for="devMode">
@@ -167,18 +182,18 @@
 								<input type="checkbox" class="form-checkbox h-5 w-5 text-green-600" id="devMode" name="devMode" {% if settings.devMode == true %}checked{% endif %}>&nbsp;Check if you want to disable optimizations
 							</div>
 						</div>
-						
+
 		      </div>
 		    </div>
 		  </div>
 
 		</div>
-		
+
 		<div class="w-full text-center">
 			<input type="submit" value ="Save" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded">
 		</div>
-			
+
 	</form>
 </div>
-	
+
 {% endblock %}

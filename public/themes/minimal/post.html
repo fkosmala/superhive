@@ -6,20 +6,20 @@
 <div>
 	<div>
 	<p> Date: {{ article.created|date("m/d/Y") }} - Upvotes : {{article.active_votes|length}} - Words : {{article.body|split(' ')|length }}</p>
-	
+
 	<h1>{{article.title}}</h1>
 	</div>
-	
+
   <article id="post">{{ article.body }} </article>
 </div>
- 
-  <div id="tags"> 
+
+  <div id="tags">
 		Tags :
 		{% for tag in metadata.tags %}
 			<span>{{ tag }}</span>
 		{% endfor %}
 	</div>
-  
+
   <div>
 		<div>
 			<h2>Comments :</h2>
@@ -52,17 +52,17 @@
 		{% endfor %}
 		</div>
 	</div>
-  
+
 </div>
-  
+
 {% endblock %}
 
 {% block scripts %}
 <script>
 $(function() {
-    $('article').html(marked($('article').text()));
+    $('article').html(marked.parse($('article').text()));
     $('dd').each(function( index ) {
-			$(this).html(marked($(this).text()));
+			$(this).html(marked.parse($(this).text()));
 		});
   });
 </script>
@@ -75,7 +75,7 @@ window.onload = function () {
 		$('#sendComment').on("click tap", function(event) {
 			event.preventDefault();
 			hive_keychain.requestHandshake(function() {
-			
+
 				// Define vars
 				account = $('#username').val();
 				title = '';
@@ -85,7 +85,7 @@ window.onload = function () {
 				json_metadata = JSON.stringify({app: "SuperHive"});
 				permlink = 'sh'+Math.random().toString(36).substring(2);
 				comment_options = '';
-				
+
 				// Post them !
 				hive_keychain.requestPost(
 					account,
