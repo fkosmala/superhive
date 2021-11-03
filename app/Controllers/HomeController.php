@@ -12,14 +12,14 @@ use DragosRoua\PHPHiveTools\HiveApi as HiveApi;
 
 final class HomeController
 {
-		
+
 		private $app;
 
     public function __construct(ContainerInterface $app)
     {
         $this->app = $app;
     }
-    
+
     public function index(Request $request, Response $response) : Response {
 			$settings = $this->app->get('settings');
 
@@ -27,7 +27,7 @@ final class HomeController
 			if (!file_exists($this->app->get('password'))) {
 				return $this->app->get('view')->render($response, '/install.html');
 			}
-			
+
 			$apiConfig = ["webservice_url" => $settings['api'], "debug" => false];
 
 			$api = new HiveApi($apiConfig);
@@ -46,8 +46,8 @@ final class HomeController
 					file_put_contents($file, $result);
 				}
 			}
-			
-		// Get the JSON 
+
+		// Get the JSON
 			$articles = json_decode(file_get_contents($file), true);
 
 			// Return view with articles
@@ -56,7 +56,7 @@ final class HomeController
 					'settings' => $settings
 			]);
 		}
-		
+
 		public function install(Request $request, Response $response, $args) : Response {
 			if (!file_exists($this->app->get('password'))) {
 				$data = $request->getParsedBody();
@@ -68,13 +68,12 @@ final class HomeController
 				return $response->withHeader('Location', '/')->withStatus(302);
 			}
 		}
-		
+
 		public function feed(Request $request, Response $response) : Response {
 			$settings = $this->app->get('settings');
 
 			$file = $this->app->get('blogfile');
-			$blog = json_decode(file_get_contents($file), true);
-			$articles = $blog['result'];
+			$articles = json_decode(file_get_contents($file), true);
 
 			header('Content-Type: text/xml');
 			return $this->app->get('view')->render($response, '/feed.xml', [
@@ -82,13 +81,12 @@ final class HomeController
 				'settings' => $settings
 			]);
 		}
-		
+
 		public function sitemap(Request $request, Response $response) : Response {
 			$settings = $this->app->get('settings');
 
 			$file = $this->app->get('blogfile');
-			$blog = json_decode(file_get_contents($file), true);
-			$articles = $blog['result'];
+			$articles = json_decode(file_get_contents($file), true);
 
 			header('Content-Type: text/xml');
 			return $this->app->get('view')->render($response, '/sitemap.xml', [
