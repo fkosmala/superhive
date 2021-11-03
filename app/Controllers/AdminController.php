@@ -64,7 +64,7 @@ final class AdminController
 			$settings = $this->app->get('settings');
 			$crosspost = (!isset($data["crosspost"])) ? false : true;
 			$devMode = (!isset($data["devMode"])) ? false : true;
-			$api = ($data["api"] == "") ? "https://api.hive.blog" : $data["api"];
+			$api = ($data["api"] == "") ? "api.hive.blog" : $data["api"];
 			$displayedPosts = ($data["displayedPosts"] == "") ? 15 : (int)$data["displayedPosts"];
 			$author = ($data["author"] == "") ? $settings["author"] : $data["author"];
 			$title = ($data["title"] == "") ? $settings["title"] : $data["title"];
