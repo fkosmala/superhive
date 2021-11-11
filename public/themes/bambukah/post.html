@@ -4,13 +4,12 @@
 
 {% block content %}
 <div class="bg-white rounded">
-	<div class="text-center pt-4 md:pt-8 pb-2">
-	<p class="text-sm md:text-base font-bold"> Date: {{ article.created|date("m/d/Y") }} - Upvotes : {{article.active_votes|length}} - Words : {{article.body|split(' ')|length }}</p>
+	<p class="text-center pt-4 md:pt-8 pb-2 text-sm md:text-base font-bold"> Date: {{ article.created|date("m/d/Y") }} - Upvotes : {{article.active_votes|length}} - Words : {{article.body|split(' ')|length }}</p>
 
-	<h1 class="text-center font-bold break-normal text-3xl md:text-5xl">{{article.title}}</h1>
-	</div>
-
-  <article id="post" class="p-3 text-sm md:text-base">{{ article.body }} </article>
+  <article id="post" class="p-3 text-sm md:text-base">
+		<h1 class="text-center font-bold break-normal text-3xl md:text-5xl">{{article.title}}</h1>
+		<div id="markdown">{{ article.body }}</div>
+	</article>
 </div>
 
   <div id="tags" class="bg-white mt-3 mb-3 p-5 rounded text-sm">
@@ -30,13 +29,13 @@
 				  <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
 				    Your HIVE Username (without @)
 				  </label>
-				  <input class="px-2 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="username "id="username" type="text" placeholder="Username">
+				  <input class="px-2 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="username" id="username" type="text" placeholder="Username">
 				</div>
 				<div class="mb-4">
 				  <label class="block text-gray-700 text-sm font-bold mb-2" for="comment">
 				    Your comment
 				  </label>
-				  <textarea class="px-2 shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="comment" id="comment" type="text" placeholder="Write your comment here"></textarea>
+				  <textarea class="px-2 shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="comment" id="comment" placeholder="Write your comment here"></textarea>
 				</div>
 				<button id="sendComment" class="bg-blue-500 text-sm hover:bg-blue-700 text-white py-2 px-4 rounded">Send your comment</button>
 			</form>
@@ -60,7 +59,7 @@
 {% block scripts %}
 <script>
 $(function() {
-    $('article').html(marked.parse($('article').text()));
+    $('#markdown').html(marked.parse($('#markdown').text()));
     $('dd').each(function( index ) {
 			$(this).html(marked.parse($(this).text()));
 		});

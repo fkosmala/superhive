@@ -4,13 +4,12 @@
 
 {% block content %}
 <div>
-	<div>
 	<p> Date: {{ article.created|date("m/d/Y") }} - Upvotes : {{article.active_votes|length}} - Words : {{article.body|split(' ')|length }}</p>
 
-	<h1>{{article.title}}</h1>
-	</div>
-
-  <article id="post">{{ article.body }} </article>
+  <article id="post">
+		<h1>{{article.title}}</h1>
+		<div id="markdown">{{ article.body }}</div>
+	</article>
 </div>
 
   <div id="tags">
@@ -36,7 +35,7 @@
 				  <label>
 				    Your comment
 				  </label>
-				  <textarea name="comment" id="comment" type="text" placeholder="Write your comment here"></textarea>
+				  <textarea name="comment" id="comment" placeholder="Write your comment here"></textarea>
 				</div>
 				<button id="sendComment">Send your comment</button>
 			</form>
@@ -60,7 +59,7 @@
 {% block scripts %}
 <script>
 $(function() {
-    $('article').html(marked.parse($('article').text()));
+    $('#markdown').html(marked.parse($('#markdown').text()));
     $('dd').each(function( index ) {
 			$(this).html(marked.parse($(this).text()));
 		});
