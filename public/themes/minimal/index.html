@@ -12,7 +12,7 @@
 				<article data-json="{{ article.json_metadata }}">
 					<a href="{{ url_for('post', { 'permlink': article.permlink }) }}">
 						<h2>{{ article.title }}</h2>
-						<img src="" alt="Picture of post : {{ article.title }}" class="img-article">
+						<img src="#" alt="Picture of post : {{ article.title }}" class="img-article">
 					</a>
 					<p>{{ article.created|date("m/d/Y") }} - {{article.active_votes|length}} Upvotes - {{article.body|split(' ')|length }} Words</p>
 					{% set excerpt = article.body|striptags|slice(0,100) %}

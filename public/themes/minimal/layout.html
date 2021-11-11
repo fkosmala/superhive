@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ settings.lang }}" prefix="og: http://ogp.me/ns#">
+<html dir="ltr" lang="{{ settings.lang }}" prefix="og: http://ogp.me/ns#">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,7 +21,7 @@
 		{% endif %}
 		<p class="subtitle">{{ settings.baseline }}</p>
 		<nav>
-			<div class="social">
+			<div title="Social networks" class="social">
 				{% if settings.social.twitter %}<a target="_blank" href="http://twitter.com/{{settings.social.twitter}}" aria-label="Twitter"><span class="im im-twitter"></span></a>{% endif %}
 				{% if settings.social.facebook %}<a target="_blank" href="http://facebook.com/{{settings.social.facebook}}" aria-label="facebook"><span class="im im-facebook"></span></a>{% endif %}
 				{% if settings.social.instagram %}<a target="_blank" href="http://instagram.com/{{settings.social.instagram}}/" aria-label="Instagram"><span class="im im-instagram"></span></a>{% endif %}
@@ -35,7 +35,7 @@
 	<main class="container">{% block content %}{% endblock %}</main>
 
 	<footer>
-		<p>Find me on :
+		<p title="Social networks">Find me on :
 			<a href="http://peakd.com/@{{settings.author}}">Hive</a>
 			{% if settings.social.twitter %}- <a href="http://twitter.com/{{settings.social.twitter}}">Twitter</a>{% endif %}
 			{% if settings.social.facebook %}- <a href="http://facebook.com/{{settings.social.facebook}}">Facebook</a>{% endif %}

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ settings.lang }}" prefix="og: http://ogp.me/ns#">
+<html dir="ltr" lang="{{ settings.lang }}" prefix="og: http://ogp.me/ns#">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -38,7 +38,7 @@
 						</ul>
 					</div>
 
-					<div class="flex w-1/2 justify-end content-center">
+					<div title="Social networks" class="flex w-1/2 justify-end content-center">
 						{% if settings.social.twitter %}<a class="inline-block text-gray-500 no-underline hover:text-white hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 avatar" target="_blank" href="http://twitter.com/{{settings.social.twitter}}" aria-label="Twitter"><span class="im im-twitter"></span></a>{% endif %}
 						{% if settings.social.facebook %}<a class="inline-block text-gray-500 no-underline hover:text-white hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 avatar" target="_blank" href="http://facebook.com/{{settings.social.facebook}}" aria-label="Facebook"><span class="im im-facebook"></span></a>{% endif %}
 						{% if settings.social.instagram %}<a class="inline-block text-gray-500 no-underline hover:text-white hover:text-underline text-center h-10 p-2 md:h-auto md:p-4 avatar" target="_blank" href="http://instagram.com/{{settings.social.instagram}}/" aria-label="Instagram"><span class="im im-instagram"></span></a>{% endif %}

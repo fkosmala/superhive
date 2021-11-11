@@ -1,11 +1,3 @@
-.title {
-	font-size: 2.35em;
-	margin: 0;
-}
-.subtitle {
-	font-size: 1.35em;
-}
-
-.social {
-	text-align : right;
-}
+.title {font-size: 2.35em;margin: 0;}
+.subtitle {font-size: 1.35em;}
+.social {text-align: right;}
