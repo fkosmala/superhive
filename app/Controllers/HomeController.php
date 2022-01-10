@@ -31,18 +31,33 @@ final class HomeController
 			$apiConfig = ["webservice_url" => $settings['api'], "debug" => false];
 
 			$api = new HiveApi($apiConfig);
-			$params = [$settings['author'], "", "", 100];
+
+			// If Author start with "hive-", it's a community account
+			if (strpos($$settings['author'], "hive-") === 0) {
+				$params = [["tag" => $settings['author'],"limit" => 100]];
+			} else {
+				$params = [$settings['author'], "", "", 100];
+			}
 
 			// The file with the latest posts.
 			$file = $this->app->get('blogfile');
 
 			// if the JSON file doesn't exist, take it from API
 			if (!file_exists($file)) {
-				$result = json_encode($api->getDiscussionsByAuthorBeforeDate($params), JSON_PRETTY_PRINT);
+
+				if (strpos($$settings['author'], "hive-") === 0) {
+					$result = json_encode($api->getDiscussionsByCreated($params), JSON_PRETTY_PRINT);
+				} else {
+					$result = json_encode($api->getDiscussionsByAuthorBeforeDate($params), JSON_PRETTY_PRINT);
+				}
 				file_put_contents($file, $result);
 			} else {
 				if (time()-filemtime($file) > 1 * 600) {
-					$result = json_encode($api->getDiscussionsByAuthorBeforeDate($params), JSON_PRETTY_PRINT);
+					if (strpos($$settings['author'], "hive-") === 0) {
+						$result = json_encode($api->getDiscussionsByCreated($params), JSON_PRETTY_PRINT);
+					} else {
+						$result = json_encode($api->getDiscussionsByAuthorBeforeDate($params), JSON_PRETTY_PRINT);
+					}
 					file_put_contents($file, $result);
 				}
 			}
