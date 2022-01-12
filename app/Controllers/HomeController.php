@@ -33,7 +33,7 @@ final class HomeController
 			$api = new HiveApi($apiConfig);
 
 			// If Author start with "hive-", it's a community account
-			if (strpos($$settings['author'], "hive-") === 0) {
+			if (strpos($settings['author'], "hive-") === 0) {
 				$params = [["tag" => $settings['author'],"limit" => 100]];
 			} else {
 				$params = [$settings['author'], "", "", 100];
@@ -45,7 +45,7 @@ final class HomeController
 			// if the JSON file doesn't exist, take it from API
 			if (!file_exists($file)) {
 
-				if (strpos($$settings['author'], "hive-") === 0) {
+				if (strpos($settings['author'], "hive-") === 0) {
 					$result = json_encode($api->getDiscussionsByCreated($params), JSON_PRETTY_PRINT);
 				} else {
 					$result = json_encode($api->getDiscussionsByAuthorBeforeDate($params), JSON_PRETTY_PRINT);
@@ -53,7 +53,7 @@ final class HomeController
 				file_put_contents($file, $result);
 			} else {
 				if (time()-filemtime($file) > 1 * 600) {
-					if (strpos($$settings['author'], "hive-") === 0) {
+					if (strpos($settings['author'], "hive-") === 0) {
 						$result = json_encode($api->getDiscussionsByCreated($params), JSON_PRETTY_PRINT);
 					} else {
 						$result = json_encode($api->getDiscussionsByAuthorBeforeDate($params), JSON_PRETTY_PRINT);
