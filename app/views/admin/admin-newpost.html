@@ -34,8 +34,20 @@
 			  <div class="text-center text-red-500 p-2 mb-6 border-2 rounded border-red-400">
 					<p>Don't forget : this post will be posted on Blockchain and cannot be deleted (but you can edit it)</p>
 				</div>
-
-			  <input id="postAuthor" type="hidden" value="{{ settings.author }}">
+				{% if 'hive-' in settings.author %}
+				<div class="md:flex md:items-center mb-6">
+					<div class="text-center md:w-1/4">
+						<label class="block text-gray-300 font-bold mb-1 md:mb-0 pr-4" for="postTitle">
+						  HIVE account
+						</label>
+					</div>
+					<div class="md:w-3/4">
+						<input name="postAuthor" id="postAuthor" class="bg-gray-700 appearance-none border-2 border-gray-500 rounded w-3/4 py-2 px-4 text-gray-100 leading-tight focus:outline-none focus:bg-black focus:border-gray-500" type="text" placeholder="Enter your HIVE author account">
+					</div>
+				</div>
+				{% else %}
+				<input id="postAuthor" type="hidden" value="{{ settings.author }}">
+				{% endif %}
 
 			  <div class="md:flex md:items-center mb-6">
 					<div class="text-center md:w-1/4">
