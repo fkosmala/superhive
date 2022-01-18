@@ -19,9 +19,29 @@
 		{% endfor %}
 	</div>
 
+	<div class="bg-white rounded my-3">
+		<div class="text-center pt-4 pb-2">
+			<h2 class="text-center font-bold break-normal text-2xl md:text-3xl">Vote for this article</h2>
+			<div class="mb-4 px-2">
+				<label class="block text-gray-700 text-sm font-bold mb-2" for="hiveAccount">Your HIVE account :</label>
+				<input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="hiveAccount" type="text" placeholder="Your HIVE username">
+			</div>
+
+			<div class="mb-4">
+				<label class="block text-gray-700 text-sm font-bold mb-2" for="upvote">Select your voting power :</label>
+				<input type="range" min="1" max="100" value="50" class="slider" id="upvote" oninput="votingPower.value = this.value">
+				<div class="output">
+					<output id="votingPower">50</output>%
+				</div>
+			</div>
+			<div id="voteError"></div>
+			<button id="upBtn" class="bg-blue-500 text-sm hover:bg-blue-700 text-white py-2 px-4 rounded">Upvote</button>
+		</div>
+	</div>
+
   <div class="bg-white rounded">
 		<div class="text-center pt-4 pb-2">
-			<h2  class="text-center font-bold break-normal text-2xl md:text-4xl">Comments :</h2>
+			<h2 class="text-center font-bold break-normal text-2xl md:text-3xl">Comments :</h2>
 		</div>
 		<div id="writeComment" class="w-full text-center p-2">
 			<form>
@@ -71,6 +91,21 @@ window.onload = function () {
 	if (typeof hive_keychain === 'undefined') {
 		$('#writeComment').addClass('text-red-400 mb-6').html('You don\'t have Hive Keychain please install it for <a target="_blank" href="https://chrome.google.com/webstore/detail/hive-keychain/jcacnejopjdphbnjgfaaobbfafkihpep">Brave/Chrome</a> or <a target="_blank" href="https://addons.mozilla.org/en-GB/firefox/addon/hive-keychain/">Firefox</a>. Don\'t forget you need also a <a target="_blank" href="https://hive.io">HIVE</a> account')
 	} else {
+		$('#upBtn').on("click tap", function(event) {
+			if ($("#hiveAccount").val().length == 0) {
+				$('#voteError').text('Enter your HIVE username')
+				return
+			}
+			hive_keychain.requestVote(
+		    $("#hiveAccount").val(),
+		    "{{ article.permlink }}",
+		    "{{ article.author }}",
+		    ($("#votingPower").val()*100),
+		    function (response) {
+		      $('#voteError').text(response.message);
+		    }
+		  );
+		});
 		$('#sendComment').on("click tap", function(event) {
 			event.preventDefault();
 			hive_keychain.requestHandshake(function() {
