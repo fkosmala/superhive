@@ -1,0 +1,15 @@
+{% extends settings.theme ~ "/layout.html" %}
+
+{% block content %}
+<div>
+	<article>{% block page %}{% endblock %}</article>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(function() {
+    $('article').html(marked.parse($('article').text()));
+  });
+</script>
+{% endblock %}

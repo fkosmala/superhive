@@ -1,5 +1,5 @@
 #post img {margin: auto;text-align: center;padding: 1% 0;}
-#post ul {list-style: square; padding: inherit;}
+#post ul {list-style: square;padding: 1rem 2rem;}
 #post h2 {font-size: 2em; font-weight:600;margin: 1% 2%;}
 #post h3 {font-size: 1.7em; font-weight:500;margin: 1% 1%;}
 h1,h2,h3,h4,h5,h6 {letter-spacing: -.1rem;margin-bottom: 1.0rem;margin-top: 0;}

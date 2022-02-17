@@ -6,7 +6,7 @@
 <div class="bg-white rounded">
 	<p class="text-center pt-4 md:pt-8 pb-2 text-sm md:text-base font-bold"> Date: {{ article.created|date("m/d/Y") }} - Upvotes : {{article.active_votes|length}} - Words : {{article.body|split(' ')|length }}</p>
 
-  <article id="post" class="p-3 text-sm md:text-base">
+  <article id="post" class="p-5 text-sm md:text-base">
 		<h1 class="text-center font-bold break-normal text-3xl md:text-5xl">{{article.title}}</h1>
 		<div id="markdown">{{ article.body }}</div>
 	</article>
