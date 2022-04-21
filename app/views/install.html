@@ -4,37 +4,43 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SuperHive Installation</title>
-  <link href="https://www.unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
 </head>
-<body class="bg-gray-800 font-sans leading-normal tracking-normal">
+<body>
+  <main class="container">
+    <h1>SuperHive Installer</h1>
+    <p>Welcome to your new fresh installation of SuperHive</p>
 
-	<!--Header-->
-	<div class="w-full m-0 p-10 bg-black">
-		<div class="container max-w-4xl mx-auto text-center break-normal">
-				<h1 class="text-white font-extrabold text-3xl md:text-5xl">
-					SuperHive
-				</h1>
-				<p class="text-xl md:text-2xl text-gray-500">Installation</p>
-		</div>
-	</div>
+    <article>
+      <h2>Requirements</h2>
+      <p>SuperHive check the minimal requirements to run.</p>
+      {% for req in requirements %}
+        {% if req.status == "success" %}
+        <p><ins>{{ req.message }}</ins></p>
+        {% else %}
+          <p><mark>{{ req.message }}</mark></p>
+        {% endif %}
+      {% endfor %}
+    </article>
 
-	<div class="w-full text-center text-gray-100 leading-normal rounded-t">
-		<h2 class="text-3xl p-5">Congratulations !</h2>
-    <p>Welcome to your new fresh installation of SuperHive. Please choose a username and a password to finish the installation :</p>
-    <form action="{{ url_for('install') }}" method="post">
-    	<div class="m-2">
-      	<label for="username">Username : </label>
-      	<input type="text" placeholder="Choose your username" id="username" name="username" class="bg-gray-700 appearance-none border-2 border-gray-500 rounded py-2 px-4 text-gray-100 leading-tight focus:outline-none focus:bg-black focus:border-gray-500">
-      </div>
-      <div class="m-2">
-      	<label for="passwd">Password : </label>
-      	<input type="password" placeholder="Choose a good password" id="passwd" name="passwd" class="bg-gray-700 appearance-none border-2 border-gray-500 rounded py-2 px-4 text-gray-100 leading-tight focus:outline-none focus:bg-black focus:border-gray-500">
-      </div>
-      <div class="m-2">
-      	<input class="bg-gray-600 text-white p-2" type="submit" value="Finish">
-      </div>
-    </form>
-	</div>
+    <article>
+      <h2>Identification</h2>
+      <p>You can choose a Username and a password for administration panel connexion.</p>
+      <form action="{{ url_for('install') }}" method="post">
+        <div class="grid">
+          <div>
+            <label for="username">Username : </label>
+          	<input type="text" placeholder="Choose your username" id="username" name="username">
+          </div>
+          <div>
+            <label for="passwd">Password : </label>
+          	<input type="password" placeholder="Choose a good password" id="passwd" name="passwd">
+          </div>
+        </div>
+      	<input type="submit" value="Finish">
+      </form>
+    </article>
+  </main>
 
 </body>
 </html>

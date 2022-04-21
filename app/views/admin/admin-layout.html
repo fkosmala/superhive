@@ -4,171 +4,60 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Administration dashboard</title>
-  <link href="https://fonts.googleapis.com/css?family=Nunito:400,700,800" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.9/tailwind.min.css" integrity="sha512-SvJR34InARUfJb279ipE/gjQqX11MDKaly9MNb0vevuWQJmZ23UH7F/65ScEsvLI+myKGbdfA1En82wVSCHQ8A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
   {% block styles %}{% endblock %}
 </head>
 
-<body class="bg-gray-700 font-sans leading-normal tracking-normal">
+<body>
 
-<nav id="header" class="bg-gray-800 fixed w-full z-1 top-0 shadow">
-	<div class="w-full container mx-auto flex flex-wrap items-center mt-0 pt-3 pb-3 md:pb-0">
+  <nav class="container-fluid">
+    <ul>
+      <li>
+        <details role="list" dir="ltr">
+          <summary aria-haspopup="listbox" role="link" class="secondary">Menu</summary>
+          <ul role="listbox">
+            <li><a href="{{ url_for('admin') }}"><i class="fas fa-home fa-fw"></i> Admin index</a></li>
+            <li><a href="{{ url_for('admin-posts') }}"><i class="fas fa-paste fa-fw"></i> Posts</a></li>
+            <li><a href="{{ url_for('admin-pages') }}"><i class="fas fa-file-alt fa-fw"></i> Pages</a></li>
+            <li><a href="{{ url_for('admin-social') }}" data-theme-switcher="dark"><i class="fas fa-user-friends fa-fw"></i> SEO & Social</a></li>
+            <li><a href="#"><i class="fas fa-wallet fa-fw"></i> Wallet</a></li>
+          </ul>
+        </details>
+      </li>
+    </ul>
+    <ul>
+      <li><a href="{{ url_for('index') }}" class="contrast">View site</a></li>
+    </ul>
+  </nav>
 
-		<div class="w-1/2 pl-2 md:pl-0">
-			<a class="text-gray-100 text-base xl:text-xl no-underline hover:no-underline font-bold"  href="{{ url_for('admin') }}">
-				SuperHive Admin
-			</a>
+  <div class="container">
+    {% block content %}{% endblock %}
+  </div>
+
+
+<footer class="container">
+  <div class="grid">
+    <div>
+      <h3>About</h3>
+      <small>
+        SuperHive is the next generation blogging engine based on <a href="https://hive.io">Hive</a>.<br>This work is made with <i class="fas fa-coffee"></i> & <i class="fas fa-heart"></i> by Florent "Bambukah" Kosmala.
+      </small>
+    </div>
+    <div>
+      <h3>Social</h3>
+      <ul>
+        <li><a href="http://peakd.com/@bambukah">Hive</a></li>
+        <li><a href="http://twitter.com/FlorentKosmala">Twitter</a></li>
+        <li><a href="http://instagram.com/kosflorent/">Instagram</a></li>
+        <li><a href="http://linkedin.com/in/florent-kosmala">LinkedIn</a></li>
+      </ul>
     </div>
 
-    <div class="w-1/2 pr-0">
-			<div class="flex relative inline-block float-right">
-			  <div class="relative text-sm text-gray-100">
-				  <div id="userMenu" class="bg-gray-800 rounded shadow-md mt-2 absolute mt-12 top-0 right-0 min-w-full overflow-auto z-30 invisible">
-				  </div>
-			  </div>
-
-				<div class="block lg:hidden pr-4">
-					<button id="nav-toggle" class="flex items-center px-3 py-2 border rounded text-gray-500 border-gray-600 hover:text-gray-100 hover:border-teal-500 appearance-none focus:outline-none">
-						<svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
-					</button>
-				</div>
-			</div>
-
-		</div>
-
-		<div class="w-full flex-grow lg:flex lg:items-center lg:w-auto hidden lg:block mt-2 lg:mt-0 bg-gray-800 z-20" id="nav-content">
-			<ul class="list-reset lg:flex flex-1 items-center px-4 md:px-0">
-				<li class="mr-6 my-2 md:my-0">
-		      <a href="{{ url_for('admin') }}" class="block py-1 md:py-3 pl-1 align-middle text-gray-200 no-underline hover:text-gray-100 border-b-2 border-gray-900 hover:border-blue-400">
-		        <i class="fas fa-home fa-fw mr-3"></i><span class="pb-1 md:pb-0 text-sm">Home</span>
-		      </a>
-		    </li>
-				<li class="mr-6 my-2 md:my-0">
-		      <a href="{{ url_for('admin-posts') }}" class="block py-1 md:py-3 pl-1 align-middle text-gray-200 no-underline hover:text-gray-100 border-b-2 border-gray-900 hover:border-blue-400">
-		        <i class="fas fa-paste fa-fw mr-3"></i><span class="pb-1 md:pb-0 text-sm">Posts</span>
-		      </a>
-		    </li>
-		    <li class="mr-6 my-2 md:my-0">
-		      <a href="{{ url_for('admin-pages') }}" class="block py-1 md:py-3 pl-1 align-middle text-gray-200 no-underline hover:text-gray-100 border-b-2 border-gray-900 hover:border-blue-400">
-		        <i class="fas fa-file-alt fa-fw mr-3"></i><span class="pb-1 md:pb-0 text-sm">Pages</span>
-		      </a>
-		    </li>
-		    <li class="mr-6 my-2 md:my-0">
-		      <a href="{{ url_for('admin-social') }}" class="block py-1 md:py-3 pl-1 align-middle text-gray-200 no-underline hover:text-gray-100 border-b-2 border-gray-900 hover:border-blue-400">
-		        <i class="fas fa-user-friends fa-fw mr-3"></i><span class="pb-1 md:pb-0 text-sm">Social & SEO</span>
-		      </a>
-		    </li>
-		    <li class="mr-6 my-2 md:my-0">
-		      <a href="#" class="block py-1 md:py-3 pl-1 align-middle text-gray-200 no-underline hover:text-gray-100 border-b-2 border-gray-900 hover:border-blue-400">
-		        <i class="fas fa-wallet fa-fw mr-3"></i><span class="pb-1 md:pb-0 text-sm">Wallet</span>
-		      </a>
-		    </li>
-			</ul>
-		</div>
-
-	</div>
-</nav>
-
-<!--Container-->
-<div class="container w-full mx-auto pt-20">
-{% block content %}{% endblock %}
-</div>
-<!--/container-->
-
-<footer class="bg-gray-800 border-t border-gray-200 shadow">
-	<div class="container max-w-md mx-auto flex py-8">
-
-		<div class="w-full mx-auto flex flex-wrap">
-			<div class="flex w-full md:w-1/2 ">
-				<div class="px-8">
-					<h3 class="font-bold font-bold text-gray-100">About</h3>
-					<p class="py-4 text-gray-600 text-sm">
-						SuperHive is the next generation blogging engine based on <a href="https://hive.io">Hive</a>. This work is made with <i class="fas fa-coffee"></i> & <i class="fas fa-heart"></i> by Florent "Bambukah" Kosmala.
-					</p>
-				</div>
-			</div>
-
-			<div class="flex w-full md:w-1/2">
-				<div class="px-8">
-				<h3 class="font-bold font-bold text-gray-100">Social</h3>
-					<ul class="list-reset items-center text-sm pt-3">
-						<li>
-						<a class="inline-block text-gray-600 no-underline hover:text-gray-100 hover:text-underline py-1" href="http://peakd.com/@bambukah">Hive</a>
-					  </li>
-					  <li>
-						<a class="inline-block text-gray-600 no-underline hover:text-gray-100 hover:text-underline py-1" href="http://twitter.com/FlorentKosmala">Twitter</a>
-					  </li>
-					  <li>
-						<a class="inline-block text-gray-600 no-underline hover:text-gray-100 hover:text-underline py-1" href="http://instagram.com/kosflorent/">Instagram</a>
-					  </li>
-						<li>
-						<a class="inline-block text-gray-600 no-underline hover:text-gray-100 hover:text-underline py-1" href="http://linkedin.com/in/florent-kosmala">LinkedIn</a>
-					  </li>
-					</ul>
-				</div>
-			</div>
-		</div>
-
-
-
-	</div>
+  </div>
 </footer>
 
 <script src="https://unpkg.com/jquery@3.6.0/dist/jquery.min.js"></script>
-<script>
-	/*Toggle dropdown list*/
-	/*https://gist.github.com/slavapas/593e8e50cf4cc16ac972afcbad4f70c8*/
-
-	var userMenuDiv = document.getElementById("userMenu");
-	var userMenu = document.getElementById("userButton");
-
-	var navMenuDiv = document.getElementById("nav-content");
-	var navMenu = document.getElementById("nav-toggle");
-
-	document.onclick = check;
-
-	function check(e){
-	  var target = (e && e.target) || (event && event.srcElement);
-
-	  //User Menu
-	  if (!checkParent(target, userMenuDiv)) {
-		// click NOT on the menu
-		if (checkParent(target, userMenu)) {
-		  // click on the link
-		  if (userMenuDiv.classList.contains("invisible")) {
-			userMenuDiv.classList.remove("invisible");
-		  } else {userMenuDiv.classList.add("invisible");}
-		} else {
-		  // click both outside link and outside menu, hide menu
-		  userMenuDiv.classList.add("invisible");
-		}
-	  }
-
-	  //Nav Menu
-	  if (!checkParent(target, navMenuDiv)) {
-		// click NOT on the menu
-		if (checkParent(target, navMenu)) {
-		  // click on the link
-		  if (navMenuDiv.classList.contains("hidden")) {
-			navMenuDiv.classList.remove("hidden");
-		  } else {navMenuDiv.classList.add("hidden");}
-		} else {
-		  // click both outside link and outside menu, hide menu
-		  navMenuDiv.classList.add("hidden");
-		}
-	  }
-
-	}
-
-	function checkParent(t, elm) {
-	  while(t.parentNode) {
-		if( t == elm ) {return true;}
-		t = t.parentNode;
-	  }
-	  return false;
-	}
-</script>
 {% block scripts %}{% endblock %}
 </body>
 </html>

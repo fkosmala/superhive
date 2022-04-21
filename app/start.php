@@ -44,8 +44,12 @@ $container->set('settings', function() {
 
 $settings = $container->get('settings');
 
-// Create folders that doesn't exist
+// Rename config.sample json to config.json
+if (file_exists($container->get('basedir').'config.sample.json')) {
+	rename($container->get('basedir').'config.sample.json', $container->get('basedir').'config.json');
+}
 
+// Create folders that doesn't exist
 // Pages Dir
 if (!file_exists($container->get('pagesdir'))) {
 	mkdir($container->get('pagesdir'), 0755, true);

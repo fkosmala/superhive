@@ -1,198 +1,59 @@
 {% extends "admin/admin-layout.html" %}
 
 {% block content %}
-	<div class="w-full px-4 md:px-0 md:mt-8 mb-16 text-gray-800 leading-normal">
-		<!--Console Content-->
-		<div class="flex flex-wrap">
-      <div class="w-full md:w-1/2 xl:w-1/3 p-3">
-          <!--Metric Card-->
-          <div class="bg-gray-900 border border-gray-800 rounded shadow p-2">
-              <div class="flex flex-row items-center">
-                  <div class="flex-shrink pr-4">
-                      <div class="rounded p-3 bg-green-600"><i class="fa fa-wallet fa-2x fa-fw fa-inverse"></i></div>
-                  </div>
-                  <div class="flex-1 text-right md:text-center">
-                      <h5 class="font-bold uppercase text-gray-400">balance</h5>
-                      <h3 class="font-bold text-3xl text-gray-600">{{account.balance}} / {{account.hbd_balance}}</h3>
-                  </div>
-              </div>
-          </div>
-          <!--/Metric Card-->
-      </div>
-      <div class="w-full md:w-1/2 xl:w-1/3 p-3">
-          <!--Metric Card-->
-          <div class="bg-gray-900 border border-gray-800 rounded shadow p-2">
-              <div class="flex flex-row items-center">
-                  <div class="flex-shrink pr-4">
-                      <div class="rounded p-3 bg-pink-600"><i class="fas fa-user-edit fa-2x fa-fw fa-inverse"></i></div>
-                  </div>
-                  <div class="flex-1 text-right md:text-center">
-                      <h5 class="font-bold uppercase text-gray-400">posts count</h5>
-                      <h3 class="font-bold text-3xl text-gray-600">{{account.post_count}}</h3>
-                  </div>
-              </div>
-          </div>
-          <!--/Metric Card-->
-      </div>
-      <div class="w-full md:w-1/2 xl:w-1/3 p-3">
-          <!--Metric Card-->
-          <div class="bg-gray-900 border border-gray-800 rounded shadow p-2">
-              <div class="flex flex-row items-center">
-                  <div class="flex-shrink pr-4">
-                      <div class="rounded p-3 bg-yellow-600"><i class="fas fa-hand-holding-usd fa-2x fa-fw fa-inverse"></i></div>
-                  </div>
-                  <div class="flex-1 text-right md:text-center">
-                      <h5 class="font-bold uppercase text-gray-400">Rewards for posting </h5>
-                      <h3 class="font-bold text-3xl text-gray-600">{{account.reward_hive_balance}} / {{account.reward_hbd_balance}}</h3>
-                  </div>
-              </div>
-          </div>
-          <!--/Metric Card-->
-      </div>
-  </div>
-
-	<hr class="border-b-2 border-gray-600 my-8 mx-4">
-
 	<form method="post" action="{{ url_for('admin-save') }}">
 		<input type="hidden" name="redirect" id="redirect" value="{{ current_url() }}">
-		<div class="flex flex-row flex-wrap flex-grow mt-2">
-			<div class="w-full md:w-1/2 p-3">
-		    <div class="bg-gray-900 border border-gray-800 rounded shadow">
-		      <div class="border-b border-gray-800 p-3">
-		          <h5 class="font-bold uppercase text-gray-300">Global settings</h5>
-		      </div>
+		<div class="grid">
+			<article>
+				<h5>Global Settings</h5>
 
-		      <div class="p-5">
-		        <div class="md:flex md:items-center mb-6">
-							<div class="md:w-1/4">
-								<label class="block text-gray-300 font-bold md:text-right mb-1 md:mb-0 pr-4" for="author">
-									Author
-								</label>
-							</div>
-							<div class="md:w-3/4">
-								<input name="author" id="author" class="bg-gray-700 appearance-none border-2 border-gray-500 rounded w-full py-2 px-4 text-gray-100 leading-tight focus:outline-none focus:bg-black focus:border-gray-500" type="text" value="{{ settings.author }}">
-							</div>
-						</div>
+				<label for="author">Author</label>
+				<input name="author" id="author" type="text" value="{{ settings.author }}">
 
-						<div class="md:flex md:items-center mb-6">
-							<div class="md:w-1/4">
-								<label class="block text-gray-300 font-bold md:text-right mb-1 md:mb-0 pr-4" for="title">
-									Title
-								</label>
-							</div>
-							<div class="md:w-3/4">
-								<input name="title" id="title" class="bg-gray-700 appearance-none border-2 border-gray-500 rounded w-full py-2 px-4 text-gray-100 leading-tight focus:outline-none focus:bg-black focus:border-gray-500" type="text" value="{{ settings.title }}">
-							</div>
-						</div>
+				<label for="title">Title</label>
+				<input name="title" id="title" type="text" value="{{ settings.title }}">
 
-						<div class="md:flex md:items-center mb-6">
-							<div class="md:w-1/4">
-								<label class="block text-gray-300 font-bold md:text-right mb-1 md:mb-0 pr-4" for="baseline">
-									Baseline
-								</label>
-							</div>
-							<div class="md:w-3/4">
-								<input name="baseline" id="baseline" class="bg-gray-700 appearance-none border-2 border-gray-500 rounded w-full py-2 px-4 text-gray-100 leading-tight focus:outline-none focus:bg-black focus:border-gray-500" type="text" value="{{ settings.baseline }}">
-							</div>
-						</div>
+				<label for="baseline">Baseline</label>
+				<input name="baseline" id="baseline"  type="text" value="{{ settings.baseline }}">
 
-						<hr class="mb-6">
+				<label for="lang">Content Language</label>
+				<select name="lang" id="lang">
+					{% for language in languages %}<option value="{{ language.code }}" {% if language.code == settings.lang %}selected{% endif %}>{{ language.name }}</option>{% endfor %}
+				</select>
 
-						<div class="md:flex md:items-center mb-6">
-							<div class="md:w-1/4">
-								<label class="block text-gray-300 font-bold md:text-right mb-1 md:mb-0 pr-4" for="lang">
-									Content Language
-								</label>
-							</div>
-							<div class="md:w-3/4">
-								<select name="lang" id="lang" class="bg-gray-700 border-2 border-gray-500 rounded w-full py-2 px-4 text-gray-100 leading-tight focus:outline-none focus:bg-black focus:border-gray-500">
-									{% for language in languages %}<option value="{{ language.code }}" {% if language.code == settings.lang %}selected{% endif %}>{{ language.name }}</option>{% endfor %}
-								</select>
-							</div>
-						</div>
+				<label for="theme">Theme</label>
+				<select name="theme" id="theme">
+					{% for theme in themes %}<option value="{{ theme }}" {% if theme == settings.theme %}selected{% endif %}>{{ theme }}</option>{% endfor %}
+				</select>
 
-						<div class="md:flex md:items-center mb-6">
-							<div class="md:w-1/4">
-								<label class="block text-gray-300 font-bold md:text-right mb-1 md:mb-0 pr-4" for="theme">
-									Theme
-								</label>
-							</div>
-							<div class="md:w-3/4">
-								<select name="theme" id="theme" class="bg-gray-700 border-2 border-gray-500 rounded w-full py-2 px-4 text-gray-100 leading-tight focus:outline-none focus:bg-black focus:border-gray-500">
-									{% for theme in themes %}<option value="{{ theme }}" {% if theme == settings.theme %}selected{% endif %}>{{ theme }}</option>{% endfor %}
-								</select>
-							</div>
-						</div>
+			</article>
 
-		      </div>
+			<article>
+				<h5>System settings</h5>
 
-		    </div>
-		  </div>
+				<label for="displayedPosts">Number of displayed post on homepage</label>
+				<input name="displayedPosts" id="displayedPosts" type="number" value="{{ settings.displayedPosts }}">
 
-		  <div class="w-full md:w-1/2 p-3 text-gray-300">
-		    <div class="bg-gray-900 border border-gray-800 rounded shadow">
-		      <div class="border-b border-gray-800 p-3">
-		          <h5 class="font-bold uppercase">System settings</h5>
-		      </div>
+				<hr>
 
-		      <div class="p-5">
+				<p class="contrast">The following settings are for power users ONLY. Change it at your own risk !</p>
 
-		      	<div class="md:flex md:items-center mb-6">
-							<div class="md:w-1/4">
-								<label class="block font-bold md:text-right mb-1 md:mb-0 pr-4" for="displayedPosts">
-									Number of displayed post on homepage
-								</label>
-							</div>
-							<div class="md:w-3/4">
-								<input name="displayedPosts" id="displayedPosts" class="bg-gray-700 appearance-none border-2 border-gray-500 rounded w-full py-2 px-4 text-gray-100 leading-tight focus:outline-none focus:bg-black focus:border-gray-500" type="number" value="{{ settings.displayedPosts }}">
-							</div>
-						</div>
+				<label for="api">API Endpoint</label>
+				<input name="api" id="api" type="text" value="{{ settings.api }}">
 
-		      	<p class="text-center mb-6 text-red-500">The following settings are for power users ONLY. Change it at your own risk !</p>
+				<div>
+					<label for="crosspost">
+					<input type="checkbox" id="crosspost" name="crosspost" {% if settings.cron == true %}checked{% endif %}>Display crossposting</label>
+				</div>
 
-						<div class="md:flex md:items-center mb-6">
-							<div class="md:w-1/4">
-								<label class="block font-bold md:text-right mb-1 md:mb-0 pr-4" for="api">
-									API Endpoint
-								</label>
-							</div>
-							<div class="md:w-3/4">
-								<input name="api" id="api" class="bg-gray-700 appearance-none border-2 border-gray-500 rounded w-full py-2 px-4 text-gray-100 leading-tight focus:outline-none focus:bg-black focus:border-gray-500" type="text" value="{{ settings.api }}">
-							</div>
-						</div>
+				<div>
+					<label for="devMode">
+					<input type="checkbox" id="devMode" name="devMode" {% if settings.devMode == true %}checked{% endif %}>Developer mode</label>
+				</div>
 
-						<div class="md:flex md:items-center mb-6">
-							<div class="md:w-1/4">
-								<label class="block font-bold md:text-right mb-1 md:mb-0 pr-4" for="crosspost">
-									Cross post
-								</label>
-							</div>
-							<div class="md:w-3/4 inline-flex items-center">
-								<input type="checkbox" class="form-checkbox h-5 w-5 text-green-600" id="crosspost" name="crosspost" {% if settings.cron == true %}checked{% endif %}>&nbsp;Check if you want to display crossposting
-							</div>
-						</div>
-
-						<div class="md:flex md:items-center mb-6">
-							<div class="md:w-1/4">
-								<label class="block font-bold md:text-right mb-1 md:mb-0 pr-4" for="devMode">
-									Developer Mode
-								</label>
-							</div>
-							<div class="md:w-3/4 inline-flex items-center">
-								<input type="checkbox" class="form-checkbox h-5 w-5 text-green-600" id="devMode" name="devMode" {% if settings.devMode == true %}checked{% endif %}>&nbsp;Check if you want to disable optimizations
-							</div>
-						</div>
-
-		      </div>
-		    </div>
-		  </div>
-
+			</article>
 		</div>
-
-		<div class="w-full text-center">
-			<input type="submit" value ="Save" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded">
-		</div>
-
+		<input type="submit" value ="Save">
 	</form>
 </div>
 
