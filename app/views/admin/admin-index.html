@@ -1,5 +1,11 @@
 {% extends "admin/admin-layout.html" %}
 
+{% block styles %}
+<style>
+	#tagPosts { display:none;}
+</style>
+{% endblock %}
+
 {% block content %}
 	<form method="post" action="{{ url_for('admin-save') }}">
 		<input type="hidden" name="redirect" id="redirect" value="{{ current_url() }}">
@@ -7,8 +13,20 @@
 			<article>
 				<h5>Global Settings</h5>
 
-				<label for="author">Author</label>
+				<label for="author">Account</label>
 				<input name="author" id="author" type="text" value="{{ settings.author }}">
+				
+				<label for="displayTypes">What to display ?</label>
+				<select name="displayTypes" id="displayTypes">
+					<option value="author" {% if settings.displayType.type == "author" %}selected{% endif %}>Author posts only</option>
+					<option value="tag" {% if settings.displayType.type == "tag" %}selected{% endif %}>Selected Tag only</option>
+					<option value="reblog" {% if settings.displayType.type == "reblog" %}selected{% endif %}>Reblogs only</option>
+				</select>
+				
+				<div id="tagPosts">
+					<label for="tag">Tag (without #)</label>
+					<input name="tag" id="tag" type="text" value="{{ settings.displayType.tag }}">
+				</div>
 
 				<label for="title">Title</label>
 				<input name="title" id="title" type="text" value="{{ settings.title }}">
@@ -39,7 +57,9 @@
 				<p class="contrast">The following settings are for power users ONLY. Change it at your own risk !</p>
 
 				<label for="api">API Endpoint</label>
-				<input name="api" id="api" type="text" value="{{ settings.api }}">
+				<select name="api" id="api">
+					{% for node in nodes %}<option value="{{ node }}" {% if node == settings.api %}selected{% endif %}>{{ node }}</option>{% endfor %}
+				</select>
 
 				<div>
 					<label for="crosspost">
@@ -57,4 +77,19 @@
 	</form>
 </div>
 
+{% endblock %}
+
+{% block scripts %}
+<script>
+	$(function() {
+		if($('#displayTypes option:selected').val() == 'tag') {
+			$('#tagPosts').show();
+		};
+		$( "#displayTypes" ).change(function() {
+			if($('#displayTypes option:selected').val() == 'tag') {
+				$('#tagPosts').show();
+			} else $('#tagPosts').hide();
+		});
+	});
+</script>
 {% endblock %}

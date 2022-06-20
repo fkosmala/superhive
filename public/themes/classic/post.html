@@ -7,7 +7,7 @@
   <article id="post">
 		<p> Date: {{ article.created|date("m/d/Y") }} - Upvotes : {{article.active_votes|length}} - Words : {{article.body|split(' ')|length }}</p>
 		<h1>{{article.title}}</h1>
-		<div id="markdown">{{ article.body }}</div>
+		<div id="markdown">{{ article.body | raw }}</div>
 		<hr />
 		<div id="tags">
 			Tags :
@@ -73,7 +73,7 @@
   		<p>
         <strong><a target="_blank" href="https://peakd.com/@{{reply.author}}">{{reply.author}}</a></strong> :
       </p>
-  		<p class="reply text-center">{{reply.body}}</p>
+  		<p class="reply text-center">{{reply.body | raw}}</p>
     </div>
 		<hr />
 		{% endif %}
@@ -83,16 +83,6 @@
 {% endblock %}
 
 {% block scripts %}
-<script>
-$(function() {
-    $('#markdown').html(marked.parse($('#markdown').text()));
-    $('#markdown').find('p').first().addClass('caps');
-    $('.reply').each(function( index ) {
-			$(this).html(marked.parse($(this).text()));
-		});
-  });
-</script>
-
 <script>
 window.onload = function () {
 	if (typeof hive_keychain === 'undefined') {

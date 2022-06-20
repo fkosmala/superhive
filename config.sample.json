@@ -2,6 +2,10 @@
     "author": "bambukah",
     "title": "SuperHive",
     "baseline": "Next-Gen Blog Engine",
+    "displayType": {
+        "type": "author",
+        "tag": "blog"
+    },
     "social": {
         "description": "Personnal blog made with SuperHive",
         "image": "",

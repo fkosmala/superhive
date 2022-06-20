@@ -1,0 +1,411 @@
+{% extends "admin/admin-layout.html" %}
+
+{% block styles %}
+<style>
+	.text-center{text-align: center;}
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>Wallet</h1>
+<div class="grid text-center">
+	<article>
+		<header>
+			<h3>{{ account.balance }}</h3>
+			<p>&nbsp;</p>
+		</header>
+		<button class="tokenSend" data-token="HIVE" data-balance="{{ account.balance }}"><i class="fas fa-paper-plane"></i> Send</button>
+		<button id="powerUp" data-balance="{{ account.balance }}" class="contrast"><i class="fas fa-arrow-up"></i> Power Up</button>
+	</article>
+	<article>
+		<header>
+			<h3>{{ vests.userHP }} HP</h3>
+			<p>delegated : {{ vests.delegHP }} HP</p>
+		</header>
+		<button id="hpDelegate" data-balance="{{ vests.userHP }}" data-deleg="{{ vests.delegHP }}"><i class="fas fa-users"></i> Delegate</button>
+		<button id="powerDown" class="secondary" data-balance="{{ vests.userHP }}" data-deleg="{{ vests.delegHP }}"><i class="fas fa-arrow-down"></i> Power Down</button>
+	</article>
+	<article>
+		<header>
+			<h3>{{ account.hbd_balance }}</h3>
+			<p>&nbsp;</p>
+		</header>
+		<button class="tokenSend" data-token="HBD" data-balance="{{ account.hbd_balance }}"><i class="fas fa-paper-plane"></i> Send</button>
+	</article>
+</div>
+
+<!--<article class="text-center">
+	<header>
+		<h2>Savings</h2>
+	</header>
+	<p>Don't forget: each withdraw from savings takes 3 days to be successfully completed.</p>
+	<div class="grid">
+		<article>
+			<h3>{{ account.vesting_balance }}</h3>
+			<button class="savingsDeposit" data-token="HIVE"><i class="fas fa-money-bill-wave"></i> Deposit</button>
+			<button class="savingsWithdraw secondary" data-token="HIVE"><i class="fas fa-arrow-up"></i> Withdraw</button>
+		</article>
+
+		<article>
+			<h3>{{ account.savings_hbd_balance }}</h3>
+			<p>HBD Savings interest : {{ blockchain.hbd_interest_rate / 100 }} %</p>
+			<button class="savingsDeposit" data-token="HBD"><i class="fas fa-money-bill-wave"></i> Deposit</button>
+			<button class="savingsWithdraw secondary" data-token="HBD"><i class="fas fa-arrow-up"></i> Withdraw</button>	
+		</article>
+	</div>
+</article>-->
+
+<!-- Send tokens modal -->
+<dialog id="modal-tokenSend">
+  <article>
+    <a data-target="copy" href="#close" aria-label="Close" class="close" onClick="toggleModal(event);modal.remove();"></a>
+    <h3 class="modal-title">Send <span></span></h3>
+    <form>
+		<div class="grid">
+			<label for="sendFrom">
+				From :
+				<input type="text" id="sendFrom" name="sendFrom" placeholder="From :" value="{{ settings.author }}" disabled required>
+			</label>
+
+			<label for="sendTo">
+				To :
+				<input type="text" id="sendTo" name="sendTo" placeholder="Receiver" required>
+			</label>
+		</div>
+		
+		<label for="sendAmount">
+			Amount : (Max: <u class="modal-balance"></u> <span class="modal-token"></span>)
+			<input type="number" id="sendAmount" name="sendAmount" placeholder="how many tokens you want to send" required>
+		</label>
+		
+		<label for="sendMemo">Memo :</label>
+		<input type="text" id="sendMemo" name="sendMemo" placeholder="Memo message (optionnal)">
+		<small>Don't enter your private keys in memo message !</small>
+		
+    </form>
+    <footer>
+      <a data-target="copy" href="#cancel" role="button" class="secondary" onClick="toggleModal(event);modal.remove();">Close</a>
+      <a class="sendConfirm" href="#confirm" role="button" > Confirm</a>
+    </footer>
+  </article>
+</dialog>
+
+<!-- HL delegation modal -->
+<dialog id="modal-hpDelegate">
+  <article>
+    <a data-target="copy" href="#close" aria-label="Close" class="close" onClick="toggleModal(event);modal.remove();"></a>
+    <h3 class="modal-title">Delegate HP<span></span></h3>
+    <form>
+		<div class="grid">
+			<label for="delegFrom">
+				From :
+				<input type="text" id="delegFrom" name="delegFrom" placeholder="From :" value="{{ settings.author }}" disabled required>
+			</label>
+
+			<label for="delegTo">
+				To :
+				<input type="text" id="delegTo" name="delegTo" placeholder="Delegation Receiver" required>
+			</label>
+		</div>
+		
+		<label for="delegAmount">
+			Amount : (Max: <u class="modal-balance"></u> <span class="modal-token"></span>)
+			<input type="number" id="sendAmount" name="sendAmount" placeholder="how many tokens you want to delegate" required>
+		</label>
+    </form>
+    <footer>
+      <a data-target="copy" href="#cancel" role="button" class="secondary" onClick="toggleModal(event);modal.remove();">Close</a>
+      <a class="sendConfirm" href="#confirm" role="button" > Confirm</a>
+    </footer>
+  </article>
+</dialog>
+
+<!-- Power Up modal -->
+<dialog id="modal-powerUp">
+  <article>
+    <a data-target="copy" href="#close" aria-label="Close" class="close" onClick="toggleModal(event);modal.remove();"></a>
+    <h3 class="modal-title">Power Up<span></span></h3>
+    <form>
+		<div class="grid">
+			<label for="powerFrom">
+				From :
+				<input type="text" id="powerFrom" name="powerFrom" placeholder="From :" value="{{ settings.author }}" disabled required>
+			</label>
+
+			<label for="powerTo">
+				To :
+				<input type="text" id="powerTo" name="powerTo" placeholder="PowerUp Receiver" value="{{ settings.author }}" required>
+			</label>
+		</div>
+		
+		<label for="powerAmount">
+			Amount : (Available: <u class="modal-balance"></u> <span class="modal-token"></span>)
+			<input type="number" id="powerAmount" name="powerAmount" placeholder="how many tokens you want to power up" required>
+		</label>
+    </form>
+    <footer>
+      <a data-target="copy" href="#cancel" role="button" class="secondary" onClick="toggleModal(event);modal.remove();">Close</a>
+      <a class="sendConfirm" href="#confirm" role="button" > Confirm</a>
+    </footer>
+  </article>
+</dialog>
+
+<!-- Power Down modal -->
+<dialog id="modal-powerDown">
+  <article>
+    <a data-target="copy" href="#close" aria-label="Close" class="close" onClick="toggleModal(event);modal.remove();"></a>
+    <h3 class="modal-title">Power Down<span></span></h3>
+    <form>
+		<div class="grid">
+			<label for="powerFrom">
+				Account :
+				<input type="text" id="powerFrom" name="powerFrom" placeholder="From :" value="{{ settings.author }}" disabled required>
+			</label>
+		</div>
+		
+		<label for="powerAmount">
+			Amount : (Available: <u class="modal-balance"></u> <span class="modal-token"></span>)
+			<input type="number" id="powerAmount" name="powerAmount" placeholder="how many tokens you want to power down" required>
+		</label>
+    </form>
+    <footer>
+      <a data-target="copy" href="#cancel" role="button" class="secondary" onClick="toggleModal(event);modal.remove();">Close</a>
+      <a class="sendConfirm" href="#confirm" role="button" > Confirm</a>
+    </footer>
+  </article>
+</dialog>
+
+<!-- Example modal -->
+<!--<dialog id="modal-example">
+  <article>
+    <a data-target="modal-example" href="#close" aria-label="Close" class="close" onClick="toggleModal(event);modal.remove();"></a>
+    <h3 class="modal-title">Send</h3>
+    <form>
+		
+    </form>
+    <footer>
+      <a data-target="modal-example" href="#cancel" role="button" class="secondary" onClick="toggleModal(event);modal.remove();">Cancel</a>
+      <a data-target="modal-example" href="#confirm" role="button" class="txConfirm"> Confirm</a>
+    </footer>
+  </article>
+</dialog>-->
+
+{% endblock %}
+
+{% block scripts %}
+<script src="/js/modal.js"></script>
+<script>
+	$(function() {
+		
+		// Send token
+		$('.tokenSend').on('click tap', function() {
+			
+			// empty fields
+			$('#sendTo').val('');
+			$('#sendAmount').val('');
+			$('#sendMemo').val('');
+			
+			// Create vars with values
+			token = $(this).data('token');
+			balance = parseFloat($(this).data('balance'));
+			name = $(this).attr('class');
+			
+			// Generate copy of selected modal
+			preModal = $('<dialog id="copy"></dialog>');
+			modal = preModal.html($('#modal-'+name).html());
+			$('body').append(modal);
+			
+			// Change the text inside modal
+			modal.find('.modal-title').find('span').text(token);
+			modal.find('.modal-balance').text(balance);
+			modal.find('.modal-token').text(token);
+			
+			// Let's open the modal !
+			modal.prop('open', true);
+			
+			// Fill amount input with max balance value
+			modal.find('.modal-balance').on('click tap', function() {
+				modal.find('#sendAmount').val(balance);
+			});
+			
+			// Create HiveKeychain tx
+			modal.find('.sendConfirm').on('click tap', function() {
+				to = modal.find('#sendTo').val();
+				amount = parseFloat(modal.find('#sendAmount').val()).toFixed(3);
+				memo = modal.find('#sendMemo').val();
+				modal.find('article').empty().attr('aria-busy', true)
+				
+				// If HIVE or HBD, create HIVE tx
+				if ((token == 'HIVE') || (token == 'HBD')) {
+					hive_keychain.requestTransfer(
+						"{{ settings.author }}",
+						to,
+						amount,
+						memo,
+						token,
+						function (response) {
+							modal.find('article').attr('aria-busy', false);
+							modal.find('article').html('<a data-target="copy" href="#close" aria-label="Close" class="close" onClick="toggleModal(event);modal.remove();"></a>');
+							modal.find('article').append(response.message);
+							modal.find('article').append('<footer><a data-target="copy" href="#cancel" role="button" class="secondary" onClick="toggleModal(event);modal.remove();">Close</a></footer>');
+						},
+						false
+					);
+				} else {
+					// TODO : Make Hiveengine custom_json for HiveKeychain
+				}
+				
+			});
+		});
+		
+		// Delegate HP
+		$('#hpDelegate').on('click tap', function() {
+			// empty fields
+			$('#delegTo').val('');
+			$('#delegAmount').val('');
+			
+			balance = parseFloat($(this).data('balance'));
+			deleg = parseFloat($(this).data('deleg'));
+			available = (balance-deleg).toFixed(3);
+			name = $(this).attr('id');
+			
+			// Generate copy of selected modal
+			preModal = $('<dialog id="copy"></dialog>');
+			modal = preModal.html($('#modal-'+name).html());
+			$('body').append(modal);
+			
+			// Change the text inside modal
+			modal.find('.modal-balance').text(available);
+			
+			// Let's open the modal !
+			modal.prop('open', true);
+			
+			// Fill amount input with max balance value
+			modal.find('.modal-balance').on('click tap', function() {
+				modal.find('#sendAmount').val(available);
+			});
+			
+			// Create HiveKeychain tx
+			modal.find('.sendConfirm').on('click tap', function() {
+				from = modal.find('#delegFrom').val();
+				to = modal.find('#delegTo').val();
+				amount = parseFloat(modal.find('#sendAmount').val()).toFixed(3);
+				
+				modal.find('article').empty().attr('aria-busy', true);
+				
+				hive_keychain.requestDelegation(
+					from,
+					to,
+					amount,
+					'HP',
+					function (response) {
+						modal.find('article').attr('aria-busy', false);
+						modal.find('article').html('<a data-target="copy" href="#close" aria-label="Close" class="close" onClick="toggleModal(event);modal.remove();"></a>');
+						modal.find('article').append(response.message);
+						modal.find('article').append('<footer><a data-target="copy" href="#cancel" role="button" class="secondary" onClick="toggleModal(event);modal.remove();">Close</a></footer>');
+					}
+				);
+			});	
+		});
+		
+		// Power Up
+		$('#powerUp').on('click tap', function() {
+			// empty fields
+			$('#powerTo').val('');
+			$('#powerAmount').val('');
+			
+			balance = parseFloat($(this).data('balance'));
+			name = $(this).attr('id');
+			
+			// Generate copy of selected modal
+			preModal = $('<dialog id="copy"></dialog>');
+			modal = preModal.html($('#modal-'+name).html());
+			$('body').append(modal);
+			
+			// Change the text inside modal
+			modal.find('.modal-balance').text(balance);
+			
+			// Let's open the modal !
+			modal.prop('open', true);
+			
+			// Fill amount input with max balance value
+			modal.find('.modal-balance').on('click tap', function() {
+				modal.find('#powerAmount').val(balance);
+			});
+			
+			// Create HiveKeychain tx
+			modal.find('.sendConfirm').on('click tap', function() {
+				from = modal.find('#powerFrom').val();
+				to = modal.find('#powerTo').val();
+				amount = parseFloat(modal.find('#powerAmount').val()).toFixed(3);
+				
+				console.lo
+				
+				modal.find('article').empty().attr('aria-busy', true);
+				
+				hive_keychain.requestPowerUp(
+					from,
+					to,
+					amount,
+					function (response) {
+						modal.find('article').attr('aria-busy', false);
+						modal.find('article').html('<a data-target="copy" href="#close" aria-label="Close" class="close" onClick="toggleModal(event);modal.remove();"></a>');
+						modal.find('article').append(response.message);
+						modal.find('article').append('<footer><a data-target="copy" href="#cancel" role="button" class="secondary" onClick="toggleModal(event);modal.remove();">Close</a></footer>');
+					}
+				);
+			});	
+		});
+		
+		// Power Down
+		$('#powerDown').on('click tap', function() {
+			// empty fields
+
+			$('#powerAmount').val('');
+			
+			balance = parseFloat($(this).data('balance'));
+			deleg = parseFloat($(this).data('deleg'));
+			available = (balance - deleg).toFixed(3);
+			name = $(this).attr('id');
+			
+			// Generate copy of selected modal
+			preModal = $('<dialog id="copy"></dialog>');
+			modal = preModal.html($('#modal-'+name).html());
+			$('body').append(modal);
+			
+			// Change the text inside modal
+			modal.find('.modal-balance').text(available);
+			
+			// Let's open the modal !
+			modal.prop('open', true);
+			
+			// Fill amount input with max balance value
+			modal.find('.modal-balance').on('click tap', function() {
+				modal.find('#powerAmount').val(available);
+			});
+			
+			// Create HiveKeychain tx
+			modal.find('.sendConfirm').on('click tap', function() {
+				from = modal.find('#powerFrom').val();
+				amount = parseFloat(modal.find('#powerAmount').val()).toFixed(3);
+				
+				console.lo
+				
+				modal.find('article').empty().attr('aria-busy', true);
+				
+				hive_keychain.requestPowerDown(
+					from,
+					amount,
+					function (response) {
+						modal.find('article').attr('aria-busy', false);
+						modal.find('article').html('<a data-target="copy" href="#close" aria-label="Close" class="close" onClick="toggleModal(event);modal.remove();"></a>');
+						modal.find('article').append(response.message);
+						modal.find('article').append('<footer><a data-target="copy" href="#cancel" role="button" class="secondary" onClick="toggleModal(event);modal.remove();">Close</a></footer>');
+					}
+				);
+			});	
+		});
+		
+	});
+</script>
+{% endblock %}

@@ -9,11 +9,12 @@ use \Psr\Container\ContainerInterface;
 use \Slim\Factory\AppFactory;
 
 use DragosRoua\PHPHiveTools\HiveApi as HiveApi;
+use Parsedown;
 
 final class HomeController
 {
 
-		private $app;
+	private $app;
 
     public function __construct(ContainerInterface $app)
     {
@@ -61,46 +62,72 @@ final class HomeController
 				]);
 			}
 
+			// Hive API communication init
 			$apiConfig = ["webservice_url" => $settings['api'], "debug" => false];
-
 			$api = new HiveApi($apiConfig);
-
-			// If Author start with "hive-", it's a community account
-			if (strpos($settings['author'], "hive-") === 0) {
-				$params = [["tag" => $settings['author'],"limit" => 100]];
-			} else {
-				$params = [$settings['author'], "", "", 100];
-			}
-
+			
 			// The file with the latest posts.
 			$file = $this->app->get('blogfile');
-
-			// if the JSON file doesn't exist, take it from API
-			if (!file_exists($file)) {
-
-				if (strpos($settings['author'], "hive-") === 0) {
-					$result = json_encode($api->getDiscussionsByCreated($params), JSON_PRETTY_PRINT);
-				} else {
+			
+			// if the JSON file doesn't exist or if it's old, take it from API
+			if (!file_exists($file) || (time()-filemtime($file) > 600)) {
+				// Prepare API call according to displayed posts type
+				$displayType = $settings['displayType']['type'];
+				if ($displayType === 'author') {
+					$params = [$settings['author'], "", "", 100];
 					$result = json_encode($api->getDiscussionsByAuthorBeforeDate($params), JSON_PRETTY_PRINT);
+				} elseif (($displayType === 'tag')) {
+					$displayTag = $settings['displayType']['tag'];
+					$taggedPosts = array();
+					$params = [$settings['author'], "", "", 100];
+					$allPosts = json_encode($api->getDiscussionsByAuthorBeforeDate($params));
+					$allPosts = json_decode($allPosts, true);
+					//print_r($allPosts);
+					foreach ($allPosts as &$post) {
+						//$postTags = json_encode($post['json_metadata'], JSON_PRETTY_PRINT);
+						$postMeta = json_decode($post['json_metadata'], true);
+						$postTags = $postMeta['tags'];
+						if(in_array($displayTag, $postTags)) {
+							$taggedPosts[] = $post;
+						}
+					}
+					
+					$result = json_encode($taggedPosts, JSON_PRETTY_PRINT);
+				} elseif ($displayType === 'reblog') {
+					$params = [["tag" => $settings['author'],"limit" => 100, "truncate_body" => 0]];
+					$result = json_encode($api->getDiscussionsByBlog($params), JSON_PRETTY_PRINT);
+				}  elseif (strpos($settings['author'], "hive-") === 0) {
+					$params = [["tag" => $settings['author'],"limit" => 100]];
+					$result = json_encode($api->getDiscussionsByCreated($params), JSON_PRETTY_PRINT);
 				}
 				file_put_contents($file, $result);
-			} else {
-				if (time()-filemtime($file) > 1 * 600) {
-					if (strpos($settings['author'], "hive-") === 0) {
-						$result = json_encode($api->getDiscussionsByCreated($params), JSON_PRETTY_PRINT);
-					} else {
-						$result = json_encode($api->getDiscussionsByAuthorBeforeDate($params), JSON_PRETTY_PRINT);
-					}
-					file_put_contents($file, $result);
-				}
+				unset($taggedPosts);
 			}
 
-		// Get the JSON
+			// Get the JSON
 			$articles = json_decode(file_get_contents($file), true);
+			
+			//Get ready to parse the mardown
+			$Parsedown = new Parsedown();
+			$parsedPosts = array();
+			
+			foreach($articles as &$article){
+				// Create HTML from Markdown
+				$article['body'] = $Parsedown->text($article['body']);
+				
+				//Get featured image
+				$meta = json_decode($article['json_metadata'], true);
+				if ((isset($meta['image'])) && (!empty($meta['image']))) {
+					$featured = $meta['image'][0];
+				} else $featured = '/themes/'.$settings['theme'].'/no-img.png';
+				$article['featured'] = $featured;
+				
+				$parsedPosts[] = $article;
+			}
 
 			// Return view with articles
 			return $this->app->get('view')->render($response, $settings['theme'].'/index.html', [
-					'articles' => $articles,
+					'articles' => $parsedPosts,
 					'settings' => $settings
 			]);
 		}

@@ -4,3 +4,4 @@ config.json
 password
 /vendor/
 /data/
+/composer/

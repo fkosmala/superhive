@@ -10,19 +10,20 @@ use Slim\Factory\AppFactory;
 use Slim\Routing\RouteContext;
 
 use DragosRoua\PHPHiveTools\HiveApi as HiveApi;
+use Parsedown;
 
 final class PostsController
 {
 		
 	private $app;
 
-  public function __construct(ContainerInterface $app)
-  {
-      $this->app = $app;
-  }
+	public function __construct(ContainerInterface $app)
+	{
+		$this->app = $app;
+	}
   
-  // Read Post
-  public function post(Request $request, Response $response, $args) : Response {
+	// Read Post
+	public function post(Request $request, Response $response, $args) : Response {
 		$settings = $this->app->get('settings');
 		
 		$apiConfig = ["webservice_url" => $settings['api'],"debug" => false];
@@ -32,26 +33,36 @@ final class PostsController
 		if (isset($args['permlink'])) {
 			$permlink = $args['permlink'];
 			
+			$Parsedown = new Parsedown();
+			$parsedReplies = array();
+			
+			
 			// Check if comments exists for this post
 			$comments = $this->app->get('commentsdir').$permlink.'.comments';
-			if ((!file_exists($comments)) || (file_exists($comments)) && (time()-filemtime($comments) > 1 * 3600)) {
+			if ((!file_exists($comments)) || (file_exists($comments)) && (time()-filemtime($comments) > 600)) {
 				$api = new HiveApi($apiConfig);
 				$params = [$settings['author'], $permlink];
 				$result = json_encode($api->getContentReplies($params), JSON_PRETTY_PRINT);
 				file_put_contents($comments, $result);
 			}
 			$replies = json_decode(file_get_contents($comments), true);
+			
+			foreach ($replies as $reply) {
+				$reply['body'] = $Parsedown->text($reply['body']);
+				$parsedReplies[] = $reply;
+			}
 
 			$file = $this->app->get('blogfile');
 			$articles = json_decode(file_get_contents($file), true);
 			foreach($articles AS $index=>$article) {
 				if($article['permlink'] == $permlink) {
 					$metadata = json_decode($article['json_metadata'], true);
+					$article['body'] = $Parsedown->text($article['body']);
 					return $this->app->get('view')->render($response, $settings['theme'].'/post.html', [
 						'settings' => $settings,
 						'article' => $article,
 						'metadata' => $metadata,
-						'replies' => $replies
+						'replies' => $parsedReplies
 					]);
 				}
 			}
@@ -60,7 +71,6 @@ final class PostsController
 	}
 	
 	// Admin Functions
-	
 	public function adminPosts(Request $request, Response $response) : Response {
 		$settings = $this->app->get('settings');
 		

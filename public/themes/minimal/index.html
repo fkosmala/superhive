@@ -9,14 +9,13 @@
 		{% if nbPosts < settings.displayedPosts %}
 			{% if 'This is a cross post' not in article.body or 'This is a cross post' in article.body and settings.crosspost == true %}
 				{% set nbPosts = nbPosts + 1 %}
-				<article data-json="{{ article.json_metadata }}">
+				<article>
 					<small>{{ article.created|date("m/d/Y") }} - {{article.active_votes|length}} Upvotes - {{article.body|split(' ')|length }} Words</small>
 					<a href="{{ url_for('post', { 'permlink': article.permlink }) }}">
 						<h2>{{ article.title }}</h2>
-						<img src="#" alt="Picture of post : {{ article.title }}" class="img-article">
+						<img src="{{ article.featured }}" alt="Picture of post : {{ article.title }}" class="img-article">
 					</a>
-					{% set excerpt = article.body|striptags|slice(0,200) %}
-					<p class="excerpt">{{ excerpt }}...</p>
+					<p class="excerpt">{{ article.body|striptags|slice(0,200) }}...</p>
 				</article>
 				<hr>
 			{% endif %}
@@ -30,25 +29,4 @@
 {% endblock %}
 
 {% block scripts %}
-<script>
-  $(function() {
-  	$(".excerpt").each(function (){
-			text = $(this).text();
-			text = text.replace(/!\[[^\]]*\]\((.*?)\s*("(?:.*[^"])")?\s*\)/g, '');
-			text = marked.parse(text);
-			$(this).html(text);
-		});
-
-  	$("article").each(function (){
-  		metadata = $(this).data('json');
-  		if (metadata.image == null) {
-  			head = "/themes/{{ settings.theme }}/no-img.png"
-  		} else {
-  			head = metadata.image[0];
-  		}
-  		img = $(this).find('.img-article');
-  		img.attr('src', head);
-  	});
-  });
-</script>
 {% endblock %}

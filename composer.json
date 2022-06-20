@@ -19,7 +19,8 @@
 		"slim/twig-view": "^3.0",
 		"tuupola/slim-basic-auth": "^3.2",
 		"christianklisch/slim-minify": "^0.7.0",
-		"dragos-roua/php-hive-tools": "dev-master"
+		"dragos-roua/php-hive-tools": "dev-master",
+		"erusev/parsedown": "dev-master"
 	},
 	"autoload": {
     "psr-4": {

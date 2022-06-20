@@ -6,6 +6,7 @@ use App\Controllers\HomeController;
 use App\Controllers\AdminController;
 use App\Controllers\PagesController;
 use App\Controllers\PostsController;
+use App\Controllers\WalletController;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -161,6 +162,7 @@ $app->get('/sitemap', HomeController::class . ":sitemap")->setName('sitemap');
 $app->get('/admin', AdminController::class . ":adminIndex")->setName('admin');
 $app->get('/admin/social', AdminController::class . ":adminSocial")->setName('admin-social');
 $app->post('/admin/save', AdminController::class . ":save")->setName('admin-save');
+$app->get('/admin/wallet', WalletController::class . ":viewWallet")->setName('admin-wallet');
 
 // Posts routes
 $app->get('/post/{permlink}', PostsController::class . ":post")->setName('post');
@@ -175,6 +177,7 @@ $app->get('/admin/newpage', PagesController::class . ":adminNewPage")->setName('
 $app->get('/admin/editpage/{file}', PagesController::class . ":adminEditPage")->setName('admin-editpage');
 $app->get('/admin/delpage/{file}', PagesController::class . ":adminDelPage")->setName('admin-delpage');
 $app->post('/admin/savepage', PagesController::class . ":adminSavePage")->setName('admin-savepage');
+
 
 // generate routes from static pages
 $pagesDir = $container->get('pagesdir');

@@ -26,6 +26,7 @@ final class AdminController
 			$settings = $this->app->get('settings');
 			$accountFile = $this->app->get('accountfile');
 			$langFile = $this->app->get('basedir').'app/languages.json';
+			$nodesFile = $this->app->get('basedir').'app/nodes.json';
 
 			$apiConfig = ["webservice_url" => $settings['api'],"debug" => false];
 			$api = new HiveApi($apiConfig);
@@ -41,13 +42,15 @@ final class AdminController
 
 			$account = json_decode(file_get_contents($accountFile), true);
 			$langs = json_decode(file_get_contents($langFile), true);
+			$nodes = json_decode(file_get_contents($nodesFile), true);
 
 			$themes = array_map('basename', glob($this->app->get('themesdir').'*' , GLOB_ONLYDIR));
 			return $this->app->get('view')->render($response, '/admin/admin-index.html', [
 					'settings' => $settings,
 					'account' => $account[0],
 					'themes' => $themes,
-					'languages' => $langs
+					'languages' => $langs,
+					'nodes' => $nodes
 			]);
 		}
 
@@ -69,6 +72,8 @@ final class AdminController
 			$author = ($data["author"] == "") ? $settings["author"] : $data["author"];
 			$title = ($data["title"] == "") ? $settings["title"] : $data["title"];
 			$baseline = ($data["baseline"] == "") ? $settings["baseline"] : $data["baseline"];
+			$displayType = ($data["displayTypes"] == "") ? $settings["displayType"]['type'] : $data["displayTypes"];
+			$displayedTag = ($data["tag"] == "") ? $settings["displayType"]['tag'] : $data["tag"];
 			$socialDesc = ($data["socialDesc"] == "") ? $settings["social"]["description"] : $data["socialDesc"];
 			$socialImage = ($data["socialImage"] == "") ? $settings["social"]["image"] : $data["socialImage"];
 			$twitter = ($data["twitter"] == "") ? $settings["social"]["twitter"] : $data["twitter"];
@@ -81,6 +86,10 @@ final class AdminController
 				'author' => $author,
 				'title' => $title,
 				'baseline' => $baseline,
+				'displayType' => array(
+					'type' => $displayType,
+					'tag' => $displayedTag,
+				),
 				'social' => array(
 					'description' => $socialDesc,
 					'image' => $socialImage,

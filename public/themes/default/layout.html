@@ -15,9 +15,9 @@
 	<header class="w-full m-0 p-0 bg-black" style="height: 60vh; max-height:460px;">
 		<div class="container max-w-4xl mx-auto pt-16 md:pt-32 text-center break-normal">
 			{% if current_url() == url_for('index') %}
-				<h1 class="text-white font-extrabold text-3xl md:text-5xl">{{ settings.title|upper }}</h1>
+			<h1 class="text-white font-extrabold text-3xl md:text-5xl">{{ settings.title|upper }}</h1>
 			{% else %}
-				<p class="text-white font-extrabold text-3xl md:text-5xl">{{ settings.title|upper }}</p>
+			<p class="text-white font-extrabold text-3xl md:text-5xl">{{ settings.title|upper }}</p>
 			{% endif %}
 			<p class="text-xl md:text-2xl text-gray-500">{{ settings.baseline }}</p>
 		</div>
