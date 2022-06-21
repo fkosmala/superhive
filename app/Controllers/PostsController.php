@@ -10,7 +10,7 @@ use Slim\Factory\AppFactory;
 use Slim\Routing\RouteContext;
 
 use DragosRoua\PHPHiveTools\HiveApi as HiveApi;
-use Parsedown;
+use League\CommonMark\CommonMarkConverter;
 
 final class PostsController
 {
@@ -33,7 +33,7 @@ final class PostsController
 		if (isset($args['permlink'])) {
 			$permlink = $args['permlink'];
 			
-			$Parsedown = new Parsedown();
+			$converter = new CommonMarkConverter();
 			$parsedReplies = array();
 			
 			$file = $this->app->get('blogfile');
@@ -41,7 +41,7 @@ final class PostsController
 			foreach($articles AS $index=>$article) {
 				if($article['permlink'] == $permlink) {
 					$metadata = json_decode($article['json_metadata'], true);
-					$article['body'] = $Parsedown->text($article['body']);
+					$article['body'] = $converter->convert($article['body']);
 					
 					// Check if comments exists for this post
 					$comments = $this->app->get('commentsdir').$permlink.'.comments';
@@ -54,7 +54,7 @@ final class PostsController
 					$replies = json_decode(file_get_contents($comments), true);
 					
 					foreach ($replies as $reply) {
-						$reply['body'] = $Parsedown->text($reply['body']);
+						$reply['body'] = $converter->convert($reply['body']);
 						$parsedReplies[] = $reply;
 					}
 			

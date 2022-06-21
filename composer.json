@@ -20,7 +20,7 @@
 		"tuupola/slim-basic-auth": "^3.2",
 		"christianklisch/slim-minify": "^0.7.0",
 		"dragos-roua/php-hive-tools": "dev-master",
-		"erusev/parsedown": "dev-master"
+		"league/commonmark": "2.4.x-dev"
 	},
 	"autoload": {
     "psr-4": {

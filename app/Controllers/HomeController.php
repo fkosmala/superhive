@@ -9,7 +9,7 @@ use \Psr\Container\ContainerInterface;
 use \Slim\Factory\AppFactory;
 
 use DragosRoua\PHPHiveTools\HiveApi as HiveApi;
-use Parsedown;
+use League\CommonMark\CommonMarkConverter;
 
 final class HomeController
 {
@@ -108,12 +108,12 @@ final class HomeController
 			$articles = json_decode(file_get_contents($file), true);
 			
 			//Get ready to parse the mardown
-			$Parsedown = new Parsedown();
+			$converter = new CommonMarkConverter();
 			$parsedPosts = array();
 			
 			foreach($articles as &$article){
 				// Create HTML from Markdown
-				$article['body'] = $Parsedown->text($article['body']);
+				$article['body'] = $converter->convert($article['body']);
 				
 				//Get featured image
 				$meta = json_decode($article['json_metadata'], true);
