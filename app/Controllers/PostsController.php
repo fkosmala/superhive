@@ -36,28 +36,28 @@ final class PostsController
 			$Parsedown = new Parsedown();
 			$parsedReplies = array();
 			
-			
-			// Check if comments exists for this post
-			$comments = $this->app->get('commentsdir').$permlink.'.comments';
-			if ((!file_exists($comments)) || (file_exists($comments)) && (time()-filemtime($comments) > 600)) {
-				$api = new HiveApi($apiConfig);
-				$params = [$settings['author'], $permlink];
-				$result = json_encode($api->getContentReplies($params), JSON_PRETTY_PRINT);
-				file_put_contents($comments, $result);
-			}
-			$replies = json_decode(file_get_contents($comments), true);
-			
-			foreach ($replies as $reply) {
-				$reply['body'] = $Parsedown->text($reply['body']);
-				$parsedReplies[] = $reply;
-			}
-
 			$file = $this->app->get('blogfile');
 			$articles = json_decode(file_get_contents($file), true);
 			foreach($articles AS $index=>$article) {
 				if($article['permlink'] == $permlink) {
 					$metadata = json_decode($article['json_metadata'], true);
 					$article['body'] = $Parsedown->text($article['body']);
+					
+					// Check if comments exists for this post
+					$comments = $this->app->get('commentsdir').$permlink.'.comments';
+					if ((!file_exists($comments)) || (file_exists($comments)) && (time()-filemtime($comments) > 600)) {
+						$api = new HiveApi($apiConfig);
+						$params = [$article['author'], $permlink];
+						$result = json_encode($api->getContentReplies($params), JSON_PRETTY_PRINT);
+						file_put_contents($comments, $result);
+					}
+					$replies = json_decode(file_get_contents($comments), true);
+					
+					foreach ($replies as $reply) {
+						$reply['body'] = $Parsedown->text($reply['body']);
+						$parsedReplies[] = $reply;
+					}
+			
 					return $this->app->get('view')->render($response, $settings['theme'].'/post.html', [
 						'settings' => $settings,
 						'article' => $article,
