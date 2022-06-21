@@ -9,7 +9,7 @@
 		{% if nbPosts < settings.displayedPosts %}
 			{% if 'This is a cross post' not in article.body or 'This is a cross post' in article.body and settings.crosspost == true %}
 				{% set nbPosts = nbPosts + 1 %}
-				<article">
+				<article>
 					<small>{{ article.created|date("m/d/Y") }} - {{article.active_votes|length}} Upvotes - {{article.body|split(' ')|length }} Words</small>
 					<a href="{{ url_for('post', { 'permlink': article.permlink }) }}">
 						<h2>{{ article.title }}</h2>
