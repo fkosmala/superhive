@@ -2,6 +2,7 @@ composer.phar
 composer.lock
 config.json
 password
+config.sample.json
 /vendor/
 /data/
 /composer/
