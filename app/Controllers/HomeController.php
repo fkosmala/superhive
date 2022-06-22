@@ -114,9 +114,12 @@ final class HomeController
 			foreach($articles as &$article){
 				// Create HTML from Markdown
 				$article['body'] = $converter->convert($article['body']);
+                $tags= '';
 				
 				//Get featured image
 				$meta = json_decode($article['json_metadata'], true);
+                
+                $tags.= implode(",", $meta['tags']).',';
 				if ((isset($meta['image'])) && (!empty($meta['image']))) {
 					$featured = $meta['image'][0];
 				} else $featured = '/themes/'.$settings['theme'].'/no-img.png';
@@ -124,11 +127,17 @@ final class HomeController
 				
 				$parsedPosts[] = $article;
 			}
+            
+            $tags = explode(',',$tags);
+            $tagsArray = array_count_values($tags);
+            array_multisort($tagsArray, SORT_DESC);
+            $mostUsedTags = array_slice($tagsArray, 0, 15);
 
 			// Return view with articles
 			return $this->app->get('view')->render($response, $settings['theme'].'/index.html', [
 					'articles' => $parsedPosts,
-					'settings' => $settings
+                    'tags' => $mostUsedTags,
+                    'settings' => $settings
 			]);
 		}
 
