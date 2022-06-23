@@ -46,7 +46,7 @@ $container->set('settings', function() {
 $settings = $container->get('settings');
 
 // Rename config.sample json to config.json
-if (file_exists($container->get('basedir').'config.sample.json')) {
+if ((file_exists($container->get('basedir').'config.sample.json')) && (!file_exists($container->get('basedir').'config.json'))) {
 	rename($container->get('basedir').'config.sample.json', $container->get('basedir').'config.json');
 }
 

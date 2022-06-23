@@ -17,7 +17,7 @@
     "lang": "mul",
     "theme": "default",
     "crosspost": false,
-    "api": "api.hive.blog",
+    "api": "anyx.io",
     "devMode": true,
     "displayedPosts": 15
 }
