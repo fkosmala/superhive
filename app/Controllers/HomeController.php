@@ -74,7 +74,8 @@ final class HomeController
 				// Prepare API call according to displayed posts type
 				$displayType = $settings['displayType']['type'];
 				if ($displayType === 'author') {
-					$params = [$settings['author'], "", "", 100];
+					$dateNow = (new \DateTime())->format('Y-m-d\TH:i:s');
+					$params = [$settings['author'], "", $dateNow, 100];
 					$result = json_encode($api->getDiscussionsByAuthorBeforeDate($params), JSON_PRETTY_PRINT);
 				} elseif (($displayType === 'tag')) {
 					$displayTag = $settings['displayType']['tag'];
