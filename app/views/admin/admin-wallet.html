@@ -43,34 +43,34 @@
 	<div class="grid">
 		<article>
 			<h3>{{ account.vesting_balance }}</h3>
-			<button class="savingsDeposit" data-token="HIVE" data-balance="{{ account.balance }}"><i class="fas fa-money-bill-wave"></i> Deposit</button>
-			<button class="savingsWithdraw secondary" data-token="HIVE"><i class="fas fa-arrow-up"></i> Withdraw</button>
+			<button class="savings" data-operation="Deposit" data-token="HIVE" data-balance="{{ account.balance }}"><i class="fas fa-money-bill-wave"></i> Deposit</button>
+			<button class="savings secondary" data-operation="Withdraw" data-token="HIVE" data-balance="{{ account.vesting_balance }}"><i class="fas fa-arrow-up"></i> Withdraw</button>
 		</article>
 
 		<article>
 			<h3>{{ account.savings_hbd_balance }}</h3>
-			<button class="savingsDeposit" data-token="HBD" data-balance="{{ account.hbd_balance }}"><i class="fas fa-money-bill-wave"></i> Deposit</button>
-			<button class="savingsWithdraw secondary" data-token="HBD"><i class="fas fa-arrow-up"></i> Withdraw</button>	
+			<button class="savings" data-operation="Deposit" data-token="HBD" data-balance="{{ account.hbd_balance }}"><i class="fas fa-money-bill-wave"></i> Deposit</button>
+			<button class="savings secondary" data-operation="Withdraw" data-token="HBD" data-balance="{{ account.savings_hbd_balance }}"><i class="fas fa-arrow-up"></i> Withdraw</button>	
 		</article>
 	</div>
 </article>
 
 <!-- Deposit Savings modal -->
-<dialog id="modal-savingsDeposit">
+<dialog id="modal-savings">
   <article>
     <a data-target="copy" href="#close" aria-label="Close" class="close" onClick="toggleModal(event);modal.remove();"></a>
-    <h3 class="modal-title">Deposit to <span></span> Savings</h3>
+    <h3 class="modal-title"><strong></strong> <span></span> Savings</h3>
     <form>
 		<div class="grid">
 			<label for="savingsFrom">
 				Account :
-				<input type="text" id="savingsFrom" name="savingsFrom" placeholder="From :" value="{{ settings.author }}" disabled required>
+				<input type="text" id="savingsFrom" name="savingsFrom" placeholder="" value="{{ settings.author }}" disabled required>
 			</label>
 		</div>
 		
 		<label for="savingsAmount">
 			Amount : (Available: <u class="modal-balance"></u> <span class="modal-token"></span>)
-			<input type="number" id="savingsAmount" name="savingsAmount" placeholder="how many tokens you want to transfert into savings" required>
+			<input type="number" id="savingsAmount" name="savingsAmount" placeholder="how many tokens ?" required>
 		</label>
     </form>
     <footer>
@@ -432,7 +432,7 @@
 		});
 		
 		// Savings Deposit
-		$('.savingsDeposit').on('click tap', function() {
+		$('.savings').on('click tap', function() {
 			
 			// empty fields
 			$('#savingsAmount').val('');
@@ -440,14 +440,15 @@
 			// Create vars with values
 			token = $(this).data('token');
 			balance = parseFloat($(this).data('balance'));
-			name = $(this).attr('class');
+			opType = $(this).data('operation');
 			
 			// Generate copy of selected modal
 			preModal = $('<dialog id="copy"></dialog>');
-			modal = preModal.html($('#modal-'+name).html());
+			modal = preModal.html($('#modal-savings').html());
 			$('body').append(modal);
 			
 			// Change the text inside modal
+			modal.find('.modal-title').find('strong').text(opType);
 			modal.find('.modal-title').find('span').text(token);
 			modal.find('.modal-balance').text(balance);
 			modal.find('.modal-token').text(token);
@@ -468,15 +469,28 @@
 				modal.find('article').empty().attr('aria-busy', true)
 				
 				// Create JSON operation for Broadcast
-				operation = [[
-					"transfer_to_savings",
-					{
-						"from": "{{ settings.author }}",
-						"to": "{{ settings.author }}",
-						"amount": total,
-						"memo": ""
-					}
-				]];
+				if (opType == "Deposit") {
+					operation = [[
+						"transfer_to_savings",
+						{
+							"from": "{{ settings.author }}",
+							"to": "{{ settings.author }}",
+							"amount": total,
+							"memo": ""
+						}
+					]];
+				} else if (opType == "Withdraw") {
+					operation = [[
+						"transfer_from_savings",
+						{
+							"from": "{{ settings.author }}",
+							"to": "{{ settings.author }}",
+							"request_id": parseInt(Date.now()),
+							"amount": total,
+							"memo": ""
+						}
+					]];
+				}
 				
 				hive_keychain.requestBroadcast(
 					"bambukah",
@@ -489,19 +503,6 @@
 						modal.find('article').append('<footer><a data-target="copy" href="#cancel" role="button" class="secondary" onClick="toggleModal(event);modal.remove();">Close</a></footer>');
 					},
 				);
-				/*
-					[
-					  [
-						"transfer_to_savings",
-						{
-						  "from": "bambukah",
-						  "to": "bambukah",
-						  "amount": "10.000 HBD",
-						  "memo": ""
-						}
-					  ]
-					]
-				*/
 				
 			});
 		});

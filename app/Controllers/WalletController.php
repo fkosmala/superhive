@@ -31,14 +31,14 @@ final class WalletController
 		$api = new HiveApi($apiConfig);
 		$params = [$settings['author']];
 		
-		$cache_interval = 300;
+		$cache_interval = 120;
 		$current_time = time();
 		if ((!file_exists($accountFile)) || ($current_time - filemtime($accountFile) > $cache_interval)) {
 			$result = json_encode($api->getAccounts($params), JSON_PRETTY_PRINT);
 			file_put_contents($accountFile, $result);
 		}
 		
-		if ((!file_exists($bcFile)) || ($current_time - filemtime($bcFile) > 1800)) {
+		if ((!file_exists($bcFile)) || ($current_time - filemtime($bcFile) > 600)) {
 			$bcParams = array();
 			$result = json_encode($api->getDynamicGlobalProperties($bcParams), JSON_PRETTY_PRINT);
 			file_put_contents($bcFile, $result);
