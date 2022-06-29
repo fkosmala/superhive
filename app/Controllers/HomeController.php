@@ -70,7 +70,7 @@ final class HomeController
 			$file = $this->app->get('blogfile');
 			
 			// if the JSON file doesn't exist or if it's old, take it from API
-			if (!file_exists($file) || (time()-filemtime($file) > 600)) {
+			if (!file_exists($file) || (time()-filemtime($file) > 120)) {
 				// Prepare API call according to displayed posts type
 				$displayType = $settings['displayType']['type'];
 				if ($displayType === 'author') {

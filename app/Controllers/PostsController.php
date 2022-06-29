@@ -45,7 +45,7 @@ final class PostsController
 					
 					// Check if comments exists for this post
 					$comments = $this->app->get('commentsdir').$permlink.'.comments';
-					if ((!file_exists($comments)) || (file_exists($comments)) && (time()-filemtime($comments) > 600)) {
+					if ((!file_exists($comments)) || (file_exists($comments)) && (time()-filemtime($comments) > 120)) {
 						$api = new HiveApi($apiConfig);
 						$params = [$article['author'], $permlink];
 						$result = json_encode($api->getContentReplies($params), JSON_PRETTY_PRINT);
