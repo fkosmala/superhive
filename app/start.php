@@ -157,6 +157,7 @@ $app->get('/', HomeController::class . ":index")->setName('index');
 $app->post('/', HomeController::class . ":install")->setName('install');
 $app->get('/feed', HomeController::class . ":feed")->setName('feed');
 $app->get('/sitemap', HomeController::class . ":sitemap")->setName('sitemap');
+$app->get('/about', HomeController::class . ":about")->setName('about');
 
 // Admin routes
 $app->get('/admin', AdminController::class . ":adminIndex")->setName('admin');

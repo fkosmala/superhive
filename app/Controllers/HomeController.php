@@ -179,4 +179,17 @@ final class HomeController
 				'settings' => $settings
 			]);
 		}
+        
+        public function about(Request $request, Response $response) : Response {
+			$settings = $this->app->get('settings');
+			$accountFile = $this->app->get('accountfile');
+            $account = json_decode(file_get_contents($accountFile), true);
+            
+            $accountBio = json_decode($account[0]['posting_json_metadata'], true);
+            
+            return $this->app->get('view')->render($response, $settings['theme'].'/about.html', [
+					'settings' => $settings,
+					'account' => $accountBio['profile']
+			]);
+		}
 }
