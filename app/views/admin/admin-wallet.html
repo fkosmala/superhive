@@ -55,6 +55,42 @@
 	</div>
 </article>
 
+<article class="text-center">
+	<header>
+		<h2>Hive-Engine tokens</h2>
+	</header>
+	{% if hetokens is empty %}
+	You don't have any Hive Engine tokens
+	{% else %}
+	<table>
+		<thead>
+			<tr>
+				<th scope="col">Name</th>
+				<th scope="col">Balance</th>
+				<th scope="col">Staked</th>
+				<th scope="col">Delegated</th>
+				<th scope="col">&nbsp;</th>
+			</tr>
+		</thead>
+		<tbody>
+		{% for token in hetokens %}
+		{% if not (token.balance == 0) or not (token.stake  == 0) %}
+			<tr>
+				<th scope="row">{{ token.symbol }}</th>
+				<td>{{ token.balance }}</td>
+				<td>{{ token.stake }}</td>
+				<td>{{ token.delegationsOut }}</td>
+				<td>
+					<button class="tokenSend" data-token="{{ token.symbol }}" data-balance="{{ token.balance }}"><i class="fas fa-paper-plane"></i> Send</button>
+				</td>
+			</tr>
+		{% endif %}
+		{% endfor %}
+		</tbody>
+	</table>
+	{% endif %}
+</article>
+
 <!-- Deposit Savings modal -->
 <dialog id="modal-savings">
   <article>
@@ -277,7 +313,19 @@
 						false
 					);
 				} else {
-					// TODO : Make Hiveengine custom_json for HiveKeychain
+					hive_keychain.requestSendToken(
+						"{{ settings.author }}",
+						to,
+						amount,
+						memo,
+						token,
+						function (response) {
+							modal.find('article').attr('aria-busy', false);
+							modal.find('article').html('<a data-target="copy" href="#close" aria-label="Close" class="close" onClick="toggleModal(event);modal.remove();"></a>');
+							modal.find('article').append(response.message);
+							modal.find('article').append('<footer><a data-target="copy" href="#cancel" role="button" class="secondary" onClick="toggleModal(event);modal.remove();">Close</a></footer>');
+						}
+					);
 				}
 				
 			});
