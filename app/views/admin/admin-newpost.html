@@ -4,6 +4,13 @@
 <link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
 <style media="screen">
 	.lightning button{color:black;}
+	.upload-area{
+		width: 100%;
+		height: 150px;
+		text-align:center;
+		border: 2px solid;
+		padding: 2%;
+}
 </style>
 {% endblock %}
 
@@ -20,8 +27,10 @@
 <label for="postTitle">Title</label>
 <input name="postTitle" id="postTitle" type="text" placeholder="Make a great title for this post :)" {% if postTitle %}value="{{ postTitle }}"{% endif %}>
 
+<div class="upload-area">
+	<p id="uplText">Drag and Drop image here / Click to select image</p>
+</div>
 <input type="file" name="imgupload" id="imgupload" style="display:none"/>
-<p id="uplText">Drag and Drop image here / Click to select image</p>
 
 <article class="lightning" data-theme="light">
 	<textarea id="mde" name="mde">{% if postContent %}{{ postContent }}{% endif %}</textarea>
@@ -55,7 +64,7 @@
 <script>
 	window.onload = function () {
 		if (typeof hive_keychain === 'undefined') {
-			$('#actions').addClass('text-red-400 mb-6').html('You don\'t have Hive Keychain please install it for <a target="_blank" href="https://chrome.google.com/webstore/detail/hive-keychain/jcacnejopjdphbnjgfaaobbfafkihpep">Brave/Chrome</a> or <a target="_blank" href="https://addons.mozilla.org/en-GB/firefox/addon/hive-keychain/">Firefox</a>')
+			$('#actions').html('You don\'t have Hive Keychain please install it for <a target="_blank" href="https://chrome.google.com/webstore/detail/hive-keychain/jcacnejopjdphbnjgfaaobbfafkihpep">Brave/Chrome</a> or <a target="_blank" href="https://addons.mozilla.org/en-GB/firefox/addon/hive-keychain/">Firefox</a>')
 		}
 	}
 
@@ -72,7 +81,11 @@
 		});
 
 		// Prevent redirect
-		$("html").on("drop", function(e) { e.preventDefault(); e.stopPropagation(); });
+		$("html").on("drop", function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+		});
+		
 		$("html").on("dragover", function(e) {
 		  e.preventDefault();
 		  e.stopPropagation();
@@ -97,26 +110,22 @@
 		    e.preventDefault();
 		    $("#uplText").text("Drop");
 		});
-
-		$('.upload-area').on('drop', function (e) {
-		  e.stopPropagation();
-		  e.preventDefault();
-
-		  $("#uplText").text("Verify before image hosting...");
-			file = e.originalEvent.dataTransfer.files;
-			image = file[0];
+		
+		function uplData() {
+			$("#uplText").text("Verify before image hosting...");
+			
 
 			reader = new FileReader();
 			reader.readAsBinaryString(image);
 			reader.onload = function(e) {
-		  	hive_keychain.requestHandshake(function() {
+				hive_keychain.requestHandshake(function() {
 					account = '{{ settings.author }}';
 
 					// Use Buffer from NodeJS to the browser to create message for Hive Keychain
 					Buffer = new Uint32Array();
 					data = buffer.Buffer.from(reader.result, 'binary');
 					prefix = buffer.Buffer.from('ImageSigningChallenge');
-		  		message = buffer.Buffer.concat([prefix, data]);
+					message = buffer.Buffer.concat([prefix, data]);
 
 					// Sign this with Keychain
 					hive_keychain.requestSignBuffer(
@@ -146,8 +155,24 @@
 						null
 					);
 				});
-		  };
+			};
+		}
 
+		$('.upload-area').on('drop', function (e) {
+			e.stopPropagation();
+			e.preventDefault();
+			file = e.originalEvent.dataTransfer.files;
+			image = file[0];
+			
+			uplData();
+		});
+		
+		$('#imgupload').on('change', function (e) {
+			e.stopPropagation();
+			e.preventDefault();
+			image = $('#imgupload')[0].files[0];
+			
+			uplData();
 		});
 
 		function insertString(editor,str){
