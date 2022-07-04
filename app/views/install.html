@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SuperHive Installation</title>
   <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+  <style>
+	  .text-center {text-align: center;} 
+  </style>
 </head>
 <body>
   <main class="container">
@@ -12,7 +15,7 @@
     <p>Welcome to your new fresh installation of SuperHive</p>
 
     <article>
-      <h2>Requirements</h2>
+      <h2>Server requirements</h2>
       <p>SuperHive check the minimal requirements to run.</p>
       {% for req in requirements %}
         {% if req.status == "success" %}
@@ -22,6 +25,32 @@
         {% endif %}
       {% endfor %}
     </article>
+    
+    <article>
+		<h2>Client requirement</h2>
+		<h3>Hive account</h3>
+		<p>SuperHive needs an HIVE blockchain account to work. If you don't have it, please create it.</p>
+		<p>Choose the best service for you to create an account :</p>
+		<div class="grid">
+			<article>
+				<header>Ecency</header>
+				Instant creation
+				E-mail verification
+				Free
+				<a role="button" href="https://ecency.com/signup?referral=superhive" target="_blank">Create your account</a>
+			</article>
+			<article>
+				<header>HiveOnboard</header>
+				Instant creation
+				Phone number verification
+				Free
+				<a role="button" href="https://hiveonboard.com/create-account?ref=superhive" target="_blank">Create your account</a>
+			</article>
+		</div>
+		<h3>Hive Keychain extension</h3>
+		<p>SuperHive doesn't store any passwords/keys (for security reasons). All features are based on Hive Keychain extension.</p>
+		<a href="https://hive-keychain.com/" target="_blank"><img src="./heychain.png" alt="Get Hive Keychain"></a>
+	</article>
 
     <article>
       <h2>Identification</h2>
