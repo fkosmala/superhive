@@ -115,6 +115,11 @@ $container->set('view', function() {
    }
 });
 
+//Set Session engine
+$container->set('session', function () {
+  return new \SlimSession\Helper();
+});
+
 // Create App
 $app = AppFactory::create();
 $app->add(TwigMiddleware::createFromContainer($app));
@@ -142,14 +147,11 @@ if (!file_exists($container->get('password'))) {
 
 // Add Basic Auth for admin panel
 $app->add(
-	new BasicAuth([
-    "path" => "/admin",
-    "secure" => true,
-    "realm" => "SuperHive Protected Area",
-    "relaxed" => ["localhost"],
-    "users" => $cred
-   ]
- )
+	new \Slim\Middleware\Session([
+    'name' => 'sh_session',
+    'autorefresh' => true,
+    'lifetime' => '1 hour',
+  ])
 );
 
 // Global routes
@@ -158,12 +160,15 @@ $app->post('/', HomeController::class . ":install")->setName('install');
 $app->get('/feed', HomeController::class . ":feed")->setName('feed');
 $app->get('/sitemap', HomeController::class . ":sitemap")->setName('sitemap');
 $app->get('/about', HomeController::class . ":about")->setName('about');
+$app->get('/login', HomeController::class . ":login")->setName('login');
+$app->post('/login', HomeController::class . ":loginPost")->setName('login-post');
 
 // Admin routes
 $app->get('/admin', AdminController::class . ":adminIndex")->setName('admin');
 $app->get('/admin/social', AdminController::class . ":adminSocial")->setName('admin-social');
 $app->post('/admin/save', AdminController::class . ":save")->setName('admin-save');
 $app->get('/admin/wallet', WalletController::class . ":viewWallet")->setName('admin-wallet');
+$app->get('/admin/logout', AdminController::class . ":logout")->setName('admin-logout');
 
 // Posts routes
 $app->get('/post/{permlink}', PostsController::class . ":post")->setName('post');

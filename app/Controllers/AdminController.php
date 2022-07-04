@@ -14,11 +14,30 @@ use DragosRoua\PHPHiveTools\HiveApi as HiveApi;
 final class AdminController
 {
 
-		private $app;
+	private $app;
 
     public function __construct(ContainerInterface $app)
     {
         $this->app = $app;
+        
+        // Check security in session for admin functions
+        $settings = $this->app->get('settings');
+        $session = $this->app->get('session');
+        $cred = unserialize(file_get_contents($this->app->get('password')));
+        $author = $settings['author'];
+        $passwd = $cred[$author];
+        
+        // if sessons keys are not set
+        if ((!isset($session['sh_author'])) || (!isset($session['sh_sign']))) {
+			header("Location: /login");
+			die();
+		} else {
+			// If session keys are not good
+			if (($settings['author'] != $session['sh_author']) || ($passwd != $session['sh_sign'])) {
+				header("Location: /login");
+				die();
+			}
+		}
     }
 
     public function adminIndex(Request $request, Response $response) : Response {
@@ -59,6 +78,16 @@ final class AdminController
 			return $this->app->get('view')->render($response, '/admin/admin-social.html', [
 					'settings' => $settings
 			]);
+		}
+		
+		public function logout(Request $request, Response $response) : Response {
+			$session = $this->app->get('session');
+			
+			$session->delete('sh_author');
+			$session->delete('sh_sign');
+			$session::destroy();
+			
+			return $response->withHeader('Location',  '/login')->withStatus(302);
 		}
 
 		public function save(Request $request, Response $response, $args) : Response {

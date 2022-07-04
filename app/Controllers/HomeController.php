@@ -145,14 +145,48 @@ final class HomeController
 		public function install(Request $request, Response $response, $args) : Response {
 			if (!file_exists($this->app->get('password'))) {
 				$data = $request->getParsedBody();
-				$passwd = password_hash($data['passwd'], PASSWORD_BCRYPT, ['cost' => 10]);
-				$cred = array($data['username'] => $passwd);
+				$cred = array($data['username'] => $data['passwd']);
 				file_put_contents($this->app->get('password'), serialize($cred));
 				return $response->withHeader('Location', '/admin')->withStatus(302);
 			} else {
 				return $response->withHeader('Location', '/')->withStatus(302);
 			}
 		}
+		
+		public function login(Request $request, Response $response, $args) : Response {
+			$settings = $this->app->get('settings');
+			$session = $this->app->get('session');
+			
+			return $this->app->get('view')->render($response, 'login.html', [
+				'settings' => $settings
+			]);
+		}
+		
+		public function loginPost(Request $request, Response $response, $args) : Response {
+			$settings = $this->app->get('settings');
+			$session = $this->app->get('session');
+			$data = $request->getParsedBody();
+			$author = $settings['author'];
+			
+			if ($author != $data['username']) {
+				$session::destroy();
+				$msg = "Not Ok";
+			} else {
+				$cred = unserialize(file_get_contents($this->app->get('password')));
+				$passwd = $cred[$author];
+				if ($data['passwd'] == $passwd) {
+					$session['sh_author'] = $author;
+					$session['sh_sign'] = $passwd;
+					$msg = "OK";
+				} else {
+					$session::destroy();
+					$msg = "Not Ok";
+				}	
+			}
+			$response->getBody()->write($msg);
+			return$response;
+		}
+
 
 		public function feed(Request $request, Response $response) : Response {
 			$settings = $this->app->get('settings');

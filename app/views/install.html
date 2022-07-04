@@ -33,43 +33,78 @@
 		<p>Choose the best service for you to create an account :</p>
 		<div class="grid">
 			<article>
-				<header>Ecency</header>
-				Instant creation
-				E-mail verification
-				Free
-				<a role="button" href="https://ecency.com/signup?referral=superhive" target="_blank">Create your account</a>
+				<h3 class="text-center">Ecency</h3>
+				<ul>
+					<li>Instant creation</li>
+					<li>E-mail verification</li>
+					<li>Free</li>
+				</ul>
+				<div class="text-center">
+					<a class="text-center" role="button" href="https://ecency.com/signup?referral=superhive" target="_blank">Create your account</a>
+				</div>
 			</article>
 			<article>
-				<header>HiveOnboard</header>
-				Instant creation
-				Phone number verification
-				Free
-				<a role="button" href="https://hiveonboard.com/create-account?ref=superhive" target="_blank">Create your account</a>
+				<h3 class="text-center">HiveOnboard</h3>
+				<ul>
+					<li>Instant creation</li>
+					<li>Phone number verification</li>
+					<li>Free</li>
+				</ul>
+				<div class="text-center">
+					<a class="text-center" role="button" href="https://hiveonboard.com/create-account?ref=superhive" target="_blank">Create your account</a>
+				</div>
 			</article>
 		</div>
 		<h3>Hive Keychain extension</h3>
-		<p>SuperHive doesn't store any passwords/keys (for security reasons). All features are based on Hive Keychain extension.</p>
-		<a href="https://hive-keychain.com/" target="_blank"><img src="./heychain.png" alt="Get Hive Keychain"></a>
+		<p>SuperHive doesn't store any passwords/keys (for security reasons). All features are based on Hive Keychain extension. You can find it for browsers or mobile here :</p>
+		<div class="text-center">
+			<a href="https://hive-keychain.com/" target="_blank"><img src="{{ base_path() }}/keychain.png" alt="Get Hive Keychain"></a>
+		</div>
 	</article>
 
     <article>
       <h2>Identification</h2>
-      <p>You can choose a Username and a password for administration panel connexion.</p>
-      <form action="{{ url_for('install') }}" method="post">
-        <div class="grid">
-          <div>
-            <label for="username">Username : </label>
-          	<input type="text" placeholder="Choose your username" id="username" name="username">
-          </div>
-          <div>
-            <label for="passwd">Password : </label>
-          	<input type="password" placeholder="Choose a good password" id="passwd" name="passwd">
-          </div>
-        </div>
-      	<input type="submit" value="Finish">
-      </form>
+      <p>Enter the account will be used for SuperHive</p>
+	  <div>
+		<label for="username">Account :</label>
+		<input type="text" placeholder="Choose your username" id="username" name="username" required>
+		<p id="signEvent"></p>
+	  </div>
+	  <button id="signMessage">Finish</button>
     </article>
   </main>
+
+  <script src="https://unpkg.com/jquery@3.6.0/dist/jquery.min.js"></script>
+  <script>
+	$(function () {
+		$('#signMessage').on('click tap', function(event) {
+			event.preventDefault();
+			message = "SuperHive12345";
+			username = $('#username').val();
+			if (username.length < 3) {
+				$('#signEvent').text('Please enter a real hive account (min 3 letters)');
+			}
+			hive_keychain.requestSignBuffer(
+				username,
+				message,
+				'Active',
+				function (response) {
+					if (response.error != "null") {
+						password = response.result;
+						$.post( 
+							"{{ url_for('install') }}", 
+							{ username: username, passwd: password },
+							function (data) {
+								console.log('OK');
+							});
+					} else $('#signEvent').text(response.result);
+				},
+				null,
+				null
+			);
+		});
+	});
+  </script>
 
 </body>
 </html>
