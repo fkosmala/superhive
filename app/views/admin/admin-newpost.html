@@ -72,12 +72,7 @@
 		var easyMDE = new EasyMDE({
 			element: $('#mde')[0],
 			autofocus: true,
-			spellChecker: false,
-			imageUpload: true,
-			autosave: {
-				enabled: true,
-				unique_id: 'SuperHive_Draft'
-			},
+			spellChecker: false
 		});
 
 		// Prevent redirect
@@ -171,6 +166,15 @@
 			e.stopPropagation();
 			e.preventDefault();
 			image = $('#imgupload')[0].files[0];
+			
+			uplData();
+		});
+		
+		// Make the Editor area droppable for image upload to ImageHoster
+		easyMDE.codemirror.on("drop", function(instance, event) {
+			console.log(event);
+			file = event.dataTransfer.files;
+			image = file[0];
 			
 			uplData();
 		});
