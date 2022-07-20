@@ -16,7 +16,6 @@ use Slim\Factory\AppFactory;
 use Slim\Routing\RouteContext;
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
-use Slim\Middleware\Minify as Minify;
 
 use Tuupola\Middleware\HttpBasicAuthentication as BasicAuth;
 
@@ -127,13 +126,6 @@ $app->add(TwigMiddleware::createFromContainer($app));
 // Add Error Middleware on DevMode
 if ($settings['devMode'] == true ) {
 	$app->addErrorMiddleware(true, false, false);
-}
-
-// Add some tweaking middlewares
-if ($settings['devMode'] == true ) {
-	$app->add(new Minify(false) );
-} else {
-	$app->add(new Minify() );
 }
 
 // Check if password file exist or create a random one for initialize the installation script

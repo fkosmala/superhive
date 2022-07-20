@@ -17,7 +17,6 @@
 		"slim/psr7": "^1.0",
 		"php-di/php-di": "^6.1",
 		"slim/twig-view": "^3.0",
-		"christianklisch/slim-minify": "^0.7.0",
 		"dragos-roua/php-hive-tools": "dev-master",
 		"league/commonmark": "2.4.x-dev",
 		"fkosmala/php-he-tools": "dev-main",
