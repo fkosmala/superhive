@@ -37,12 +37,12 @@ final class WalletController
 		if ((!file_exists($heFile)) || ($current_time - filemtime($heFile) > $cache_interval)) {
 			$heConfig = [
 				"debug" => false,
-				"heNode" => "api2.hive-engine.com/rpc/contracts"
+				"heNode" => "api2.hive-engine.com/rpc"
 			];
 			
 			$heApi = new HeApi($heConfig);
 			
-			$heResponse = $heApi->getHeTokensFromAccount($settings['author']);
+			$heResponse = $heApi->getAccountBalance($settings['author']);
 			$heResult = json_encode($heResponse, JSON_PRETTY_PRINT);
 			file_put_contents($heFile, $heResult);
 		}
