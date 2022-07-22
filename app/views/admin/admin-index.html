@@ -63,12 +63,14 @@
 
 				<div>
 					<label for="crosspost">
-					<input type="checkbox" id="crosspost" name="crosspost" {% if settings.cron == true %}checked{% endif %}>Display crossposting</label>
+					<input type="checkbox" id="crosspost" name="crosspost" {% if settings.crosspost == true %}checked{% endif %}>Display crossposting</label>
+                    <input type="hidden" id="cross" name="cross" {% if settings.crosspost == true %}value="1"{% else %}value=0{% endif %} />
 				</div>
 
 				<div>
 					<label for="devMode">
 					<input type="checkbox" id="devMode" name="devMode" {% if settings.devMode == true %}checked{% endif %}>Developer mode</label>
+                    <input type="hidden" id="devel" name="devel" {% if settings.devMode == true %}value="1"{% else %}value=0{% endif %} />
 				</div>
 
 			</article>
@@ -82,6 +84,21 @@
 {% block scripts %}
 <script>
 	$(function() {
+        $('#devMode').on('change', function() {
+            if($(this).prop('checked')) {
+                $('#devel').val(1);
+            } else {
+                $('#devel').val(0);
+            }
+        });
+        $('#crosspost').on('change', function() {
+            if($(this).prop('checked')) {
+                $('#cross').val(1);
+            } else {
+                $('#cross').val(0);
+            }
+        });
+        
 		if($('#displayTypes option:selected').val() == 'tag') {
 			$('#tagPosts').show();
 		};

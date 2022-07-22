@@ -94,10 +94,10 @@ final class AdminController
 			$data = $request->getParsedBody();
 			$redirect = $data["redirect"];
 			$settings = $this->app->get('settings');
-			$crosspost = (!isset($data["crosspost"])) ? false : true;
-			$devMode = (!isset($data["devMode"])) ? false : true;
-			$api = ($data["api"] == "") ? "api.hive.blog" : $data["api"];
-			$displayedPosts = ($data["displayedPosts"] == "") ? 15 : (int)$data["displayedPosts"];
+			$crosspost = (!isset($data["cross"])) ? $settings["crosspost"] : (bool)$data["cross"];
+			$devMode = (!isset($data["devel"])) ? $settings["devMode"] : (bool)$data["devel"];
+			$api = ($data["api"] == "") ? $settings["api"] : $data["api"];
+			$displayedPosts = ($data["displayedPosts"] == "") ? $settings["displayedPosts"] : (int)$data["displayedPosts"];
 			$author = ($data["author"] == "") ? $settings["author"] : $data["author"];
 			$title = ($data["title"] == "") ? $settings["title"] : $data["title"];
 			$baseline = ($data["baseline"] == "") ? $settings["baseline"] : $data["baseline"];
@@ -109,8 +109,8 @@ final class AdminController
 			$facebook = ($data["facebook"] == "") ? $settings["social"]["facebook"] : $data["facebook"];
 			$instagram = ($data["instagram"] == "") ? $settings["social"]["instagram"] : $data["instagram"];
 			$linkedin = ($data["linkedin"] == "") ? $settings["social"]["linkedin"] : $data["linkedin"];
-			$language = ($data["lang"] == "") ? "mul" : $data["lang"];
-			$theme = ($data["theme"] == "") ? "default" : $data["theme"];
+			$language = ($data["lang"] == "") ? $settings["lang"] : $data["lang"];
+			$theme = ($data["theme"] == "") ? $settings["theme"] : $data["theme"];
 			$newSettings = array(
 				'author' => $author,
 				'title' => $title,
