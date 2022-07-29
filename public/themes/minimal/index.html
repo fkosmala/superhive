@@ -5,6 +5,9 @@
 {% set nbPosts = 0 %}
 
 {% block content %}
+	<form action="{{ url_for('search') }}" method="post">
+			<input name="term" id ="term" type="text" placeholder="Search... (press enter to search)">
+		</form>
 	{% for article in articles %}
 		{% if nbPosts < settings.displayedPosts %}
 			{% if 'This is a cross post' not in article.body or 'This is a cross post' in article.body and settings.crosspost == true %}

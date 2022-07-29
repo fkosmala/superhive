@@ -149,6 +149,7 @@ $app->add(
 // Global routes
 $app->get('/', HomeController::class . ":index")->setName('index');
 $app->post('/', HomeController::class . ":install")->setName('install');
+$app->post('/search', HomeController::class . ":search")->setName('search');
 $app->get('/feed', HomeController::class . ":feed")->setName('feed');
 $app->get('/sitemap', HomeController::class . ":sitemap")->setName('sitemap');
 $app->get('/about', HomeController::class . ":about")->setName('about');
