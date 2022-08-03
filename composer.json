@@ -1,34 +1,42 @@
 {
-	"name": "fkosmala/superhive",
-	"description": "Generate a full real blog with your HIVE author feed",
-	"type": "project",
-	"keywords": ["hive", "blog", "blockchain", "generator"],
-	"homepage": "https://github.com/fkosmala/superhive",
-	"license": "GPL-3.0-only",
-	"authors": [
-		{
-			"name": "Florent Kosmala",
-			"email": "contact@florent-kosmala.fr",
-			"homepage": "http://florent-kosmala.fr/"
-		}
-	],
-	"require": {
-		"slim/slim": "4.*",
-		"slim/psr7": "^1.0",
-		"php-di/php-di": "^6.1",
-		"slim/twig-view": "^3.0",
-		"dragos-roua/php-hive-tools": "dev-master",
-		"league/commonmark": "2.4.x-dev",
-		"fkosmala/php-he-tools": "dev-main",
-		"bryanjhv/slim-session": "~4.0"
-	},
-	"autoload": {
+  "name": "fkosmala/superhive",
+  "description": "Generate a full real blog with your HIVE author feed",
+  "type": "project",
+  "keywords": ["hive", "blog", "blockchain", "generator"],
+  "homepage": "https://github.com/fkosmala/superhive",
+  "license": "GPL-3.0-only",
+  "authors": [
+    {
+      "name": "Florent Kosmala",
+      "email": "contact@florent-kosmala.fr",
+      "homepage": "https://florent-kosmala.fr/",
+      "role": "Founder & Developer"
+    }
+  ],
+  "support": {
+    "email": "contact@florent-kosmala.fr",
+    "docs": "https://docs.superhive.me/",
+    "issues": "https://github.com/fkosmala/superhive/issues",
+    "rss": "https://blog.superhive.me/feed"
+  },
+  "require": {
+    "slim/slim": "4.*",
+    "slim/psr7": "^1.0",
+    "php-di/php-di": "^6.1",
+    "slim/twig-view": "^3.0",
+    "dragos-roua/php-hive-tools": "dev-master",
+    "league/commonmark": "2.4.x-dev",
+    "fkosmala/php-he-tools": "dev-main",
+    "bryanjhv/slim-session": "~4.0"
+  },
+  "autoload": {
     "psr-4": {
       "App\\": "app/"
     }
   },
-	"scripts": {
-		"start": "php -S localhost:8080 -t public"
+  "scripts": {
+    "start": "php -S localhost:8080 -t public"
   },
-  "minimum-stability": "dev"
+  "minimum-stability": "dev",
+  "prefer-stable" : true
 }
