@@ -95,7 +95,9 @@
 							"{{ url_for('install') }}", 
 							{ username: username, passwd: password },
 							function (data) {
-								console.log('OK');
+								if (data == "ok") {
+                                    window.location.replace('/admin');
+                                }
 							});
 					} else $('#signEvent').text(response.result);
 				},

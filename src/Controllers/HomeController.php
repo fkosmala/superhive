@@ -195,12 +195,21 @@ final class HomeController
 	public function install(Request $request, Response $response, $args) : Response {
 		if (!file_exists($this->app->get('password'))) {
 			$data = $request->getParsedBody();
+            // Create password file with  username and password (signed msg))
 			$cred = array($data['username'] => $data['passwd']);
 			file_put_contents($this->app->get('password'), serialize($cred));
-			return $response->withHeader('Location', '/admin')->withStatus(302);
+            
+            // Changeaccount name in config file
+            $settings = $this->app->get('settings');
+            $settings['author'] = $data['username'];
+            $file = json_encode($settings, JSON_PRETTY_PRINT);
+            file_put_contents($this->app->get('configfile'), $file);
+            
+            $response->getBody()->write('ok');
 		} else {
-			return $response->withHeader('Location', '/')->withStatus(302);
+			$response->getBody()->write('notok');
 		}
+        return $response;
 	}
 	
 	public function login(Request $request, Response $response, $args) : Response {
@@ -234,7 +243,7 @@ final class HomeController
 			}	
 		}
 		$response->getBody()->write($msg);
-		return$response;
+		return $response;
 	}
 
 	public function feed(Request $request, Response $response) : Response {

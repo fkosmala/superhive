@@ -26,14 +26,18 @@ $container = new Container();
 // Set all dirs & files paths
 $container->set('basedir', __DIR__ . '/../');
 $container->set('cachedir', __DIR__ . '/../cache/');
+
+$container->set('configdir', __DIR__ . '/../config/');
+$container->set('configfile', __DIR__ . '/../config/config.json');
+$container->set('password', __DIR__ . '/../config/password');
+
 $container->set('datadir', __DIR__ . '/../resources/blog/');
-$container->set('themesdir', __DIR__ . '/../public/themes/');
 $container->set('commentsdir', __DIR__ . '/../resources/blog/comments/');
 $container->set('pagesdir', __DIR__ . '/../resources/blog/pages/');
-$container->set('configdir', __DIR__ . '/../config/');
-$container->set('blogfile', __DIR__ . '/../resources/blog.json');
+$container->set('blogfile', __DIR__ . '/../resources/blog/blog.json');
 $container->set('accountfile', __DIR__ . '/../resources/blog/account.json');
-$container->set('password', __DIR__ . '/../config/password');
+
+$container->set('themesdir', __DIR__ . '/../public/themes/');
 
 // Set settings array in container for use in all routes
 $container->set('settings', function() {

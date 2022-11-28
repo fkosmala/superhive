@@ -44,8 +44,8 @@ final class AdminController
 			// Create array from config file
 			$settings = $this->app->get('settings');
 			$accountFile = $this->app->get('accountfile');
-			$langFile = $this->app->get('basedir').'app/languages.json';
-			$nodesFile = $this->app->get('basedir').'app/nodes.json';
+			$langFile = $this->app->get('basedir').'resources/languages.json';
+			$nodesFile = $this->app->get('basedir').'resources/nodes.json';
 
 			$apiConfig = ["webservice_url" => $settings['api'],"debug" => false];
 			$api = new HiveApi($apiConfig);
