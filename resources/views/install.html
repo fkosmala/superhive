@@ -48,7 +48,6 @@
                 </div>
             </article>
 		</div>
-		
 	</article>
 
     <article>
@@ -84,6 +83,7 @@
 							"{{ url_for('install') }}", 
 							{ username: username, passwd: password },
 							function (data) {
+                                console.log(data);
 								if (data == "ok") {
                                     window.location.replace('/admin');
                                 }

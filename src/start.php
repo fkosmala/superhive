@@ -157,7 +157,7 @@ if ((!file_exists($container->get('password'))) && ($actualLink != $installLink)
 
 // Global routes
 $app->get('/prepare', InstallController::class . ":prepare")->setName('prepare');
-$app->post('/', InstallController::class . ":install")->setName('install');
+$app->post('/prepare', InstallController::class . ":install")->setName('install');
 
 $app->get('/', HomeController::class . ":index")->setName('index');
 $app->post('/search', HomeController::class . ":search")->setName('search');
