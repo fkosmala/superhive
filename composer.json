@@ -31,12 +31,18 @@
   },
   "autoload": {
     "psr-4": {
-      "App\\": "app/"
+      "App\\": "src/"
     }
   },
   "scripts": {
-    "start": "php -S localhost:8080 -t public"
+    "start": "php -S localhost:8080 -t public",
+    "psr": ["vendor/bin/phpcs --standard=PSR1,PSR2,PSR12 ./app"],
+    "pds": ["vendor/bin/pds-skeleton validate"]
   },
   "minimum-stability": "dev",
-  "prefer-stable" : true
+  "prefer-stable" : true,
+  "require-dev": {
+    "pds/skeleton": "^1.0",
+    "squizlabs/php_codesniffer": "^3.7"
+  }
 }

@@ -26,18 +26,18 @@ $container = new Container();
 // Set all dirs & files paths
 $container->set('basedir', __DIR__ . '/../');
 $container->set('cachedir', __DIR__ . '/../cache/');
-$container->set('datadir', __DIR__ . '/../data/');
+$container->set('datadir', __DIR__ . '/../resources/');
 $container->set('themesdir', __DIR__ . '/../public/themes/');
-$container->set('commentsdir', __DIR__ . '/../data/comments/');
-$container->set('pagesdir', __DIR__ . '/../pages/');
-$container->set('configfile', __DIR__ . '/../config.json');
-$container->set('blogfile', __DIR__ . '/../data/blog.json');
-$container->set('accountfile', __DIR__ . '/../data/account.json');
-$container->set('password', __DIR__ . '/../password');
+$container->set('commentsdir', __DIR__ . '/../resources/comments/');
+$container->set('pagesdir', __DIR__ . '/../resources/pages/');
+$container->set('configdir', __DIR__ . '/../config/');
+$container->set('blogfile', __DIR__ . '/../resources/blog.json');
+$container->set('accountfile', __DIR__ . '/../resources/account.json');
+$container->set('password', __DIR__ . '/../config/password');
 
 // Set settings array in container for use in all routes
 $container->set('settings', function() {
-	$config = file_get_contents(__DIR__ . '/../config.json');
+	$config = file_get_contents(__DIR__ . '/../config/config.json');
   $settings = json_decode($config, true);
   return $settings;
 });
@@ -45,8 +45,8 @@ $container->set('settings', function() {
 $settings = $container->get('settings');
 
 // Rename config.sample json to config.json
-if ((file_exists($container->get('basedir').'config.sample.json')) && (!file_exists($container->get('basedir').'config.json'))) {
-	rename($container->get('basedir').'config.sample.json', $container->get('basedir').'config.json');
+if ((file_exists($container->get('configdir').'config.sample.json')) && (!file_exists($container->get('configdir').'config.json'))) {
+	rename($container->get('configdir').'config.sample.json', $container->get('configdir').'config.json');
 }
 
 // Create folders that doesn't exist
@@ -88,10 +88,10 @@ AppFactory::setContainer($container);
 
 // Set Twig engine for templating
 $container->set('view', function() {
-	$settings = json_decode(file_get_contents(__DIR__ . '/../config.json'), true);
+	$settings = json_decode(file_get_contents(__DIR__ . '/../config/config.json'), true);
 	$tpls = [
-		__DIR__ . "/../app/views/",
-		__DIR__ . "/../pages/",
+		__DIR__ . "/views/",
+		__DIR__ . "/../resources/pages/",
 		__DIR__ . "/../public/themes/"
 	];
 	// Disable Cache on DevMode

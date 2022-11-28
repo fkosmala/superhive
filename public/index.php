@@ -1,7 +1,7 @@
 <?php
 // Check if vendor folder exist
 if(file_exists(__DIR__ . '/../vendor')) {
-  (require __DIR__ . '/../app/start.php')->run();
+  (require __DIR__ . '/../src/start.php')->run();
 } else {
   if (!version_compare(PHP_VERSION, '7.4.0', '>=')) {
     echo 'You need to update your PHP version (PHP 7.4 required)';
