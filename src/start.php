@@ -4,6 +4,7 @@ namespace App;
 
 use App\Controllers\HomeController;
 use App\Controllers\AdminController;
+use App\Controllers\InstallController;
 use App\Controllers\PagesController;
 use App\Controllers\PostsController;
 use App\Controllers\WalletController;
@@ -14,7 +15,6 @@ use Slim\Factory\AppFactory;
 use Slim\Routing\RouteContext;
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
-use Tuupola\Middleware\HttpBasicAuthentication as BasicAuth;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -145,9 +145,21 @@ $app->add(
     ])
 );
 
+//Check if password file exists
+$link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]";
+$actualLink = $link . "$_SERVER[REQUEST_URI]";
+$installLink = $link . "/prepare";
+
+if ((!file_exists($container->get('password'))) && ($actualLink != $installLink)) {
+    header('Location: ' . $installLink);
+    exit();
+}
+
 // Global routes
+$app->get('/prepare', InstallController::class . ":prepare")->setName('prepare');
+$app->post('/', InstallController::class . ":install")->setName('install');
+
 $app->get('/', HomeController::class . ":index")->setName('index');
-$app->post('/', HomeController::class . ":install")->setName('install');
 $app->post('/search', HomeController::class . ":search")->setName('search');
 $app->get('/feed', HomeController::class . ":feed")->setName('feed');
 $app->get('/sitemap', HomeController::class . ":sitemap")->setName('sitemap');
@@ -175,7 +187,6 @@ $app->get('/admin/newpage', PagesController::class . ":adminNewPage")->setName('
 $app->get('/admin/editpage/{file}', PagesController::class . ":adminEditPage")->setName('admin-editpage');
 $app->get('/admin/delpage/{file}', PagesController::class . ":adminDelPage")->setName('admin-delpage');
 $app->post('/admin/savepage', PagesController::class . ":adminSavePage")->setName('admin-savepage');
-
 
 // generate routes from static pages
 $pagesDir = $container->get('pagesdir');

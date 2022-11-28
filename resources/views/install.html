@@ -16,7 +16,6 @@
 
     <article>
       <h2>Server requirements</h2>
-      <p>SuperHive check the minimal requirements to run.</p>
       {% for req in requirements %}
         {% if req.status == "success" %}
         <p><ins>{{ req.message }}</ins></p>
@@ -28,12 +27,10 @@
     
     <article>
 		<h2>Client requirement</h2>
-		<h3>Hive account</h3>
-		<p>SuperHive needs an HIVE blockchain account to work. If you don't have it, please create it.</p>
-		<p>Choose the best service for you to create an account :</p>
 		<div class="grid">
 			<article>
-				<h3 class="text-center">Ecency</h3>
+                <h3>Hive account</h3>
+                <p>SuperHive needs an HIVE blockchain account to work. You can create one with <strong>Ecency</strong>:</p>
 				<ul>
 					<li>Instant creation</li>
 					<li>E-mail verification</li>
@@ -43,23 +40,15 @@
 					<a class="text-center" role="button" href="https://ecency.com/signup?referral=superhive" target="_blank">Create your account</a>
 				</div>
 			</article>
-			<article>
-				<h3 class="text-center">HiveOnboard</h3>
-				<ul>
-					<li>Instant creation</li>
-					<li>Phone number verification</li>
-					<li>Free</li>
-				</ul>
-				<div class="text-center">
-					<a class="text-center" role="button" href="https://hiveonboard.com/create-account?ref=superhive" target="_blank">Create your account</a>
-				</div>
-			</article>
+            <article>
+                <h3>Hive Keychain extension</h3>
+                <p>SuperHive doesn't store any passwords/keys (for security reasons). All features are based on Hive Keychain extension. You can find it for browsers or mobile here :</p>
+                <div class="text-center">
+                    <a class="text-center" role="button" href="https://hive-keychain.com/" target="_blank">Get Hive Keychain</a>
+                </div>
+            </article>
 		</div>
-		<h3>Hive Keychain extension</h3>
-		<p>SuperHive doesn't store any passwords/keys (for security reasons). All features are based on Hive Keychain extension. You can find it for browsers or mobile here :</p>
-		<div class="text-center">
-			<a href="https://hive-keychain.com/" target="_blank"><img src="{{ base_path() }}/keychain.png" alt="Get Hive Keychain"></a>
-		</div>
+		
 	</article>
 
     <article>

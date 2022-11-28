@@ -23,44 +23,6 @@ final class HomeController
     {
         $settings = $this->app->get('settings');
 
-        //Check if password file exists
-        if (!file_exists($this->app->get('password'))) {
-            $requirements = array();
-
-            // Check if PHP version is ok tu run SuperHive
-            if (version_compare(PHP_VERSION, '7.4.0', '>=')) {
-                $req = [
-                    "status" => "success",
-                    "message" => "Your PHP version can run SuperHive."
-                ];
-            } else {
-                $req = [
-                    "status" => "error",
-                    "message" => "Please, update your PHP version to run SuperHive. (PHP 7.4 minimum)"
-                ];
-            }
-            $requirements[] = $req;
-
-            // Check if data folder is writeable
-            $datadir = $this->app->get('datadir');
-            if (is_writable($datadir)) {
-                $req = [
-                    "status" => "success",
-                    "message" => "The data folder is writable to store blockchain data."
-                ];
-            } else {
-                $req = [
-                    "status" => "error",
-                    "message" => "Make the data folder writable."
-                ];
-            }
-            $requirements[] = $req;
-
-            return $this->app->get('view')->render($response, '/install.html', [
-                'requirements' => $requirements
-            ]);
-        }
-
         // Hive API communication init
         $apiConfig = ["webservice_url" => $settings['api'], "debug" => false];
         $api = new HiveApi($apiConfig);
@@ -192,27 +154,6 @@ final class HomeController
             'posts' => $posts,
             'settings' => $settings
         ]);
-    }
-
-    public function install(Request $request, Response $response, $args): Response
-    {
-        if (!file_exists($this->app->get('password'))) {
-            $data = $request->getParsedBody();
-            // Create password file with  username and password (signed msg))
-            $cred = array($data['username'] => $data['passwd']);
-            file_put_contents($this->app->get('password'), serialize($cred));
-            
-            // Changeaccount name in config file
-            $settings = $this->app->get('settings');
-            $settings['author'] = $data['username'];
-            $file = json_encode($settings, JSON_PRETTY_PRINT);
-            file_put_contents($this->app->get('configfile'), $file);
-            
-            $response->getBody()->write('ok');
-        } else {
-            $response->getBody()->write('notok');
-        }
-        return $response;
     }
     
     public function login(Request $request, Response $response, $args): Response

@@ -3,9 +3,6 @@
 if(file_exists(__DIR__ . '/../vendor')) {
   (require __DIR__ . '/../src/start.php')->run();
 } else {
-  if (!version_compare(PHP_VERSION, '7.4.0', '>=')) {
-    echo 'You need to update your PHP version (PHP 7.4 required)';
-  } else {
 ?>
 <!DOCTYPE html>
 <html lang="fr" prefix="og: http://ogp.me/ns#">
@@ -28,5 +25,4 @@ if(file_exists(__DIR__ . '/../vendor')) {
 </body>
 </html>
 <?php
-  }
 }
