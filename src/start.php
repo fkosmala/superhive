@@ -9,14 +9,11 @@ use App\Controllers\PostsController;
 use App\Controllers\WalletController;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-
 use DI\Container;
-
 use Slim\Factory\AppFactory;
 use Slim\Routing\RouteContext;
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
-
 use Tuupola\Middleware\HttpBasicAuthentication as BasicAuth;
 
 require __DIR__ . '/../vendor/autoload.php';
@@ -40,87 +37,85 @@ $container->set('accountfile', __DIR__ . '/../resources/blog/account.json');
 $container->set('themesdir', __DIR__ . '/../public/themes/');
 
 // Set settings array in container for use in all routes
-$container->set('settings', function() {
-	$config = file_get_contents(__DIR__ . '/../config/config.json');
-  $settings = json_decode($config, true);
-  return $settings;
+$container->set('settings', function () {
+    $config = file_get_contents(__DIR__ . '/../config/config.json');
+    $settings = json_decode($config, true);
+    return $settings;
 });
 
 $settings = $container->get('settings');
 
 // Rename config.sample json to config.json
-if ((file_exists($container->get('configdir').'config.sample.json')) && (!file_exists($container->get('configdir').'config.json'))) {
-	rename($container->get('configdir').'config.sample.json', $container->get('configdir').'config.json');
+$confDir = $container->get('configdir');
+if ((file_exists($confDir . 'config.sample.json')) && (!file_exists($confDir . 'config.json'))) {
+    rename($confDir . 'config.sample.json', $confDir . 'config.json');
 }
 
 // Create folders that doesn't exist
 // Pages Dir
 if (!file_exists($container->get('pagesdir'))) {
-	mkdir($container->get('pagesdir'), 0755, true);
+    mkdir($container->get('pagesdir'), 0755, true);
 }
 
 // Data dir (to store blockchain data)
 if (!file_exists($container->get('datadir'))) {
-	mkdir($container->get('datadir'), 0755, true);
+    mkdir($container->get('datadir'), 0755, true);
 }
 
 // Comments
 if (!file_exists($container->get('commentsdir'))) {
-	mkdir($container->get('commentsdir'), 0755, true);
+    mkdir($container->get('commentsdir'), 0755, true);
 }
 
 // Create Cache dir only in Production mode
 if ((!file_exists($container->get('cachedir'))) && ($settings["devMode"] == false)) {
-	mkdir($container->get('cachedir'), 0755, true);
+    mkdir($container->get('cachedir'), 0755, true);
 } else {
-	// Flush Cache folder if disabled
-	if ((file_exists($container->get('cachedir'))) && ($settings["devMode"] == true )) {
-		function removeDirectory($path) {
-			$files = glob($path . '/*');
-			foreach ($files as $file) {
-				is_dir($file) ? removeDirectory($file) : unlink($file);
-			}
-			rmdir($path);
-			return;
-		}
-		removeDirectory($container->get('cachedir'));
-	}
+    // Flush Cache folder if disabled
+    if ((file_exists($container->get('cachedir'))) && ($settings["devMode"] == true )) {
+        $path = $container->get('cachedir');
+        $files = glob($path . '/*');
+        foreach ($files as $file) {
+            is_dir($file) ? removeDirectory($file) : unlink($file);
+        }
+        rmdir($path);
+    }
 }
 
 // Set container in App factory
 AppFactory::setContainer($container);
 
 // Set Twig engine for templating
-$container->set('view', function() {
-	$settings = json_decode(file_get_contents(__DIR__ . '/../config/config.json'), true);
-	$tpls = [
-		__DIR__ . "/../resources/views/",
-		__DIR__ . "/../resources/blog/pages/",
-		__DIR__ . "/../public/themes/"
-	];
-	// Disable Cache on DevMode
-	if ($settings['devMode'] == true ) {
-    $twig = Twig::create(
-			$tpls,
-			[
-				'cache' => false
-			]
-		);
-    return $twig;
-   } else {
-   	$twig = Twig::create(
-			$tpls,
-			[
-				'cache' => __DIR__ . '/../cache/'
-			]
-		);
-    return $twig;
-   }
+$container->set('view', function () {
+    $settings = json_decode(file_get_contents(__DIR__ . '/../config/config.json'), true);
+    $tpls = [
+        __DIR__ . "/../resources/views/",
+        __DIR__ . "/../resources/blog/pages/",
+        __DIR__ . "/../public/themes/"
+    ];
+    // Disable Cache on DevMode
+    if ($settings['devMode'] == true) {
+        $twig = Twig::create(
+            $tpls,
+            [
+                'cache' => false
+            ]
+        );
+        return $twig;
+    } else {
+        $twig = Twig::create(
+            $tpls,
+            [
+                'cache' => __DIR__ . '/../cache/'
+            ]
+        );
+        return $twig;
+    }
 });
 
 //Set Session engine
 $container->set('session', function () {
-  return new \SlimSession\Helper();
+    return new \SlimSession\Helper();
 });
 
 // Create App
@@ -128,26 +123,26 @@ $app = AppFactory::create();
 $app->add(TwigMiddleware::createFromContainer($app));
 
 // Add Error Middleware on DevMode
-if ($settings['devMode'] == true ) {
-	$app->addErrorMiddleware(true, false, false);
+if ($settings['devMode'] == true) {
+    $app->addErrorMiddleware(true, false, false);
 }
 
 // Check if password file exist or create a random one for initialize the installation script
 if (!file_exists($container->get('password'))) {
-  $user = substr(md5(microtime()),rand(0,26),5);
-  $passwd = substr(md5(microtime()),rand(0,26),5);
-  $cred = array($user => $passwd);
+    $user = substr(md5(microtime()), rand(0, 26), 5);
+    $passwd = substr(md5(microtime()), rand(0, 26), 5);
+    $cred = array($user => $passwd);
 } else {
-  $cred = unserialize(file_get_contents($container->get('password')));
+    $cred = unserialize(file_get_contents($container->get('password')));
 }
 
 // Add Basic Auth for admin panel
 $app->add(
-	new \Slim\Middleware\Session([
-    'name' => 'sh_session',
-    'autorefresh' => true,
-    'lifetime' => '1 hour',
-  ])
+    new \Slim\Middleware\Session([
+        'name' => 'sh_session',
+        'autorefresh' => true,
+        'lifetime' => '1 hour',
+    ])
 );
 
 // Global routes
@@ -187,16 +182,15 @@ $pagesDir = $container->get('pagesdir');
 $pages = preg_grep('~\.(html)$~', scandir($pagesDir));
 
 foreach ($pages as $page) {
-	$route = substr($page, 0, strrpos($page, "."));
-	$app->get('/'.$route, function ($request, $response) {
-		$settings = $this->get('settings');
-		$uri = $request->getUri();
-		$route = substr(strrchr($uri, "/"), 1);
-		return $this->get('view')->render($response, $route.'.html', [
-			"settings"=>$settings
-		]);
-	})->setName($route);
-
+    $route = substr($page, 0, strrpos($page, "."));
+    $app->get('/' . $route, function ($request, $response) {
+        $settings = $this->get('settings');
+        $uri = $request->getUri();
+        $route = substr(strrchr($uri, "/"), 1);
+        return $this->get('view')->render($response, $route . '.html', [
+            "settings" => $settings
+        ]);
+    })->setName($route);
 }
 
 return $app;

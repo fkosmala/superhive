@@ -36,7 +36,7 @@
   },
   "scripts": {
     "start": "php -S localhost:8080 -t public",
-    "psr": ["vendor/bin/phpcs --standard=PSR1,PSR2,PSR12 ./app"],
+    "psr": ["vendor/bin/phpcs --standard=PSR1,PSR2,PSR12 ./src"],
     "pds": ["vendor/bin/pds-skeleton validate"]
   },
   "minimum-stability": "dev",
