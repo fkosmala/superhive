@@ -18,47 +18,26 @@ To run SuperHive you need :
 ### Clone this repository
 
 Download zip and extract it onto your webserver or use GIT :
+
 ```
 git clone https://github.com/fkosmala/superhive
 ```
 
-### Get Composer & install dependencies
-
-You must install [Composer](https://getcomposer.org/). Aftar that, just run :
-```
-php composer.phar update
-```
-
-It will install all the dependencies.
-
 ### Configure your webserver
 
-Based on Slim 4, the configuration for your webserver is avaiblable on [Slim 4 WebServer documentation](http://www.slimframework.com/docs/v4/start/web-servers.html)
-
-### Rename the config file
-
-Rename ```config.sample.json``` to ```config.json``` 
+Based on Slim 4, the configuration for your webserver is available on [Slim 4 WebServer documentation](http://www.slimframework.com/docs/v4/start/web-servers.html)
 
 ### Create a new username/password
 
-It's really simple : go to ```https://YOUR_URL/``` and create a (secure) username/password couple. and click Finish !
+Juqt go to ```https://YOUR_URL/``` and just follow the installation steps.
 
 ### Have fun !
-It's finished ! If you want to change settings, go to ```https://YOUR_URL/admin``` & enter your username and password (defined the step before).
 
-### (Optional) Set up Crontab
-
-For better performances, you can set up your crontab. All you need is to set ```$settings['cron']  ``` to ```true``` and add this line to your crontab :
-
-```
-0 */2 * * * /bin/php /path/to/your/folder/update.php > /dev/null 2>&1
-```
-
-The website will be updated every 2 hours
+It's finished ! If you want to change settings, go to ```https://YOUR_URL/admin```, enter your username, and log in with [HiveKeychain](https://hive-keychain.com/).
 
 ## Demo
 
-You can see a demo on https://www.florent-kosmala.fr/
+You can see a demo on https://blog.florent-kosmala.fr/
 
 ## Showcase
 
