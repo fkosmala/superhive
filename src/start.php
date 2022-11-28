@@ -26,13 +26,13 @@ $container = new Container();
 // Set all dirs & files paths
 $container->set('basedir', __DIR__ . '/../');
 $container->set('cachedir', __DIR__ . '/../cache/');
-$container->set('datadir', __DIR__ . '/../resources/');
+$container->set('datadir', __DIR__ . '/../resources/blog/');
 $container->set('themesdir', __DIR__ . '/../public/themes/');
-$container->set('commentsdir', __DIR__ . '/../resources/comments/');
-$container->set('pagesdir', __DIR__ . '/../resources/pages/');
+$container->set('commentsdir', __DIR__ . '/../resources/blog/comments/');
+$container->set('pagesdir', __DIR__ . '/../resources/blog/pages/');
 $container->set('configdir', __DIR__ . '/../config/');
 $container->set('blogfile', __DIR__ . '/../resources/blog.json');
-$container->set('accountfile', __DIR__ . '/../resources/account.json');
+$container->set('accountfile', __DIR__ . '/../resources/blog/account.json');
 $container->set('password', __DIR__ . '/../config/password');
 
 // Set settings array in container for use in all routes
@@ -90,8 +90,8 @@ AppFactory::setContainer($container);
 $container->set('view', function() {
 	$settings = json_decode(file_get_contents(__DIR__ . '/../config/config.json'), true);
 	$tpls = [
-		__DIR__ . "/views/",
-		__DIR__ . "/../resources/pages/",
+		__DIR__ . "/../resources/views/",
+		__DIR__ . "/../resources/blog/pages/",
 		__DIR__ . "/../public/themes/"
 	];
 	// Disable Cache on DevMode

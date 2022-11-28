@@ -1,7 +1,6 @@
 composer.phar
 composer.lock
-password
-/vendor/
-/data/
 /composer/
 /config/
+/resources/blog/
+/vendor/
