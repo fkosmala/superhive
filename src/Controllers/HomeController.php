@@ -99,9 +99,9 @@ final class HomeController
 
         // Return view with articles
         return $this->app->get('view')->render($response, $settings['theme'] . '/index.html', [
-                'articles' => $parsedPosts,
-                'tags' => $mostUsedTags,
-                'settings' => $settings
+            'articles' => $parsedPosts,
+            'tags' => $mostUsedTags,
+            'settings' => $settings
         ]);
     }
     
@@ -229,8 +229,8 @@ final class HomeController
         $accountBio = json_decode($account[0]['posting_json_metadata'], true);
         
         return $this->app->get('view')->render($response, $settings['theme'] . '/about.html', [
-                'settings' => $settings,
-                'account' => $accountBio['profile']
+            'settings' => $settings,
+            'account' => $accountBio['profile']
         ]);
     }
 }

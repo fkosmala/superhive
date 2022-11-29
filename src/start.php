@@ -127,15 +127,6 @@ if ($settings['devMode'] == true) {
     $app->addErrorMiddleware(true, false, false);
 }
 
-// Check if password file exist or create a random one for initialize the installation script
-if (!file_exists($container->get('password'))) {
-    $user = substr(md5(microtime()), rand(0, 26), 5);
-    $passwd = substr(md5(microtime()), rand(0, 26), 5);
-    $cred = array($user => $passwd);
-} else {
-    $cred = unserialize(file_get_contents($container->get('password')));
-}
-
 // Add Basic Auth for admin panel
 $app->add(
     new \Slim\Middleware\Session([
