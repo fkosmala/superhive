@@ -1,5 +1,18 @@
 <?php
 
+/**
+ * Admin controller
+ *
+ * The file contains all the functions used in all administration panel.
+ * For admin posts function, please go to the Posts Controller
+ * For admin pages function, please go to the Pages Controller
+ *
+ * @category   Controllers
+ * @package    SuperHive
+ * @author     Florent Kosmala <kosflorent@gmail.com>
+ * @license    https://www.gnu.org/licenses/gpl-3.0.txt GPL-3.0
+ */
+
 namespace App\Controllers;
 
 use DI\Container;
@@ -14,23 +27,33 @@ final class AdminController
 {
     private $app;
 
+    /**
+     * Admin part contructor
+     *
+     * This constructor is not the same as other controllers.
+     * Administration need  to control if session exists with good account & encrypted key.
+     *
+     * @param object $app
+     */
     public function __construct(ContainerInterface $app)
     {
         $this->app = $app;
         
-        // Check security in session for admin functions
+        /*
+         *  Check security in session for admin functions
+         */
         $settings = $this->app->get('settings');
         $session = $this->app->get('session');
         $cred = unserialize(file_get_contents($this->app->get('password')));
         $author = $settings['author'];
         $passwd = $cred[$author];
         
-        // if sessons keys are not set
+        /* If sessons keys are not set */
         if ((!isset($session['sh_author'])) || (!isset($session['sh_sign']))) {
             header("Location: /login");
             die();
         } else {
-            // If session keys are not good
+            /* If session keys are not good */
             if (($settings['author'] != $session['sh_author']) || ($passwd != $session['sh_sign'])) {
                 header("Location: /login");
                 die();
@@ -38,6 +61,18 @@ final class AdminController
         }
     }
 
+    /**
+     * Admin index function
+     *
+     * This function display the admin index with some settings ready to be changed.
+     * It call the admin save() functionwhen the button is clicked.
+     *
+     * @param object $request
+     * @param object $response
+     * @param array $args
+     *
+     * @return object $response
+     */
     public function adminIndex(Request $request, Response $response): Response
     {
         // Create array from config file
@@ -72,6 +107,18 @@ final class AdminController
         ]);
     }
 
+    /**
+     * Admin social function
+     *
+     * This function display tthe social pagewith a form.
+     * This page contains every social settings which can be modified.
+     *
+     * @param object $request
+     * @param object $response
+     * @param array $args
+     *
+     * @return object $response
+     */
     public function adminSocial(Request $request, Response $response): Response
     {
         $settings = $this->app->get('settings');
@@ -80,6 +127,17 @@ final class AdminController
         ]);
     }
     
+    /**
+     * Admin logout function
+     *
+     * This function clear ther session, destroy it, and redirect to login page.
+     *
+     * @param object $request
+     * @param object $response
+     * @param array $args
+     *
+     * @return object $response
+     */
     public function logout(Request $request, Response $response): Response
     {
         $session = $this->app->get('session');
@@ -90,7 +148,19 @@ final class AdminController
         
         return $response->withHeader('Location', '/login')->withStatus(302);
     }
-
+    
+    /**
+     * Admin save function
+     *
+     * This function Take every fields in the form and convert the into a (human-readable))JSON file.
+     * the generated file will be save in config folder.
+     *
+     * @param object $request
+     * @param object $response
+     * @param array $args
+     *
+     * @return object $response
+     */
     public function save(Request $request, Response $response, $args): Response
     {
         $data = $request->getParsedBody();

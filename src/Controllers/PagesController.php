@@ -1,5 +1,17 @@
 <?php
 
+/**
+ * Pages controller
+ *
+ * The file contains all the functions used for off-chain pages.
+ * Display / Save / update / ...
+ *
+ * @category   Controllers
+ * @package    SuperHive
+ * @author     Florent Kosmala <kosflorent@gmail.com>
+ * @license    https://www.gnu.org/licenses/gpl-3.0.txt GPL-3.0
+ */
+
 namespace App\Controllers;
 
 use DI\Container;
@@ -17,7 +29,18 @@ final class PagesController
     {
         $this->app = $app;
     }
-        
+
+    /**
+     * Admin pages function
+     *
+     * This function display the already written pages and a button to create one.
+     *
+     * @param object $request
+     * @param object $response
+     * @param array $args
+     *
+     * @return object $response
+     */
     public function adminPages(Request $request, Response $response): Response
     {
         $pagesDir = $this->app->get('pagesdir');
@@ -34,6 +57,17 @@ final class PagesController
         ]);
     }
     
+    /**
+     * Administration new page function
+     *
+     * This function just display editor to write new page.
+     *
+     * @param object $request
+     * @param object $response
+     * @param array $args
+     *
+     * @return object $response
+     */
     public function adminNewPage(Request $request, Response $response): Response
     {
         $settings = $this->app->get('settings');
@@ -42,7 +76,18 @@ final class PagesController
                 'settings' => $settings
         ]);
     }
-        
+
+    /**
+     * Administration edit page function
+     *
+     * Same as adminNewPage but with already written content from already written page.
+     *
+     * @param object $request
+     * @param object $response
+     * @param array $args
+     *
+     * @return object $response
+     */
     public function adminEditPage(Request $request, Response $response, array $args): Response
     {
         $file = $args['file'];
@@ -65,7 +110,18 @@ final class PagesController
             'settings' => $settings
         ]);
     }
-        
+
+/**
+     * Administration delete page function
+     *
+     * called to delete fpage and return to administration Pages section
+     *
+     * @param object $request
+     * @param object $response
+     * @param array $args
+     *
+     * @return object $response
+     */
     public function adminDelPage(Request $request, Response $response, array $args): Response
     {
         $name = $args['file'];
@@ -82,7 +138,18 @@ final class PagesController
         
         return $response;
     }
-        
+    
+    /**
+     * Administration save page function
+     *
+     * Used to generate slug, html code and save page in file.
+     *
+     * @param object $request
+     * @param object $response
+     * @param array $args
+     *
+     * @return object $response
+     */
     public function adminSavePage(Request $request, Response $response): Response
     {
         $data = $request->getParsedBody();

@@ -1,5 +1,17 @@
 <?php
 
+/**
+ * Post controller
+ *
+ * The file contains all the functions used for posts.
+ * Display / Save / update / ...
+ *
+ * @category   Controllers
+ * @package    SuperHive
+ * @author     Florent Kosmala <kosflorent@gmail.com>
+ * @license    https://www.gnu.org/licenses/gpl-3.0.txt GPL-3.0
+ */
+
 namespace App\Controllers;
 
 use DI\Container;
@@ -20,7 +32,18 @@ final class PostsController
         $this->app = $app;
     }
   
-    // Read Post
+    /**
+     * Post function
+     *
+     * This function display the selected post in the blog.json (from Blockchain).
+     * It also take all comments to display them in the end of post
+     *
+     * @param object $request
+     * @param object $response
+     * @param array $args
+     *
+     * @return object $response
+     */
     public function post(Request $request, Response $response, $args): Response
     {
         $settings = $this->app->get('settings');
@@ -68,7 +91,18 @@ final class PostsController
         }
     }
     
-    // Admin Functions
+    /**
+     * Administration posts function
+     *
+     * This function display the post page in admin panel.
+     * Contains every posts in blog.json file (from blockchain)
+     *
+     * @param object $request
+     * @param object $response
+     * @param array $args
+     *
+     * @return object $response
+     */
     public function adminPosts(Request $request, Response $response): Response
     {
         $settings = $this->app->get('settings');
@@ -82,6 +116,17 @@ final class PostsController
         ]);
     }
     
+    /**
+     * Administration new post function
+     *
+     * This function just display the new post page to write and send post.
+     *
+     * @param object $request
+     * @param object $response
+     * @param array $args
+     *
+     * @return object $response
+     */
     public function adminNewPost(Request $request, Response $response): Response
     {
         $settings = $this->app->get('settings');
@@ -91,6 +136,17 @@ final class PostsController
         ]);
     }
     
+    /**
+     * Administration edit post function
+     *
+     * Same as adminNewPost but with already written content from an old post.
+     *
+     * @param object $request
+     * @param object $response
+     * @param array $args
+     *
+     * @return object $response
+     */
     public function adminEditPost(Request $request, Response $response, array $args): Response
     {
         $posted = $args['post'];

@@ -1,5 +1,16 @@
 <?php
 
+/**
+ * Install controller
+ *
+ * The file contains every necessary functions for installation.
+ *
+ * @category   Controllers
+ * @package    SuperHive
+ * @author     Florent Kosmala <kosflorent@gmail.com>
+ * @license    https://www.gnu.org/licenses/gpl-3.0.txt GPL-3.0
+ */
+
 namespace App\Controllers;
 
 use DI\Container;
@@ -19,12 +30,25 @@ final class InstallController
     {
         $this->app = $app;
     }
-    
+
+    /**
+     * Prepare function
+     *
+     * This function called after Composer installation.
+     * It will display the page with requirements check, account creation and
+     * the form to create password file with encreypted key
+     *
+     * @param object $request
+     * @param object $response
+     * @param array $args
+     *
+     * @return object $response
+     */
     public function prepare(Request $request, Response $response, $args): Response
     {
         $requirements = array();
 
-        // Check if PHP version is ok tu run SuperHive
+        /* Check if PHP version is ok tu run SuperHive */
         if (version_compare(PHP_VERSION, '7.2.0', '>=')) {
             $req = [
                 "status" => "success",
@@ -38,7 +62,7 @@ final class InstallController
         }
         $requirements[] = $req;
 
-        // Check if data folder is writeable
+        /* Check if data folder is writeable */
         $datadir = $this->app->get('datadir');
         if (is_writable($datadir)) {
             $req = [
@@ -58,6 +82,17 @@ final class InstallController
         ]);
     }
     
+    /**
+     * Install function
+     *
+     * This function dis called after the prepare function to generate the file and store it in ocnfig folder.
+     *
+     * @param object $request
+     * @param object $response
+     * @param array $args
+     *
+     * @return object $response
+     */
     public function install(Request $request, Response $response, $args): Response
     {
         if (!file_exists($this->app->get('password'))) {
