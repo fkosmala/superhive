@@ -20,8 +20,8 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Container\ContainerInterface;
 use Slim\Factory\AppFactory;
 use Slim\Routing\RouteContext;
-use DragosRoua\PHPHiveTools\HiveApi as HiveApi;
-use FKosmala\PHPHeTools\HeApi as HeApi;
+use BetterBC\HiveToolboxPhp\Hive\Condenser as HiveCondenser;
+use BetterBC\HiveToolboxPhp\HiveEngine\Account as HeAccount;
 use Parsedown;
 
 final class WalletController
@@ -61,12 +61,13 @@ final class WalletController
          *  Get Hive engine tokens from account
          */
         if ((!file_exists($heFile)) || ($current_time - filemtime($heFile) > $cache_interval)) {
-            $heConfig = [
+            $config = [
                 "debug" => false,
-                "heNode" => "api2.hive-engine.com/rpc"
+                "heNode" => "api.hive-engine.com/rpc",
+                "hiveNode" => "anyx.io"
             ];
             
-            $heApi = new HeApi($heConfig);
+            $heApi = new HeAccount($config);
             
             $heResponse = $heApi->getAccountBalance($settings['author']);
             $heResult = json_encode($heResponse, JSON_PRETTY_PRINT);
@@ -82,18 +83,15 @@ final class WalletController
             "webservice_url" => $settings['api'],
             "debug" => false
         ];
-        $api = new HiveApi($apiConfig);
-        
-        $params = [$settings['author']];
+        $api = new HiveCondenser($apiConfig);
         
         if ((!file_exists($accountFile)) || ($current_time - filemtime($accountFile) > $cache_interval)) {
-            $result = json_encode($api->getAccounts($params), JSON_PRETTY_PRINT);
+            $result = json_encode($api->getAccounts($settings['author']), JSON_PRETTY_PRINT);
             file_put_contents($accountFile, $result);
         }
         
         if ((!file_exists($bcFile)) || ($current_time - filemtime($bcFile) > 600)) {
-            $bcParams = array();
-            $result = json_encode($api->getDynamicGlobalProperties($bcParams), JSON_PRETTY_PRINT);
+            $result = json_encode($api->getDynamicGlobalProperties(), JSON_PRETTY_PRINT);
             file_put_contents($bcFile, $result);
         }
 

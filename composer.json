@@ -20,14 +20,17 @@
     "rss": "https://blog.superhive.me/feed"
   },
   "require": {
+    "php-di/php-di": "^6.1",
     "slim/slim": "4.*",
     "slim/psr7": "^1.0",
-    "php-di/php-di": "^6.1",
     "slim/twig-view": "^3.0",
-    "dragos-roua/php-hive-tools": "dev-master",
     "league/commonmark": "2.4.x-dev",
-    "fkosmala/php-he-tools": "dev-main",
+    "better-bc/hive-toolbox-php": "dev-main",
     "bryanjhv/slim-session": "~4.0"
+  },
+    "require-dev": {
+    "pds/skeleton": "^1.0",
+    "squizlabs/php_codesniffer": "^3.7"
   },
   "autoload": {
     "psr-4": {
@@ -39,10 +42,6 @@
     "psr": ["vendor/bin/phpcs --standard=PSR1,PSR2,PSR12 ./src"],
     "pds": ["vendor/bin/pds-skeleton validate"]
   },
-  "minimum-stability": "dev",
-  "prefer-stable" : true,
-  "require-dev": {
-    "pds/skeleton": "^1.0",
-    "squizlabs/php_codesniffer": "^3.7"
-  }
+  "minimum-stability": "stable",
+  "prefer-stable" : true
 }

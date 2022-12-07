@@ -20,7 +20,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Container\ContainerInterface;
 use Slim\Factory\AppFactory;
 use Slim\Routing\RouteContext;
-use DragosRoua\PHPHiveTools\HiveApi as HiveApi;
+use BetterBC\HiveToolboxPhp\Hive\Condenser as HiveCondenser;
 use League\CommonMark\CommonMarkConverter;
 
 final class PostsController
@@ -48,9 +48,12 @@ final class PostsController
     {
         $settings = $this->app->get('settings');
         
-        $apiConfig = ["webservice_url" => $settings['api'],"debug" => false];
+        $apiConfig = [
+            "hiveNode" => $settings['api'],
+            "debug" => false
+        ];
 
-        $api = new HiveApi($apiConfig);
+        $api = new HiveCondenser($apiConfig);
 
         if (isset($args['permlink'])) {
             $permlink = $args['permlink'];
@@ -68,9 +71,8 @@ final class PostsController
                     // Check if comments exists for this post
                     $cmts = $this->app->get('commentsdir') . $permlink . '.comments';
                     if ((!file_exists($cmts)) || (file_exists($cmts)) && (time() - filemtime($cmts) > 120)) {
-                        $api = new HiveApi($apiConfig);
-                        $params = [$article['author'], $permlink];
-                        $result = json_encode($api->getContentReplies($params), JSON_PRETTY_PRINT);
+                        $api = new HiveCondenser($apiConfig);
+                        $result = json_encode($api->getContentReplies($article['author'], $permlink), JSON_PRETTY_PRINT);
                         file_put_contents($cmts, $result);
                     }
                     $replies = json_decode(file_get_contents($cmts), true);

@@ -18,7 +18,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Container\ContainerInterface;
 use Slim\Factory\AppFactory;
-use DragosRoua\PHPHiveTools\HiveApi as HiveApi;
+use BetterBC\HiveToolboxPhp\Hive\Condenser as HiveCondenser;
 use League\CommonMark\CommonMarkConverter;
 
 final class HomeController
@@ -48,8 +48,11 @@ final class HomeController
         $settings = $this->app->get('settings');
 
         // Hive API communication init
-        $apiConfig = ["webservice_url" => $settings['api'], "debug" => false];
-        $api = new HiveApi($apiConfig);
+        $apiConfig = [
+            "hiveNode" => $settings['api'],
+            "debug" => false
+        ];
+        $api = new HiveCondenser($apiConfig);
         
         // The file with the latest posts.
         $file = $this->app->get('blogfile');
@@ -60,13 +63,25 @@ final class HomeController
             $displayType = $settings['displayType']['type'];
             if ($displayType === 'author') {
                 $dateNow = (new \DateTime())->format('Y-m-d\TH:i:s');
-                $params = [$settings['author'], "", $dateNow, 100];
-                $result = json_encode($api->getDiscussionsByAuthorBeforeDate($params), JSON_PRETTY_PRINT);
+                $result = json_encode(
+                    $api->getDiscussionsByAuthorBeforeDate(
+                        $settings['author'],
+                        "",
+                        $dateNow,
+                        100
+                    ),
+                JSON_PRETTY_PRINT);
             } elseif (($displayType === 'tag')) {
                 $displayTag = $settings['displayType']['tag'];
                 $taggedPosts = array();
-                $params = [$settings['author'], "", "", 100];
-                $allPosts = json_encode($api->getDiscussionsByAuthorBeforeDate($params));
+                $allPosts = json_encode(
+                    $api->getDiscussionsByAuthorBeforeDate(
+                        $settings['author'],
+                        "",
+                        "",
+                        100
+                    )
+                );
                 $allPosts = json_decode($allPosts, true);
                 //print_r($allPosts);
                 foreach ($allPosts as &$post) {
@@ -80,11 +95,9 @@ final class HomeController
                 
                 $result = json_encode($taggedPosts, JSON_PRETTY_PRINT);
             } elseif ($displayType === 'reblog') {
-                $params = [["tag" => $settings['author'],"limit" => 100, "truncate_body" => 0]];
-                $result = json_encode($api->getDiscussionsByBlog($params), JSON_PRETTY_PRINT);
+                $result = json_encode($api->getDiscussionsByBlog($settings['author']), JSON_PRETTY_PRINT);
             } elseif (strpos($settings['author'], "hive-") === 0) {
-                $params = [["tag" => $settings['author'],"limit" => 100]];
-                $result = json_encode($api->getDiscussionsByCreated($params), JSON_PRETTY_PRINT);
+                $result = json_encode($api->getDiscussionsByCreated($settings['author']), JSON_PRETTY_PRINT);
             }
             file_put_contents($file, $result);
             unset($taggedPosts);

@@ -21,7 +21,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Container\ContainerInterface;
 use Slim\Factory\AppFactory;
 use Slim\Routing\RouteContext;
-use DragosRoua\PHPHiveTools\HiveApi as HiveApi;
+use BetterBC\HiveToolboxPhp\Hive\Condenser as HiveCondenser;
 
 final class AdminController
 {
@@ -81,15 +81,17 @@ final class AdminController
         $langFile = $this->app->get('basedir') . 'resources/languages.json';
         $nodesFile = $this->app->get('basedir') . 'resources/nodes.json';
 
-        $apiConfig = ["webservice_url" => $settings['api'],"debug" => false];
-        $api = new HiveApi($apiConfig);
+        $apiConfig = [
+            "hiveNode" => $settings['api'],
+            "debug" => false
+        ];
+        $api = new HiveCondenser($apiConfig);
 
         $cache_interval = 300;
-        $params = [$settings['author']];
 
         $current_time = time();
         if ((!file_exists($accountFile)) || ($current_time - filemtime($accountFile) > $cache_interval)) {
-            $result = json_encode($api->getAccounts($params), JSON_PRETTY_PRINT);
+            $result = json_encode($api->getAccounts($settings['author']), JSON_PRETTY_PRINT);
             file_put_contents($accountFile, $result);
         }
 
