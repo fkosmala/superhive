@@ -2,6 +2,15 @@
 
 All notable changes to this publication will be documented in this file.
 
+## 0.4.2 - 2022-12-07
+- [Update] PDS compliance (app to src folder)
+- [Update] All controllers are now PSR compliants
+- [Update] New Install controller
+- [Update] DocBlocks for phpDocumentor
+- [Fix] Fix some bugs in admin & install
+- [Fix] More secure and easier installation script
+- [Feature] Move from php-hive-tools & php-he-tools to hive-php-toolbox
+
 ## 0.4.1 - 2022-07-22
 - [Fix] Fix Admin Minify bug (the minify system is removed, will be replaced)
 - [Fix] Fix PHP-HE-Tools bug for wallet page
