@@ -1,23 +1,18 @@
-# SuperHive - Your HIVE unique blog engine
+# SuperHive
 
-SuperHive is the Next-generation blog engine. It who fetch all articles from the [Hive Blockchain](https://hive.io) and create a beautiful and SEO-optimized blog. 
+[![Latest Stable Version](http://poser.pugx.org/fkosmala/superhive/v)](https://packagist.org/packages/fkosmala/superhive)
+[![Latest Unstable Version](http://poser.pugx.org/fkosmala/superhive/v/unstable)](https://packagist.org/packages/fkosmala/superhive)
+[![License](http://poser.pugx.org/fkosmala/superhive/license)](https://packagist.org/packages/fkosmala/superhive)
+[![PHP Version Require](http://poser.pugx.org/fkosmala/superhive/require/php)](https://packagist.org/packages/fkosmala/superhive)
 
-It' very easy to set up a blog feed with a unique design. You can write article to HIVE Blockchain (via [PeakD](https://peakd.com) or [HiveBlog](https://hive.blog)) and display it to a great personal website.
-
-All you need is to install SuperHive, set up your author feed... and that's all ! If you want to change the design, you can go to ```/public/themes/``` and make your design (you need to know HTML / CSS and JS).
+SuperHive is a blockchain-based blog engine.
+All your posts are saved into the [Hive Blockchain](https://hive.io) and SuperHive use them to create your custom beautiful blog.
 
 ## How to install SuperHive
 
-### Requirements
-
-To run SuperHive you need :
-
-- PHP 7.2+ with CLI
-- php-zip, php-xml & php-curl packages
-
 ### Clone this repository
 
-Download zip and extract it onto your webserver or use GIT :
+Download, zip and extract this repo onto your webserver or use GIT :
 
 ```
 git clone https://github.com/fkosmala/superhive
@@ -25,11 +20,11 @@ git clone https://github.com/fkosmala/superhive
 
 ### Configure your webserver
 
-Based on Slim 4, the configuration for your webserver is available on [Slim 4 WebServer documentation](http://www.slimframework.com/docs/v4/start/web-servers.html)
+Superhive  is based on PHP 7.4 and [Slim 4 Framework](https://www.slimframework.com/), the configuration for your webserver is available on [Slim 4 WebServer documentation](https://www.slimframework.com/docs/v4/start/web-servers.html)
 
-### Create a new username/password
+### Finish the installation
 
-Juqt go to ```https://YOUR_URL/``` and just follow the installation steps.
+Juqt go to ```https://YOUR_URL/``` and just follow the steps to create your blog.
 
 ### Have fun !
 
@@ -37,12 +32,12 @@ It's finished ! If you want to change settings, go to ```https://YOUR_URL/admin`
 
 ## Demo
 
-You can see a demo on https://blog.florent-kosmala.fr/
+You can see my own SuperHive blog on https://blog.florent-kosmala.fr/
 
-## Showcase
+## Changelog
 
-Here is the list of websites who use SuperHive. If you want to add your superHive website, send me an email to Contact|AT|florent-kosmala.fr
+Please see [CHANGELOG](CHANGELOG) for more information on what has changed recently.
 
 ## Support
 
-If you want to support the project, you can send some HIVE to my [@bambukah](https://peakd.com/@bambukah/) account. You can also tell me what do you want for future versions. 
+If you want to support the project, you can send some HIVE/HBD to the [@superhive](https://ecency.com/@superhive/) account. You can also tell me what do you want for future versions. 

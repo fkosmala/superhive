@@ -20,6 +20,7 @@
     "rss": "https://blog.superhive.me/feed"
   },
   "require": {
+    "php": ">=7.4",
     "php-di/php-di": "^6.1",
     "slim/slim": "4.*",
     "slim/psr7": "^1.0",
@@ -28,7 +29,7 @@
     "better-bc/hive-toolbox-php": "dev-main",
     "bryanjhv/slim-session": "~4.0"
   },
-    "require-dev": {
+  "require-dev": {
     "pds/skeleton": "^1.0",
     "squizlabs/php_codesniffer": "^3.7"
   },
