@@ -26,7 +26,7 @@
     "slim/psr7": "^1.0",
     "slim/twig-view": "^3.0",
     "league/commonmark": "2.4.x-dev",
-    "better-bc/hive-toolbox-php": "dev-main",
+    "hive/hive-php-lib": "dev-main",
     "bryanjhv/slim-session": "~4.0"
   },
   "require-dev": {

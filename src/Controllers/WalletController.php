@@ -20,8 +20,8 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Container\ContainerInterface;
 use Slim\Factory\AppFactory;
 use Slim\Routing\RouteContext;
-use BetterBC\HiveToolboxPhp\Hive\Condenser as HiveCondenser;
-use BetterBC\HiveToolboxPhp\HiveEngine\Account as HeAccount;
+use Hive\PhpLib\Hive\Condenser as HiveCondenser;
+use Hive\PhpLib\HiveEngine\Account as HeAccount;
 use Parsedown;
 
 final class WalletController

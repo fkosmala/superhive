@@ -21,7 +21,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Container\ContainerInterface;
 use Slim\Factory\AppFactory;
 use Slim\Routing\RouteContext;
-use BetterBC\HiveToolboxPhp\Hive\Condenser as HiveCondenser;
+use Hive\PhpLib\Hive\Condenser as HiveCondenser;
 
 final class AdminController
 {
