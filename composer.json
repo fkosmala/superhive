@@ -27,7 +27,8 @@
     "slim/twig-view": "^3.0",
     "league/commonmark": "2.4.x-dev",
     "hive/hive-php-lib": "dev-main",
-    "bryanjhv/slim-session": "~4.0"
+    "bryanjhv/slim-session": "~4.0",
+    "christianklisch/slim-minify": "^0.7.0"
   },
   "require-dev": {
     "pds/skeleton": "^1.0",
