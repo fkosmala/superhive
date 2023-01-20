@@ -13,6 +13,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use DI\Container;
 use Slim\Factory\AppFactory;
 use Slim\Routing\RouteContext;
+use Slim\Routing\RouteCollectorProxy;
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
 
@@ -45,7 +46,7 @@ $container->set('settings', function () {
 
 $settings = $container->get('settings');
 
-// Rename config.sample json to config.json
+// Rename config.sample.json to config.json
 $confDir = $container->get('configdir');
 if ((file_exists($confDir . 'config.sample.json')) && (!file_exists($confDir . 'config.json'))) {
     rename($confDir . 'config.sample.json', $confDir . 'config.json');
@@ -102,6 +103,7 @@ $container->set('view', function () {
             ]
         );
         return $twig;
+
     } else {
         $twig = Twig::create(
             $tpls,
@@ -125,6 +127,9 @@ $app->add(TwigMiddleware::createFromContainer($app));
 // Add Error Middleware on DevMode
 if ($settings['devMode'] == true) {
     $app->addErrorMiddleware(true, false, false);
+    $minify = false;
+} else {
+    $minify = true;
 }
 
 // Add Basic Auth for admin panel
@@ -146,38 +151,38 @@ if ((!file_exists($container->get('password'))) && ($actualLink != $installLink)
     exit();
 }
 
-// Global routes
+// Install routes
 $app->get('/prepare', InstallController::class . ":prepare")->setName('prepare');
 $app->post('/prepare', InstallController::class . ":install")->setName('install');
 
-$app->get('/', HomeController::class . ":index")->setName('index');
-$app->post('/search', HomeController::class . ":search")->setName('search');
+// Global routes
+$app->get('/', HomeController::class . ":index")->setName('index')->add(new \Slim\Middleware\Minify($minify) );
+$app->post('/search', HomeController::class . ":search")->setName('search')->add(new \Slim\Middleware\Minify($minify) );
+$app->get('/about', HomeController::class . ":about")->setName('about')->add(new \Slim\Middleware\Minify($minify) );
+$app->get('/post/{permlink}', PostsController::class . ":post")->setName('post')->add(new \Slim\Middleware\Minify($minify) );
+
+// SEO routes
 $app->get('/feed', HomeController::class . ":feed")->setName('feed');
 $app->get('/sitemap', HomeController::class . ":sitemap")->setName('sitemap');
-$app->get('/about', HomeController::class . ":about")->setName('about');
-$app->get('/login', HomeController::class . ":login")->setName('login');
-$app->post('/login', HomeController::class . ":loginPost")->setName('login-post');
 
 // Admin routes
-$app->get('/admin', AdminController::class . ":adminIndex")->setName('admin');
-$app->get('/admin/social', AdminController::class . ":adminSocial")->setName('admin-social');
-$app->post('/admin/save', AdminController::class . ":save")->setName('admin-save');
-$app->get('/admin/wallet', WalletController::class . ":viewWallet")->setName('admin-wallet');
-$app->get('/admin/logout', AdminController::class . ":logout")->setName('admin-logout');
-
-// Posts routes
-$app->get('/post/{permlink}', PostsController::class . ":post")->setName('post');
-
-$app->get('/admin/posts', PostsController::class . ":adminPosts")->setName('admin-posts');
-$app->get('/admin/newpost', PostsController::class . ":adminNewPost")->setName('admin-newpost');
-$app->get('/admin/editpost/{post}', PostsController::class . ":adminEditPost")->setName('admin-editpost');
-
-// Other Admin Pages
-$app->get('/admin/pages', PagesController::class . ":adminPages")->setName('admin-pages');
-$app->get('/admin/newpage', PagesController::class . ":adminNewPage")->setName('admin-newpage');
-$app->get('/admin/editpage/{file}', PagesController::class . ":adminEditPage")->setName('admin-editpage');
-$app->get('/admin/delpage/{file}', PagesController::class . ":adminDelPage")->setName('admin-delpage');
-$app->post('/admin/savepage', PagesController::class . ":adminSavePage")->setName('admin-savepage');
+$app->get('/login', HomeController::class . ":login")->setName('login');
+$app->post('/login', HomeController::class . ":loginPost")->setName('login-post');
+$app->group('/admin', function (RouteCollectorProxy $group) {
+    $group->get('', AdminController::class . ":adminIndex")->setName('admin');
+    $group->get('/social', AdminController::class . ":adminSocial")->setName('admin-social');
+    $group->get('/wallet', WalletController::class . ":viewWallet")->setName('admin-wallet');
+    $group->get('/logout', AdminController::class . ":logout")->setName('admin-logout');
+    $group->get('/posts', PostsController::class . ":adminPosts")->setName('admin-posts');
+    $group->get('/newpost', PostsController::class . ":adminNewPost")->setName('admin-newpost');
+    $group->get('/editpost/{post}', PostsController::class . ":adminEditPost")->setName('admin-editpost');
+    $group->get('/pages', PagesController::class . ":adminPages")->setName('admin-pages');
+    $group->get('/newpage', PagesController::class . ":adminNewPage")->setName('admin-newpage');
+    $group->get('/editpage/{file}', PagesController::class . ":adminEditPage")->setName('admin-editpage');
+    $group->get('/delpage/{file}', PagesController::class . ":adminDelPage")->setName('admin-delpage');
+    $group->post('/savepage', PagesController::class . ":adminSavePage")->setName('admin-savepage');
+    $group->post('/save', AdminController::class . ":save")->setName('admin-save');
+});
 
 // generate routes from static pages
 $pagesDir = $container->get('pagesdir');
@@ -192,7 +197,7 @@ foreach ($pages as $page) {
         return $this->get('view')->render($response, $route . '.html', [
             "settings" => $settings
         ]);
-    })->setName($route);
+    })->setName($route)->add(new \Slim\Middleware\Minify($minify) );
 }
 
 return $app;
