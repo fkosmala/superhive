@@ -56,8 +56,6 @@ final class PostsController
             "debug" => false
         ];
 
-        $api = new HiveCondenser($apiConfig);
-
         if (isset($args['permlink'])) {
             $permlink = $args['permlink'];
             
@@ -94,6 +92,7 @@ final class PostsController
                 }
             }
         }
+        return $response;
     }
     
     /**

@@ -45,7 +45,8 @@ final class PagesController
     {
         $pagesDir = $this->app->get('pagesdir');
         $settings = $this->app->get('settings');
-
+        $pages = array();
+        
         $allPages = preg_grep('~\.(html)$~', scandir($pagesDir));
         foreach ($allPages as $page) {
             $pages[] = substr($page, 0, strrpos($page, "."));
@@ -91,12 +92,12 @@ final class PagesController
     public function adminEditPage(Request $request, Response $response, array $args): Response
     {
         $file = $args['file'];
+        $pageTitle = array();
         
         $pagesDir = $this->app->get('pagesdir');
         $settings = $this->app->get('settings');
         
         $content = file_get_contents($pagesDir . $file . '.html');
-        
         
         $pageTitle = preg_match('/\{% block title %\}(.*?)\{% endblock %\}/s', $content, $match);
         $pageTitle = $match[1];
@@ -153,7 +154,6 @@ final class PagesController
     public function adminSavePage(Request $request, Response $response): Response
     {
         $data = $request->getParsedBody();
-        $settings = $this->app->get('settings');
         $pagesDir = $this->app->get('pagesdir');
         
         $pageTitle = $data['title'];

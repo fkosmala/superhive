@@ -18,7 +18,6 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Container\ContainerInterface;
 use Slim\Factory\AppFactory;
-use Hive\PhpLib\Hive\Condenser as HiveCondenser;
 use League\CommonMark\CommonMarkConverter;
 use App\Controllers\CommonController as Common;
 
@@ -49,13 +48,6 @@ final class HomeController
     public function index(Request $request, Response $response): Response
     {
         $settings = $this->app->get('settings');
-
-        // Hive API communication init
-        $apiConfig = [
-            "hiveNode" => $settings['api'],
-            "debug" => false
-        ];
-        $api = new HiveCondenser($apiConfig);
         
         // The file with the latest posts.
         $file = $this->app->get('blogfile');
@@ -115,10 +107,12 @@ final class HomeController
      *
      * @return object $response
      */
-    public function search(Request $request, Response $response, $args): Response
+    public function search(Request $request, Response $response): Response
     {
         $data = $request->getParsedBody();
         $term = $data['term'];
+        $posts = array();
+        $result = array();
         
         $settings = $this->app->get('settings');
         
@@ -150,8 +144,6 @@ final class HomeController
             }
             $result = array_unique($matches);
             
-            $posts = array();
-            
             foreach ($articles as $article) {
                 if (in_array($article['title'], $result)) {
                     $posts[] = $article;
@@ -178,7 +170,7 @@ final class HomeController
      *
      * @return object $response
      */
-    public function login(Request $request, Response $response, $args): Response
+    public function login(Request $request, Response $response): Response
     {
         $settings = $this->app->get('settings');
         $session = $this->app->get('session');
@@ -201,7 +193,7 @@ final class HomeController
      *
      * @return object $response
      */
-    public function loginPost(Request $request, Response $response, $args): Response
+    public function loginPost(Request $request, Response $response): Response
     {
         $settings = $this->app->get('settings');
         $session = $this->app->get('session');

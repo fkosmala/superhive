@@ -22,7 +22,6 @@ use Slim\Factory\AppFactory;
 use Slim\Routing\RouteContext;
 use Hive\PhpLib\Hive\Condenser as HiveCondenser;
 use Hive\PhpLib\HiveEngine\Account as HeAccount;
-use Parsedown;
 
 final class WalletController
 {
@@ -47,7 +46,7 @@ final class WalletController
      *
      * @return object $response
      */
-    public function viewWallet(Request $request, Response $response, $args): Response
+    public function viewWallet(Request $request, Response $response): Response
     {
         $settings = $this->app->get('settings');
         $accountFile = $this->app->get('accountfile');

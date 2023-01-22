@@ -44,6 +44,7 @@ final class CommonController
     public function genPostsFile()
     {
         $settings = $this->app->get('settings');
+        $result = "";
 
         // Hive API communication init
         $apiConfig = [
