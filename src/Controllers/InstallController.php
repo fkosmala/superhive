@@ -76,7 +76,7 @@ final class InstallController
         }
         $requirements[] = $req;
 
-        return $this->app->get('view')->render($response, '/install.html', [
+        return $this->app->get('view')->render($response, '/setup.html', [
             'requirements' => $requirements
         ]);
     }

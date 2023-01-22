@@ -1,101 +1,26 @@
 <!DOCTYPE html>
 <html lang="fr" prefix="og: http://ogp.me/ns#">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SuperHive Installation</title>
-  <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
-  <style>
-	  .text-center {text-align: center;} 
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SuperHive Installation</title>
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
 </head>
 <body>
-  <main class="container">
-    <h1>SuperHive Installer</h1>
-    <p>Welcome to your new fresh installation of SuperHive</p>
-
-    <article>
-      <h2>Server requirements</h2>
-      {% for req in requirements %}
-        {% if req.status == "success" %}
-        <p><ins>{{ req.message }}</ins></p>
-        {% else %}
-          <p><mark>{{ req.message }}</mark></p>
-        {% endif %}
-      {% endfor %}
-    </article>
-    
-    <article>
-		<h2>Client requirement</h2>
-		<div class="grid">
-			<article>
-                <h3>Hive account</h3>
-                <p>SuperHive needs an HIVE blockchain account to work. You can create one with <strong>Ecency</strong>:</p>
-				<ul>
-					<li>Instant creation</li>
-					<li>E-mail verification</li>
-					<li>Free</li>
-				</ul>
-				<div class="text-center">
-					<a class="text-center" role="button" href="https://ecency.com/signup?referral=superhive" target="_blank">Create your account</a>
-				</div>
-			</article>
-            <article>
-                <h3>Hive Keychain extension</h3>
-                <p>SuperHive doesn't store any passwords/keys (for security reasons). All features are based on Hive Keychain extension. You can find it for browsers or mobile here :</p>
-                <div class="text-center">
-                    <a class="text-center" role="button" href="https://hive-keychain.com/" target="_blank">Get Hive Keychain</a>
-                </div>
-            </article>
-		</div>
-	</article>
-
-    <article>
-      <h2>Identification</h2>
-      <p>Enter the account will be used for SuperHive</p>
-	  <div>
-		<label for="username">Account :</label>
-		<input type="text" placeholder="Choose your username" id="username" name="username" required>
-		<p id="signEvent"></p>
-	  </div>
-	  <button id="signMessage">Finish</button>
-    </article>
-  </main>
-
-  <script src="https://unpkg.com/jquery@3.6.0/dist/jquery.min.js"></script>
-  <script>
-	$(function () {
-		$('#signMessage').on('click tap', function(event) {
-			event.preventDefault();
-			message = "SuperHive12345";
-			username = $('#username').val();
-			if (username.length < 3) {
-				$('#signEvent').text('Please enter a real hive account (min 3 letters)');
-			}
-			hive_keychain.requestSignBuffer(
-				username,
-				message,
-				'Active',
-				function (response) {
-					if (response.error != "null") {
-						password = response.result;
-						$.post( 
-							"{{ url_for('install') }}", 
-							{ username: username, passwd: password },
-							function (data) {
-                                console.log(data);
-								if (data == "ok") {
-                                    window.location.replace('/admin');
-                                }
-							});
-					} else $('#signEvent').text(response.result);
-				},
-				null,
-				null
-			);
-		});
-	});
-  </script>
-
+    <main class="container">
+        <h1>SuperHive Installer</h1>
+        <article>
+            <p>Welcome to the SuperHive Installer. Just click the button to start the installation</p>
+            <a id="start" role="button" href="/install.php">Install</a>
+        </article>
+    </main>
+    <script src="https://unpkg.com/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script>
+        $(function() {
+            $('#start').on('click', function() {
+                $('#start').text('Please wait...').attr("aria-busy","true").attr("disabled", true);
+            });
+        });
+    </script>
 </body>
 </html>
