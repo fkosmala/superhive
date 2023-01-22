@@ -32,10 +32,10 @@ $container->set('configfile', __DIR__ . '/../config/config.json');
 $container->set('password', __DIR__ . '/../config/password');
 
 $container->set('datadir', __DIR__ . '/../resources/blog/');
+$container->set('accountfile', __DIR__ . '/../resources/blog/account.json');
+$container->set('blogfile', __DIR__ . '/../resources/blog/blog.json');
 $container->set('commentsdir', __DIR__ . '/../resources/blog/comments/');
 $container->set('pagesdir', __DIR__ . '/../resources/blog/pages/');
-$container->set('blogfile', __DIR__ . '/../resources/blog/blog.json');
-$container->set('accountfile', __DIR__ . '/../resources/blog/account.json');
 
 $container->set('themesdir', __DIR__ . '/../public/themes/');
 
@@ -196,19 +196,20 @@ $app->group('/admin', function (RouteCollectorProxy $group) {
 });
 
 // generate routes from static pages
-$pagesDir = $container->get('pagesdir');
-$pages = preg_grep('~\.(html)$~', scandir($pagesDir));
-
-foreach ($pages as $page) {
-    $route = substr($page, 0, strrpos($page, "."));
-    $app->get('/' . $route, function ($request, $response) {
-        $settings = $this->get('settings');
-        $uri = $request->getUri();
-        $route = substr(strrchr($uri, "/"), 1);
-        return $this->get('view')->render($response, $route . '.html', [
-            "settings" => $settings
-        ]);
-    })->setName($route)->add(new \Slim\Middleware\Minify($minify));
-}
+$app->group('/pages/', function (RouteCollectorProxy $group) {
+    $pagesDir = $this->get('pagesdir');
+    $pages = preg_grep('~\.(html)$~', scandir($pagesDir));
+    foreach ($pages as $page) {
+        $route = substr($page, 0, strrpos($page, "."));
+        $group->get('' . $route, function ($request, $response) {
+            $settings = $this->get('settings');
+            $uri = $request->getUri();
+            $route = substr(strrchr($uri, "/"), 1);
+            return $this->get('view')->render($response, $route . '.html', [
+                "settings" => $settings
+            ]);
+        })->setName($route)->add(new \Slim\Middleware\Minify($minify));
+    }
+});
 
 return $app;
