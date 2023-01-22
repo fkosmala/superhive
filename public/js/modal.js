@@ -4,6 +4,8 @@
  * Pico.css - https://picocss.com
  * Copyright 2019-2022 - Licensed under MIT
  */
+ 
+ /** global: screen */
 
 // Config
 const isOpenClass = 'modal-is-open';
@@ -17,7 +19,7 @@ let visibleModal = null;
 const toggleModal = event => {
   event.preventDefault();
   const modal = document.getElementById(event.currentTarget.getAttribute('data-target'));
-  (typeof(modal) != 'undefined' && modal != null)
+  (typeof(modal) !== 'undefined' && modal !== null)
     && isModalOpen(modal) ? closeModal(modal) : openModal(modal)
 }
 
@@ -52,7 +54,7 @@ const closeModal = modal => {
 
 // Close with a click outside
 document.addEventListener('click', event => {
-  if (visibleModal != null) {
+  if (visibleModal !== null) {
     const modalContent = visibleModal.querySelector('article');
     const isClickInside = modalContent.contains(event.target);
     !isClickInside && closeModal(visibleModal);
@@ -61,7 +63,7 @@ document.addEventListener('click', event => {
 
 // Close with Esc key
 document.addEventListener('keydown', event => {
-  if (event.key === 'Escape' && visibleModal != null) {
+  if (event.key === 'Escape' && visibleModal !== null) {
     closeModal(visibleModal);
   }
 });
