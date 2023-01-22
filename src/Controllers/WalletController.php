@@ -100,6 +100,7 @@ final class WalletController
          *  Convert VESTS to HP
          */
         $bcVars = json_decode(file_get_contents($bcFile), true);
+        $vests = array();
         $vests['tvfh'] = (float)$bcVars['total_vesting_fund_hive'];
         $vests['tvs'] = (float)$bcVars['total_vesting_shares'];
         $vests['totalVests'] = $vests['tvfh'] / $vests['tvs'];
