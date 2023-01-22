@@ -3,7 +3,7 @@ define('ROOT', "../");
 define('EXTRACT_DIRECTORY', "../composer");
 
 if(file_exists(ROOT.'vendor')) {
-  return header("Refresh:0; url=/");
+  return header('Location: /');
 }
 
 if (file_exists(EXTRACT_DIRECTORY.'/vendor/autoload.php') === true) {
@@ -32,4 +32,4 @@ $input = new ArrayInput(array('command' => 'update'));
 $application = new Application();
 $application->setAutoExit(false);
 echo $application->run($input);
-return header("Refresh:0; url=/");
+return header('Location: /');
