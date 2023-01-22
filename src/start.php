@@ -16,6 +16,8 @@ use Slim\Routing\RouteContext;
 use Slim\Routing\RouteCollectorProxy;
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -75,10 +77,19 @@ if ((!file_exists($container->get('cachedir'))) && ($settings["devMode"] == fals
     // Flush Cache folder if disabled
     if ((file_exists($container->get('cachedir'))) && ($settings["devMode"] == true )) {
         $path = $container->get('cachedir');
-        $files = glob($path . '/*');
-        foreach ($files as $file) {
-            is_dir($file) ? removeDirectory($file) : unlink($file);
+        
+        $files = new RecursiveIteratorIterator(
+        new RecursiveDirectoryIterator(
+            $path, 
+            RecursiveDirectoryIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::CHILD_FIRST
+        );
+        
+        foreach ($files as $fileinfo) {
+            $todo = ($fileinfo->isDir() ? 'rmdir' : 'unlink');
+            $todo($fileinfo->getRealPath());
         }
+
         rmdir($path);
     }
 }
