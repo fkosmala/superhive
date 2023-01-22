@@ -20,7 +20,6 @@ use Psr\Container\ContainerInterface;
 use Slim\Factory\AppFactory;
 use Composer\Console\Application;
 use Composer\Command\UpdateCommand;
-use Symfony\Component\Console\Input\ArrayInput;
 
 final class InstallController
 {
@@ -44,12 +43,12 @@ final class InstallController
      *
      * @return object $response
      */
-    public function prepare(Request $request, Response $response, $args): Response
+    public function prepare(Request $request, Response $response): Response
     {
         $requirements = array();
 
         /* Check if PHP version is ok tu run SuperHive */
-        if (version_compare(PHP_VERSION, '7.2.0', '>=')) {
+        if (version_compare(PHP_VERSION, '7.4.0', '>=')) {
             $req = [
                 "status" => "success",
                 "message" => "Your PHP version can run SuperHive. PHP version: " . PHP_VERSION
@@ -57,7 +56,7 @@ final class InstallController
         } else {
             $req = [
                 "status" => "error",
-                "message" => "Please, update your PHP version to run SuperHive. (PHP 7.2 minimum)"
+                "message" => "Please, update your PHP version to run SuperHive. (PHP 7.4 minimum)"
             ];
         }
         $requirements[] = $req;
@@ -93,7 +92,7 @@ final class InstallController
      *
      * @return object $response
      */
-    public function install(Request $request, Response $response, $args): Response
+    public function install(Request $request, Response $response): Response
     {
         if (!file_exists($this->app->get('password'))) {
             $data = $request->getParsedBody();

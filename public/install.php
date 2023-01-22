@@ -6,7 +6,7 @@ if(file_exists(ROOT.'vendor')) {
   return header("Refresh:0; url=/");
 }
 
-if (file_exists(EXTRACT_DIRECTORY.'/vendor/autoload.php') == true) {
+if (file_exists(EXTRACT_DIRECTORY.'/vendor/autoload.php') === true) {
   echo "Extracted autoload already exists. Skipping phar extraction as presumably it's already extracted.";
 }
 else{
@@ -24,7 +24,7 @@ require_once (EXTRACT_DIRECTORY.'/vendor/autoload.php');
 //Use the Composer classes
 use Composer\Console\Application;
 use Composer\Command\UpdateCommand;
-use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Input\ArrayInput as ArrayInput;
 
 chdir('../');
 
@@ -33,5 +33,3 @@ $application = new Application();
 $application->setAutoExit(false);
 echo $application->run($input);
 return header("Refresh:0; url=/");
-
-?>
