@@ -163,7 +163,7 @@ final class AdminController
      *
      * @return object $response
      */
-    public function save(Request $request, Response $response, $args): Response
+    public function save(Request $request, Response $response): Response
     {
         $data = $request->getParsedBody();
         $redirect = $data["redirect"];
