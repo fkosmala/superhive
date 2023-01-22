@@ -177,7 +177,7 @@ final class PagesController
         
         if (file_put_contents($file, $page)) {
             $scheme = $_SERVER['HTTPS'];
-            $pageUrl = (isset($scheme) && $scheme === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]" . '/' . $slug;
+            $pageUrl = (isset($scheme) && $scheme === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]" . '/pages/' . $slug;
             $response->getBody()->write($pageUrl);
         } else {
             $response->getBody()->write('Error');
