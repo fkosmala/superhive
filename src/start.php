@@ -79,9 +79,10 @@ if ((!file_exists($container->get('cachedir'))) && ($settings["devMode"] == fals
         $path = $container->get('cachedir');
         
         $files = new RecursiveIteratorIterator(
-        new RecursiveDirectoryIterator(
-            $path, 
-            RecursiveDirectoryIterator::SKIP_DOTS),
+            new RecursiveDirectoryIterator(
+                $path,
+                RecursiveDirectoryIterator::SKIP_DOTS
+            ),
             RecursiveIteratorIterator::CHILD_FIRST
         );
         
