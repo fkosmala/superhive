@@ -2,6 +2,22 @@
 
 All notable changes to this publication will be documented in this file.
 
+## 0.5.0 - 2023-01-22
+- [Feature] Add New Post button in Admin
+- [Feature] Minify HTML Code in production mode
+- [Feature] New CommonController
+- [Feature] New genPostsFile() function to query the chain and generate the file
+- [Feature] Off-chain static pages
+- [Fix] Editor button on fullscreen
+- [Fix] Only Minify public pages in production mode
+- [Fix] Call posts file generation in Admin & Posts controller
+- [Fix] Change blockchain queries to official Hive PHP library
+- [Fix] Install script & InstallController
+- [Fix] Remove dead code to make cleaner code
+- [Fix] Cache folder deletion when Dev Mode
+- [Update] More recent composer.lock for production
+- [Update] Easier and better Install script
+
 ## 0.4.2 - 2022-12-07
 - [Update] PDS compliance (app to src folder)
 - [Update] All controllers are now PSR compliants

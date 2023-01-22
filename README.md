@@ -36,7 +36,7 @@ You can see my own SuperHive blog on https://blog.florent-kosmala.fr/
 
 ## Changelog
 
-Please see [CHANGELOG](CHANGELOG) for more information on what has changed recently.
+Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
 
 ## Support
 
