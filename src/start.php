@@ -103,7 +103,6 @@ $container->set('view', function () {
             ]
         );
         return $twig;
-
     } else {
         $twig = Twig::create(
             $tpls,
@@ -156,10 +155,10 @@ $app->get('/prepare', InstallController::class . ":prepare")->setName('prepare')
 $app->post('/prepare', InstallController::class . ":install")->setName('install');
 
 // Global routes
-$app->get('/', HomeController::class . ":index")->setName('index')->add(new \Slim\Middleware\Minify($minify) );
-$app->post('/search', HomeController::class . ":search")->setName('search')->add(new \Slim\Middleware\Minify($minify) );
-$app->get('/about', HomeController::class . ":about")->setName('about')->add(new \Slim\Middleware\Minify($minify) );
-$app->get('/post/{permlink}', PostsController::class . ":post")->setName('post')->add(new \Slim\Middleware\Minify($minify) );
+$app->get('/', HomeController::class . ":index")->setName('index')->add(new \Slim\Middleware\Minify($minify));
+$app->post('/search', HomeController::class . ":search")->setName('search')->add(new \Slim\Middleware\Minify($minify));
+$app->get('/about', HomeController::class . ":about")->setName('about')->add(new \Slim\Middleware\Minify($minify));
+$app->get('/post/{permlink}', PostsController::class . ":post")->setName('post')->add(new \Slim\Middleware\Minify($minify));
 
 // SEO routes
 $app->get('/feed', HomeController::class . ":feed")->setName('feed');
@@ -197,7 +196,7 @@ foreach ($pages as $page) {
         return $this->get('view')->render($response, $route . '.html', [
             "settings" => $settings
         ]);
-    })->setName($route)->add(new \Slim\Middleware\Minify($minify) );
+    })->setName($route)->add(new \Slim\Middleware\Minify($minify));
 }
 
 return $app;

@@ -3,7 +3,7 @@
 /**
  * Home controller
  *
- * The file contains every necessary functions for installation.
+ * The file contains every necessary functions for Home display.
  *
  * @category   Controllers
  * @package    SuperHive
@@ -20,6 +20,7 @@ use Psr\Container\ContainerInterface;
 use Slim\Factory\AppFactory;
 use Hive\PhpLib\Hive\Condenser as HiveCondenser;
 use League\CommonMark\CommonMarkConverter;
+use App\Controllers\CommonController as Common;
 
 final class HomeController
 {
@@ -28,6 +29,8 @@ final class HomeController
     public function __construct(ContainerInterface $app)
     {
         $this->app = $app;
+        $genPosts = new Common($this->app);
+        $genPosts->genPostsFile();
     }
 
     /**
@@ -56,52 +59,6 @@ final class HomeController
         
         // The file with the latest posts.
         $file = $this->app->get('blogfile');
-        
-        // if the JSON file doesn't exist or if it's old, take it from API
-        if (!file_exists($file) || (time() - filemtime($file) > 120)) {
-            // Prepare API call according to displayed posts type
-            $displayType = $settings['displayType']['type'];
-            if ($displayType === 'author') {
-                $dateNow = (new \DateTime())->format('Y-m-d\TH:i:s');
-                $result = json_encode(
-                    $api->getDiscussionsByAuthorBeforeDate(
-                        $settings['author'],
-                        "",
-                        $dateNow,
-                        100
-                    ),
-                JSON_PRETTY_PRINT);
-            } elseif (($displayType === 'tag')) {
-                $displayTag = $settings['displayType']['tag'];
-                $taggedPosts = array();
-                $allPosts = json_encode(
-                    $api->getDiscussionsByAuthorBeforeDate(
-                        $settings['author'],
-                        "",
-                        "",
-                        100
-                    )
-                );
-                $allPosts = json_decode($allPosts, true);
-                //print_r($allPosts);
-                foreach ($allPosts as &$post) {
-                    //$postTags = json_encode($post['json_metadata'], JSON_PRETTY_PRINT);
-                    $postMeta = json_decode($post['json_metadata'], true);
-                    $postTags = $postMeta['tags'];
-                    if (in_array($displayTag, $postTags)) {
-                        $taggedPosts[] = $post;
-                    }
-                }
-                
-                $result = json_encode($taggedPosts, JSON_PRETTY_PRINT);
-            } elseif ($displayType === 'reblog') {
-                $result = json_encode($api->getDiscussionsByBlog($settings['author']), JSON_PRETTY_PRINT);
-            } elseif (strpos($settings['author'], "hive-") === 0) {
-                $result = json_encode($api->getDiscussionsByCreated($settings['author']), JSON_PRETTY_PRINT);
-            }
-            file_put_contents($file, $result);
-            unset($taggedPosts);
-        }
 
         // Get the JSON
         $articles = json_decode(file_get_contents($file), true);
@@ -129,11 +86,15 @@ final class HomeController
             $parsedPosts[] = $article;
         }
         
-        $tags = explode(',', $tags);
-        $tagsArray = array_count_values($tags);
-        array_multisort($tagsArray, SORT_DESC);
-        $mostUsedTags = array_slice($tagsArray, 0, 15);
-
+        if (!empty($tags)) {
+            $tags = explode(',', $tags);
+            $tagsArray = array_count_values($tags);
+            array_multisort($tagsArray, SORT_DESC);
+            $mostUsedTags = array_slice($tagsArray, 0, 15);
+        } else {
+            $mostUsedTags = ['no', 'tags', 'found'];
+        }
+        
         // Return view with articles
         return $this->app->get('view')->render($response, $settings['theme'] . '/index.html', [
             'articles' => $parsedPosts,

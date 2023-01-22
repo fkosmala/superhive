@@ -22,6 +22,7 @@ use Psr\Container\ContainerInterface;
 use Slim\Factory\AppFactory;
 use Slim\Routing\RouteContext;
 use Hive\PhpLib\Hive\Condenser as HiveCondenser;
+use App\Controllers\CommonController as Common;
 
 final class AdminController
 {
@@ -38,6 +39,8 @@ final class AdminController
     public function __construct(ContainerInterface $app)
     {
         $this->app = $app;
+        $genPosts = new Common($this->app);
+        $genPosts->genPostsFile();
         
         /*
          *  Check security in session for admin functions

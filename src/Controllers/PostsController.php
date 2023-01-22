@@ -22,6 +22,7 @@ use Slim\Factory\AppFactory;
 use Slim\Routing\RouteContext;
 use Hive\PhpLib\Hive\Condenser as HiveCondenser;
 use League\CommonMark\CommonMarkConverter;
+use App\Controllers\CommonController as Common;
 
 final class PostsController
 {
@@ -30,6 +31,8 @@ final class PostsController
     public function __construct(ContainerInterface $app)
     {
         $this->app = $app;
+        $genPosts = new Common($this->app);
+        $genPosts->genPostsFile();
     }
   
     /**
