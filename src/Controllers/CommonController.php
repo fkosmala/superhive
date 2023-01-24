@@ -108,7 +108,6 @@ final class CommonController
      */
     public function getMostUsedTags(): array
     {
-        $settings = $this->app->get('settings');
         $file = $this->app->get('blogfile');
         $tags = "";
         

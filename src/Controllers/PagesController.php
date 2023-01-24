@@ -177,7 +177,7 @@ final class PagesController
         
         if (file_put_contents($file, $page)) {
             $isSecure = $_SERVER['HTTPS'];
-            if (isset($isSecure) && $scheme === 'on') {
+            if (isset($isSecure) && $isSecure === 'on') {
                 $scheme = "https";
             } else {
                 $scheme = "http";

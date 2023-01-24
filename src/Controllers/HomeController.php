@@ -25,7 +25,7 @@ final class HomeController
 {
     private $app;
     
-    public array $settings;
+    public array $settings, $tags;
 
     public function __construct(ContainerInterface $app)
     {
@@ -34,7 +34,9 @@ final class HomeController
         
         $common = new Common($this->app);
         $common->genPostsFile();
-        $this->tags = $common->getMostUsedTags();
+        
+        $tags = $common->getMostUsedTags();
+        $this->tags = $tags;
     }
 
     /**
