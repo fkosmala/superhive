@@ -24,12 +24,17 @@ use App\Controllers\CommonController as Common;
 final class HomeController
 {
     private $app;
+    
+    public array $settings;
 
     public function __construct(ContainerInterface $app)
     {
         $this->app = $app;
-        $genPosts = new Common($this->app);
-        $genPosts->genPostsFile();
+        $this->settings = $app->get('settings');
+        
+        $common = new Common($this->app);
+        $common->genPostsFile();
+        $this->tags = $common->getMostUsedTags();
     }
 
     /**
@@ -47,7 +52,7 @@ final class HomeController
      */
     public function index(Request $request, Response $response): Response
     {
-        $settings = $this->app->get('settings');
+        $settings = $this->settings;
         
         // The file with the latest posts.
         $file = $this->app->get('blogfile');
@@ -62,12 +67,10 @@ final class HomeController
         foreach ($articles as &$article) {
             // Create HTML from Markdown
             $article['body'] = $converter->convert($article['body']);
-            $tags = '';
             
             //Get featured image
             $meta = json_decode($article['json_metadata'], true);
-            
-            $tags .= implode(",", $meta['tags']) . ',';
+
             if ((isset($meta['image'])) && (!empty($meta['image']))) {
                 $featured = $meta['image'][0];
             } else {
@@ -78,14 +81,7 @@ final class HomeController
             $parsedPosts[] = $article;
         }
         
-        if (!empty($tags)) {
-            $tags = explode(',', $tags);
-            $tagsArray = array_count_values($tags);
-            array_multisort($tagsArray, SORT_DESC);
-            $mostUsedTags = array_slice($tagsArray, 0, 15);
-        } else {
-            $mostUsedTags = ['no', 'tags', 'found'];
-        }
+        $mostUsedTags = $this->tags;
         
         // Return view with articles
         return $this->app->get('view')->render($response, $settings['theme'] . '/index.html', [
@@ -114,7 +110,7 @@ final class HomeController
         $posts = array();
         $result = array();
         
-        $settings = $this->app->get('settings');
+        $settings = $this->settings;
         
         if ($term == '') {
             $result = [];
@@ -172,7 +168,7 @@ final class HomeController
      */
     public function login(Request $request, Response $response): Response
     {
-        $settings = $this->app->get('settings');
+        $settings = $this->settings;
         $session = $this->app->get('session');
         
         return $this->app->get('view')->render($response, 'login.html', [
@@ -195,7 +191,7 @@ final class HomeController
      */
     public function loginPost(Request $request, Response $response): Response
     {
-        $settings = $this->app->get('settings');
+        $settings = $this->settings;
         $session = $this->app->get('session');
         $data = $request->getParsedBody();
         $author = $settings['author'];
@@ -232,7 +228,7 @@ final class HomeController
      */
     public function feed(Request $request, Response $response): Response
     {
-        $settings = $this->app->get('settings');
+        $settings = $this->settings;
 
         $file = $this->app->get('blogfile');
         $articles = json_decode(file_get_contents($file), true);
@@ -257,7 +253,7 @@ final class HomeController
      */
     public function sitemap(Request $request, Response $response): Response
     {
-        $settings = $this->app->get('settings');
+        $settings = $this->settings;
 
         $file = $this->app->get('blogfile');
         $articles = json_decode(file_get_contents($file), true);
@@ -282,7 +278,7 @@ final class HomeController
      */
     public function about(Request $request, Response $response): Response
     {
-        $settings = $this->app->get('settings');
+        $settings = $this->settings;
         $accountFile = $this->app->get('accountfile');
         $account = json_decode(file_get_contents($accountFile), true);
         

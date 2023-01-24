@@ -30,7 +30,29 @@
 	</header>
 
 	<main class="container">
-	{% block content %}{% endblock %}
+        <div class="grid">
+            <section>{% block content %}{% endblock %}</section>
+            <aside>
+                <section>
+                    <h2>Search</h2>
+                    <form action="{{ url_for('search') }}" method="post">
+                        <input name="term" id="term" type="text" placeholder="Enter your search">
+                        <input type="submit" value="Search">
+                    </form>
+                </section>
+                
+                {% if tags %}
+                <section>
+                    <h2>Popular tags</h2>
+                    <ul>
+                    {% for key, tag in tags %}
+                        <li>{{ key }} (<span>{{ tag }}</span>)</li>
+                    {% endfor %}
+                    </ul>
+                </section>
+                {% endif %}
+            </aside>
+        </div>
 	</main>
 
 	<footer>
@@ -49,7 +71,7 @@
 	</footer>
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/cash/7.0.1/cash.min.js" integrity="sha256-cP4vwprtrs4i6th5S3ysmrRUfhdEyHA5MlBxaOwQ+/s=" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.0.0/marked.min.js" integrity="sha512-hzyXu3u+VDu/7vpPjRKFp9w33Idx7pWWNazPm+aCMRu26yZXFCby1gn1JxevVv3LDwnSbyKrvLo3JNdi4Qx1ww==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.0.0/marked.min.js" integrity="sha512-hzyXu3u+VDu/7vpPjRKFp9w33Idx7pWWNazPm+aCMRu26yZXFCby1gn1JxevVv3LDwnSbyKrvLo3JNdi4Qx1ww==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   {% block scripts %}{% endblock %}
 </body>
 </html>

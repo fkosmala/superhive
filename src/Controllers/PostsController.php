@@ -73,7 +73,8 @@ final class PostsController
                     $cmts = $this->app->get('commentsdir') . $permlink . '.comments';
                     if ((!file_exists($cmts)) || (file_exists($cmts)) && (time() - filemtime($cmts) > 120)) {
                         $api = new HiveCondenser($apiConfig);
-                        $result = json_encode($api->getContentReplies($article['author'], $permlink), JSON_PRETTY_PRINT);
+                        $replies = $api->getContentReplies($article['author'], $permlink);
+                        $result = json_encode($replies, JSON_PRETTY_PRINT);
                         file_put_contents($cmts, $result);
                     }
                     $replies = json_decode(file_get_contents($cmts), true);

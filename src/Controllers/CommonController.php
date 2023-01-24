@@ -30,16 +30,10 @@ final class CommonController
     }
     
     /**
-     * getPosts function
+     * genPostsFile function
      *
      * This function will query the blockchain to have posts
-     * It will generate a json file stored in /resources/blog/ folder
-     *
-     * @param object $request
-     * @param object $response
-     * @param array $args
-     *
-     * @return object $response
+     * It will generate a JSON file stored in /resources/blog/ folder
      */
     public function genPostsFile()
     {
@@ -102,5 +96,35 @@ final class CommonController
             }
             file_put_contents($file, $result);
         }
+    }
+    
+    /**
+     * getMostUsedTags function
+     *
+     * This function will get tags from eac post and sort them
+     * by occurence.
+     *
+     * @return array $categories
+     */
+    public function getMostUsedTags(): array
+    {
+        $settings = $this->app->get('settings');
+        $file = $this->app->get('blogfile');
+        $tags = "";
+        
+        $data = json_decode(file_get_contents($file), true);
+        
+        /* For each post, get metadata, to extract tags only */
+        foreach ($data as &$post) {
+            $meta = json_decode($post['json_metadata'], true);
+            $tags .= implode(",", $meta['tags']) . ',';
+        }
+        
+        $tagsArray = explode(",", $tags);
+        $mostUsedTags = array_count_values($tagsArray); //get all occurrences of each values
+        arsort($mostUsedTags);
+        $mostUsedTags = array_slice($mostUsedTags, 0, 10, true);
+        
+        return $mostUsedTags;
     }
 }

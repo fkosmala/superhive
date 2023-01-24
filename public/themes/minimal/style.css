@@ -5,3 +5,13 @@
 .output {text-align:center;margin:1% 10%;padding:1%;border:2px solid #1095c1}
 main{padding:0 !important;}
 footer{border-top: 1px solid #AAA}
+
+@media (min-width: 992px) {
+  main .grid {
+    grid-column-gap: 1.5rem;
+    grid-template-columns: auto 20%;
+  }
+  main aside {
+    margin: var(--block-spacing-vertical) 0;
+  }
+}
