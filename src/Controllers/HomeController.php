@@ -35,9 +35,6 @@ final class HomeController
         
         $common = new Common($this->app);
         $common->genPostsFile();
-        
-        $tags = $common->getMostUsedTags();
-        $this->tags = $tags;
     }
 
     /**
@@ -84,7 +81,8 @@ final class HomeController
             $parsedPosts[] = $article;
         }
         
-        $mostUsedTags = $this->tags;
+        $common = new Common($this->app);
+        $mostUsedTags = $common->getMostUsedTags();
         
         // Return view with articles
         return $this->app->get('view')->render($response, $settings['theme'] . '/index.html', [
