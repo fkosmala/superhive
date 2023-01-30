@@ -28,7 +28,8 @@
     "league/commonmark": "2.4.x-dev",
     "hive/hive-php-lib": "dev-main",
     "bryanjhv/slim-session": "~4.0",
-    "christianklisch/slim-minify": "^0.7.0"
+    "christianklisch/slim-minify": "^0.7.0",
+    "zeuxisoo/slim-whoops": "0.7.*"
   },
   "require-dev": {
     "pds/skeleton": "^1.0",

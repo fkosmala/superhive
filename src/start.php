@@ -18,6 +18,7 @@ use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use Zeuxisoo\Whoops\Slim\WhoopsMiddleware as Whoops;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -137,7 +138,7 @@ $app->add(TwigMiddleware::createFromContainer($app));
 
 // Add Error Middleware on DevMode
 if ($settings['devMode'] == true) {
-    $app->addErrorMiddleware(true, false, false);
+    $app->add(new Whoops());
     $minify = false;
 } else {
     $minify = true;
