@@ -6,6 +6,14 @@
 		<changefreq>weekly</changefreq>
 		<priority>0.8</priority>
 	</url>
+    {% for page in pages %}
+    <url>
+		<loc>{{ full_url_for('index') }}pages/{{ page.name }}</loc>
+		<lastmod>{{ page.created|date("D, d M Y H:i:s O", "Europe/Paris") }}</lastmod>
+		<changefreq>monthly</changefreq>
+		<priority>0.5</priority>
+	</url>
+    {% endfor %}
 	{% for article in articles %}
 	{% if article.author == settings.author %}
 	{% if 'This is a cross post' not in article.body or 'This is a cross post' in article.body and settings.crosspost == true %}

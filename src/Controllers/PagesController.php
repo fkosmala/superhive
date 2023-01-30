@@ -160,9 +160,11 @@ final class PagesController
         $pageContent = $data['mde'];
         
         // Some functions to slugify title to create very cool URL
-        $Acc = 'àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ';
+        $acc = 'àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ';
         $noAcc = 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY';
-        $slug = mb_strtolower(strtr(utf8_decode($pageTitle), utf8_decode($Acc), $noAcc));
+        $title = mb_convert_encoding($pageTitle, 'UTF-8', mb_list_encodings());
+        $acc =  mb_convert_encoding($acc, 'UTF-8', mb_list_encodings());
+        $slug = mb_strtolower(strtr($title, $acc, $noAcc));
         $slug = preg_replace('~[^\pL\d]+~u', "-", $slug);
         $slug = preg_replace('~[^-\w]+~', '', $slug);
         $slug = strtolower($slug);
@@ -176,13 +178,15 @@ final class PagesController
         $file = $pagesDir . $slug . '.html';
         
         if (file_put_contents($file, $page)) {
-            $isSecure = $_SERVER['HTTPS'];
-            if (isset($isSecure) && $isSecure === 'on') {
+            if (isset($_SERVER["HTTPS"])) {
+                $isSecure = $_SERVER["HTTPS"];
+            }
+            if (isset($isSecure) && $isSecure == 'on') {
                 $scheme = "https";
             } else {
                 $scheme = "http";
             }
-            $pageUrl = $scheme . "://$_SERVER[HTTP_HOST]" . '/pages/' . $slug;
+            $pageUrl = $scheme . "://" . $_SERVER["HTTP_HOST"] . '/pages/' . $slug;
             $response->getBody()->write($pageUrl);
         } else {
             $response->getBody()->write('Error');

@@ -210,7 +210,7 @@ $app->group('/pages/', function (RouteCollectorProxy $group) {
             return $this->get('view')->render($response, $route . '.html', [
                 "settings" => $settings
             ]);
-        })->setName($route)->add(new \Slim\Middleware\Minify($minify));
+        })->setName($route);
     }
 });
 

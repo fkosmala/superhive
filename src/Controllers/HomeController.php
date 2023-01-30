@@ -25,7 +25,8 @@ final class HomeController
 {
     private $app;
     
-    public array $settings, $tags;
+    public array $settings;
+    public array $tags;
 
     public function __construct(ContainerInterface $app)
     {
@@ -217,7 +218,7 @@ final class HomeController
         return $response;
     }
 
-    /**
+    /**The value "always" should be used to describe documents that change each time they are accessed. T
      * Feed function
      *
      * Generate the RSS feed of account's posts
@@ -259,10 +260,19 @@ final class HomeController
 
         $file = $this->app->get('blogfile');
         $articles = json_decode(file_get_contents($file), true);
+        
+        $pagesDir = $this->app->get('pagesdir');
+        $files = preg_grep('~\.(html)$~', scandir($pagesDir));
+        foreach ($files as $file) {
+            $page['created'] = filemtime($pagesDir . $file);
+            $page['name'] = mb_substr($file, 0, -5);
+            $pages[] = $page;
+        }
 
         header('Content-Type: text/xml');
         return $this->app->get('view')->render($response, '/sitemap.xml', [
             'articles' => $articles,
+            'pages' => $pages,
             'settings' => $settings
         ]);
     }

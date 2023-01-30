@@ -49,39 +49,44 @@
 	});
 
 	$(function() {
-    $('#pageCreate').on('click tap', function(event) {
-    	event.preventDefault();
-    	var title = $('#pageTitle').val();
-    	var mde = easyMDE.value();
-    	$.post(
-    		"{{ url_for('admin-savepage') }}",
-    		{ title: title, mde: mde },
-    		function(data) {
-    			if (data == "Error") {
-    				$('#results').text('An error has occured !');
-    			} else {
-    				$('#results').html('Congrats! Your page is here : <a target="_blank" href="'+data+'">'+data+'</a>');
-    			}
-    		}
-    	);
-    });
+        $('#pageCreate').on('click tap', function(event) {
+            event.preventDefault();
+            var title = $('#pageTitle').val();
+            var mde = easyMDE.value();
+            $.post(
+                "{{ url_for('admin-savepage') }}",
+                { title: title, mde: mde }
+            ).done(function(data) {
+                if (data == "Error") {
+                    $('#results').text('An error has occured !');
+                } else {
+                    $('#results').html('Congrats! Your page is here : <a target="_blank" href="'+data+'">'+data+'</a>');
+                }
+            }).fail(function(xhr, status, error) {
+                obj = JSON.stringify(xhr);
+                console.log("XHR: "+obj);
+                console.log("Status: "+status);
+                console.log("Error: "+error);
+            });
 
-    $('#pageDelete').on('click tap', function(event) {
-    	event.preventDefault();
-    	var title = $('#pageTitle').val();
-    	var mde = easyMDE.value();
-    	$.get(
-    		"{{ url_for('admin-delpage', {'file': pageFile }) }}",
-    		{ title: title, mde: mde },
-    		function(data) {
-    			if (data == "Error") {
-    				$('#results').text('An error has occured !');
-    			} else {
-    				$('#results').html('Congrats! Your page is now deleted from your server');
-    			}
-    		}
-    	);
-    });
+        });
+
+        $('#pageDelete').on('click tap', function(event) {
+            event.preventDefault();
+            var title = $('#pageTitle').val();
+            var mde = easyMDE.value();
+            $.get(
+                "{{ url_for('admin-delpage', {'file': pageFile }) }}",
+                { title: title, mde: mde },
+                function(data) {
+                    if (data == "Error") {
+                        $('#results').text('An error has occured !');
+                    } else {
+                        $('#results').html('Congrats! Your page is now deleted from your server');
+                    }
+                }
+            );
+        });
 
 	});
 </script>
