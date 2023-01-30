@@ -97,6 +97,53 @@ final class PostsController
     }
     
     /**
+     * Post function
+     *
+     * This function display the selected post in the blog.json (from Blockchain).
+     * It also take all comments to display them in the end of post
+     *
+     * @param object $request
+     * @param object $response
+     * @param array $args
+     *
+     * @return object $response
+     */
+    public function tag(Request $request, Response $response, $args): Response
+    {
+        $settings = $this->app->get('settings');
+        
+        if (isset($args['tag'])) {
+            $tag = $args['tag'];
+            
+            $file = $this->app->get('blogfile');
+            $articles = json_decode(file_get_contents($file), true);
+            
+            foreach ($articles as $article) {
+                //Check in Tags
+                $metadata = json_decode($article['json_metadata'], true);
+                $tags = implode(",", $metadata['tags']);
+                if (preg_match("/\b$tag\b/i", $tags)) {
+                    $matches[] = $article['title'];
+                }
+            }
+            
+            $result = array_unique($matches);
+            
+            foreach ($articles as $article) {
+                if (in_array($article['title'], $result)) {
+                    $posts[] = $article;
+                }
+            }
+            
+            return $this->app->get('view')->render($response, $settings['theme'] . '/tag.html', [
+                'tag' => $tag,
+                'posts' => $posts,
+                'settings' => $settings
+            ]);
+        }
+    }
+    
+    /**
      * Administration posts function
      *
      * This function display the post page in admin panel.

@@ -1,0 +1,23 @@
+{% extends settings.theme ~ "/layout.html" %}
+
+{% block content %}
+<article>
+    <h1>Posts with "{{ tag }}" tag</h1>
+    
+    {% if posts %}
+	<ul>
+		{% for post in posts %}
+			<h2>
+				<a href="{{ url_for('post', { 'permlink': post.permlink }) }}">{{ post.title }}</a>
+			</h2>
+			<p>{{ post.body|striptags|slice(0,200) }}...</p>
+			<hr>
+		{% endfor %}
+	</ul>
+    {% else %}
+		<p>No post found ! Sorry :(</p>
+    {% endif %}
+</article>
+{% endblock %}
+
+{% block scripts %}{% endblock %}

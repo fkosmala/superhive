@@ -46,7 +46,7 @@
                     <h2>Popular tags</h2>
                     <ul>
                     {% for key, tag in tags %}
-                        <li>{{ key }} (<span>{{ tag }}</span>)</li>
+                        <li><a href="{{ url_for('tag', { 'tag': key }) }}">{{ key }}</a> (<span>{{ tag }}</span>)</li>
                     {% endfor %}
                     </ul>
                 </section>

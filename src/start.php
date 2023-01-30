@@ -171,6 +171,7 @@ $app->post('/prepare', InstallController::class . ":install")->setName('install'
 $app->get('/', HomeController::class . ":index")->setName('index')->add(new \Slim\Middleware\Minify($minify));
 $app->post('/search', HomeController::class . ":search")->setName('search')->add(new \Slim\Middleware\Minify($minify));
 $app->get('/about', HomeController::class . ":about")->setName('about')->add(new \Slim\Middleware\Minify($minify));
+$app->get('/tag/{tag}', PostsController::class . ":tag")->setName('tag')->add(new \Slim\Middleware\Minify($minify));
 $app->get('/post/{permlink}', PostsController::class . ":post")->setName('post')
 ->add(new \Slim\Middleware\Minify($minify));
 
