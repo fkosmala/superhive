@@ -1,11 +1,27 @@
 {% extends settings.theme ~ "/layout.html" %}
 
+{%block title %}About {{ account.name }}{% endblock %}
+
 {% block content %}
 <article>
-    <h1>About {{ account.name }}</h1>
+    <div class="grid">
+        <div>
+            <h1>About {{ account.name }}</h1>
+            <ul>
+                <li>Location : {{ account.location }}</li>
+                <li>{{ account.about }}</li>
+                
+            </ul>
+        </div>
+        <div>
+            <img src="{{ account.profile_image }}" alt="Profile image of {{ account.name }}">
+        </div>
+    </div>
+    <hr>
+    <h2>About HIVE</h2>
     <ul>
-        <li>Location : {{ account.location }}</li>
-        <li>{{ account.about }}</li>
+        <li>Account created: {{ data.created|date("d M Y") }}</li>
+        <li>Last post: {{ data.last_post|date("D, d M Y H:i:s") }}</li>
     </ul>
 </article>
 {% endblock %}

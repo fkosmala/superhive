@@ -298,6 +298,7 @@ final class HomeController
         
         return $this->app->get('view')->render($response, $settings['theme'] . '/about.html', [
             'settings' => $settings,
+            'data' => $account[0],
             'account' => $accountBio['profile']
         ]);
     }
