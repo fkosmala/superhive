@@ -111,10 +111,14 @@ final class PostsController
     public function tag(Request $request, Response $response, $args): Response
     {
         $settings = $this->app->get('settings');
+        $tag = $args['tag'];
+        $posts = array();
+        $result = array();
         
-        if (isset($args['tag'])) {
-            $tag = $args['tag'];
-            
+        if (!isset($tag)) {
+            $result = [];
+        } else {
+            $matches = array();
             $file = $this->app->get('blogfile');
             $articles = json_decode(file_get_contents($file), true);
             
@@ -134,13 +138,13 @@ final class PostsController
                     $posts[] = $article;
                 }
             }
-            
-            return $this->app->get('view')->render($response, $settings['theme'] . '/tag.html', [
-                'tag' => $tag,
-                'posts' => $posts,
-                'settings' => $settings
-            ]);
         }
+        
+        return $this->app->get('view')->render($response, $settings['theme'] . '/tag.html', [
+            'tag' => $tag,
+            'posts' => $posts,
+            'settings' => $settings
+        ]);
     }
     
     /**
