@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html dir="ltr" lang="{{ settings.lang }}" prefix="og: http://ogp.me/ns#">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}{% endblock %} - {{ settings.title }}</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1.4.4/css/pico.min.css">
-  <link rel="stylesheet" href="https://cdn.iconmonstr.com/1.3.0/css/iconmonstr-iconic-font.min.css">
-  <link rel="stylesheet" href="/themes/{{ settings.theme }}/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% endblock %} - {{ settings.title }}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1.4.4/css/pico.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/typicons/2.1.2/typicons.min.css" integrity="sha512-/O0SXmd3R7+Q2CXC7uBau6Fucw4cTteiQZvSwg/XofEu/92w6zv5RBOdySvPOQwRsZB+SFVd/t9T5B/eg0X09g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/themes/{{ settings.theme }}/style.css">
 {% include '/meta.html' %}
 </head>
 <body>
@@ -21,10 +21,10 @@
 		<p class="subtitle">{{ settings.baseline }}</p>
 		<nav>
 			<div title="Social networks" class="social">
-				{% if settings.social.twitter %}<a class="inline" target="_blank" href="http://twitter.com/{{settings.social.twitter}}" aria-label="Twitter" title="Twitter"><span class="im im-twitter"></span></a>{% endif %}
-				{% if settings.social.facebook %}<a class="inline" target="_blank" href="http://facebook.com/{{settings.social.facebook}}" aria-label="Facebook" title="Facebook"><span class="im im-facebook"></span></a>{% endif %}
-				{% if settings.social.instagram %}<a class="inline" target="_blank" href="http://instagram.com/{{settings.social.instagram}}/" aria-label="Instagram" title="Instagram"><span class="im im-instagram"></span></a>{% endif %}
-				{% if settings.social.linkedin %}<a class="inline" target="_blank" href="http://linkedin.com/in/{{settings.social.linkedin}}" aria-label="LinkedIn" title="LinkedIn"><span class="im im-linkedin"></span></a>{% endif %}
+				{% if settings.social.twitter %}<a class="inline" target="_blank" href="http://twitter.com/{{settings.social.twitter}}" aria-label="Twitter" title="Twitter"><span class="typcn icon typcn-social-twitter"></span></a>{% endif %}
+				{% if settings.social.facebook %}<a class="inline" target="_blank" href="http://facebook.com/{{settings.social.facebook}}" aria-label="Facebook" title="Facebook"><span class="typcn icon typcn-social-facebook"></span></a>{% endif %}
+				{% if settings.social.instagram %}<a class="inline" target="_blank" href="http://instagram.com/{{settings.social.instagram}}/" aria-label="Instagram" title="Instagram"><span class="typcn icon typcn-social-instagram"></span></a>{% endif %}
+				{% if settings.social.linkedin %}<a class="inline" target="_blank" href="http://linkedin.com/in/{{settings.social.linkedin}}" aria-label="LinkedIn" title="LinkedIn"><span class="typcn icon typcn-social-linkedin"></span></a>{% endif %}
 			</div>
 		</nav>
 	</header>
