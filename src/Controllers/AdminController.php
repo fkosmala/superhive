@@ -173,21 +173,21 @@ final class AdminController
         $settings = $this->app->get('settings');
         $crosspost = (!isset($data["cross"])) ? $settings["crosspost"] : (bool)$data["cross"];
         $devMode = (!isset($data["devel"])) ? $settings["devMode"] : (bool)$data["devel"];
-        $api = ($data["api"] == "") ? $settings["api"] : $data["api"];
-        $displayedPosts = ($data["displayedPosts"] == "") ? $settings["displayedPosts"] : (int)$data["displayedPosts"];
-        $author = ($data["author"] == "") ? $settings["author"] : $data["author"];
-        $title = ($data["title"] == "") ? $settings["title"] : $data["title"];
-        $baseline = ($data["baseline"] == "") ? $settings["baseline"] : $data["baseline"];
-        $displayType = ($data["displayTypes"] == "") ? $settings["displayType"]['type'] : $data["displayTypes"];
-        $displayedTag = ($data["tag"] == "") ? $settings["displayType"]['tag'] : $data["tag"];
-        $socialDesc = ($data["socialDesc"] == "") ? $settings["social"]["description"] : $data["socialDesc"];
-        $socialImage = ($data["socialImage"] == "") ? $settings["social"]["image"] : $data["socialImage"];
-        $twitter = ($data["twitter"] == "") ? $settings["social"]["twitter"] : $data["twitter"];
-        $facebook = ($data["facebook"] == "") ? $settings["social"]["facebook"] : $data["facebook"];
-        $instagram = ($data["instagram"] == "") ? $settings["social"]["instagram"] : $data["instagram"];
-        $linkedin = ($data["linkedin"] == "") ? $settings["social"]["linkedin"] : $data["linkedin"];
-        $language = ($data["lang"] == "") ? $settings["lang"] : $data["lang"];
-        $theme = ($data["theme"] == "") ? $settings["theme"] : $data["theme"];
+        $api = (!isset($data["api"])) ? $settings["api"] : $data["api"];
+        $displayedPosts = (!isset($data["displayedPosts"])) ? $settings["displayedPosts"] : (int)$data["displayedPosts"];
+        $author = (!isset($data["author"])) ? $settings["author"] : $data["author"];
+        $title = (!isset($data["title"])) ? $settings["title"] : $data["title"];
+        $baseline = (!isset($data["baseline"])) ? $settings["baseline"] : $data["baseline"];
+        $displayType = (!isset($data["displayTypes"])) ? $settings["displayType"]['type'] : $data["displayTypes"];
+        $displayedTag = (!isset($data["tag"])) ? $settings["displayType"]['tag'] : $data["tag"];
+        $socialDesc = (!isset($data["socialDesc"])) ? $settings["social"]["description"] : $data["socialDesc"];
+        $socialImage = (!isset($data["socialImage"])) ? $settings["social"]["image"] : $data["socialImage"];
+        $twitter = (!isset($data["twitter"])) ? $settings["social"]["twitter"] : $data["twitter"];
+        $facebook = (!isset($data["facebook"])) ? $settings["social"]["facebook"] : $data["facebook"];
+        $instagram = (!isset($data["instagram"])) ? $settings["social"]["instagram"] : $data["instagram"];
+        $linkedin = (!isset($data["linkedin"])) ? $settings["social"]["linkedin"] : $data["linkedin"];
+        $language = (!isset($data["lang"])) ? $settings["lang"] : $data["lang"];
+        $theme = (!isset($data["theme"])) ? $settings["theme"] : $data["theme"];
         $newSettings = array(
             'author' => $author,
             'title' => $title,
