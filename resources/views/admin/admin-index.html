@@ -7,78 +7,29 @@
 {% endblock %}
 
 {% block content %}
-	<form method="post" action="{{ url_for('admin-save') }}">
-		<input type="hidden" name="redirect" id="redirect" value="{{ current_url() }}">
-		<div class="grid">
-			<article>
-				<h5>Global Settings</h5>
-
-				<label for="author">Account</label>
-				<input name="author" id="author" type="text" value="{{ settings.author }}">
-				
-				<label for="displayTypes">What to display ?</label>
-				<select name="displayTypes" id="displayTypes">
-					<option value="author" {% if settings.displayType.type == "author" %}selected{% endif %}>Author posts only</option>
-					<option value="tag" {% if settings.displayType.type == "tag" %}selected{% endif %}>Selected Tag only</option>
-					<option value="reblog" {% if settings.displayType.type == "reblog" %}selected{% endif %}>Reblogs only</option>
-				</select>
-				
-				<div id="tagPosts">
-					<label for="tag">Tag (without #)</label>
-					<input name="tag" id="tag" type="text" value="{{ settings.displayType.tag }}">
-				</div>
-
-				<label for="title">Title</label>
-				<input name="title" id="title" type="text" value="{{ settings.title }}">
-
-				<label for="baseline">Baseline</label>
-				<input name="baseline" id="baseline"  type="text" value="{{ settings.baseline }}">
-
-				<label for="lang">Content Language</label>
-				<select name="lang" id="lang">
-					{% for language in languages %}<option value="{{ language.code }}" {% if language.code == settings.lang %}selected{% endif %}>{{ language.name }}</option>{% endfor %}
-				</select>
-
-				<label for="theme">Theme</label>
-				<select name="theme" id="theme">
-					{% for theme in themes %}<option value="{{ theme }}" {% if theme == settings.theme %}selected{% endif %}>{{ theme }}</option>{% endfor %}
-				</select>
-
-			</article>
-
-			<article>
-				<h5>System settings</h5>
-
-				<label for="displayedPosts">Number of displayed post on homepage</label>
-				<input name="displayedPosts" id="displayedPosts" type="number" value="{{ settings.displayedPosts }}">
-
-				<hr>
-
-				<p class="contrast">The following settings are for power users ONLY. Change it at your own risk !</p>
-
-				<label for="api">API Endpoint</label>
-				<select name="api" id="api">
-					{% for node in nodes %}<option value="{{ node }}" {% if node == settings.api %}selected{% endif %}>{{ node }}</option>{% endfor %}
-				</select>
-
-				<div>
-					<label for="crosspost">
-					<input type="checkbox" id="crosspost" name="crosspost" {% if settings.crosspost == true %}checked{% endif %}>Display crossposting</label>
-                    <input type="hidden" id="cross" name="cross" {% if settings.crosspost == true %}value="1"{% else %}value=0{% endif %} />
-				</div>
-
-				<div>
-					<label for="devMode">
-					<input type="checkbox" id="devMode" name="devMode" {% if settings.devMode == true %}checked{% endif %}>Developer mode</label>
-                    <input type="hidden" id="devel" name="devel" {% if settings.devMode == true %}value="1"{% else %}value=0{% endif %} />
-				</div>
-
-			</article>
-		</div>
-		<input type="submit" value ="Save">
-	</form>
-</div>
-
+    <h1>Welcome to your panel!</h1>
+    <div class="grid">
+        <article>
+            <p>Posts:</p>
+            <h2>{{ account.post_count }} posts</h2>
+            <a href="{{ url_for('admin-posts') }}" class="secondary"><button class="secondary">See your posts</button></a>
+            <a href="{{ url_for('admin-newpost') }}"><button>Write a post</button></a>
+        </article>
+        <article>
+            <p>Available balance:</p>
+            <h3>{{ account.balance }}</h3>
+            <h3>{{ account.hbd_balance }}</h3>
+            <a href="{{ url_for('admin-wallet') }}"><button>Wallet</button></a>
+        </article>
+        <article>
+            <p>Savings balance:</p>
+            <h3>{{ account.savings_balance }}</h3>
+            <h3>{{ account.savings_hbd_balance }}</h3>
+            <a href="{{ url_for('admin-wallet') }}"><button>Wallet</button></a>
+        </article>
+        
+    </div>
+    
 {% endblock %}
 
 {% block scripts %}

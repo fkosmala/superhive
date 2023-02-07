@@ -81,8 +81,6 @@ final class AdminController
         // Create array from config file
         $settings = $this->app->get('settings');
         $accountFile = $this->app->get('accountfile');
-        $langFile = $this->app->get('basedir') . 'resources/languages.json';
-        $nodesFile = $this->app->get('basedir') . 'resources/nodes.json';
 
         $apiConfig = [
             "hiveNode" => $settings['api'],
@@ -99,16 +97,58 @@ final class AdminController
         }
 
         $account = json_decode(file_get_contents($accountFile), true);
+
+        return $this->app->get('view')->render($response, '/admin/admin-index.html', [
+            'settings' => $settings,
+            'account' => $account[0]
+        ]);
+    }
+    
+    /**
+     * Admin settings function
+     *
+     * This function display tthe settings page
+     * This page contains every Superhive settings (not plugins settings)..
+     *
+     * @param object $request
+     * @param object $response
+     * @param array $args
+     *
+     * @return object $response
+     */
+    public function adminSettings(Request $request, Response $response): Response
+    {
+        // Create array from config file
+        $settings = $this->app->get('settings');
+        $accountFile = $this->app->get('accountfile');
+        $langFile = $this->app->get('basedir') . 'resources/languages.json';
+        $nodesFile = $this->app->get('basedir') . 'resources/nodes.json';
+
+        $apiConfig = [
+            'hiveNode' => $settings['api'],
+            'debug' => false
+        ];
+        $api = new HiveCondenser($apiConfig);
+
+        $cache_interval = 300;
+
+        $current_time = time();
+        if ((!file_exists($accountFile)) || ($current_time - filemtime($accountFile) > $cache_interval)) {
+            $result = json_encode($api->getAccounts($settings['author']), JSON_PRETTY_PRINT);
+            file_put_contents($accountFile, $result);
+        }
+
+        $account = json_decode(file_get_contents($accountFile), true);
         $langs = json_decode(file_get_contents($langFile), true);
         $nodes = json_decode(file_get_contents($nodesFile), true);
 
         $themes = array_map('basename', glob($this->app->get('themesdir') . '*', GLOB_ONLYDIR));
-        return $this->app->get('view')->render($response, '/admin/admin-index.html', [
-                'settings' => $settings,
-                'account' => $account[0],
-                'themes' => $themes,
-                'languages' => $langs,
-                'nodes' => $nodes
+        return $this->app->get('view')->render($response, '/admin/admin-settings.html', [
+            'settings' => $settings,
+            'account' => $account[0],
+            'themes' => $themes,
+            'languages' => $langs,
+            'nodes' => $nodes
         ]);
     }
 

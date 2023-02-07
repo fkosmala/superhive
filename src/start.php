@@ -32,6 +32,7 @@ $container->set('configdir', __DIR__ . '/../config/');
 $container->set('configfile', __DIR__ . '/../config/config.json');
 $container->set('password', __DIR__ . '/../config/password');
 
+$container->set('pluginsdir', __DIR__ . '/../resources/plugins/');
 $container->set('datadir', __DIR__ . '/../resources/blog/');
 $container->set('accountfile', __DIR__ . '/../resources/blog/account.json');
 $container->set('blogfile', __DIR__ . '/../resources/blog/blog.json');
@@ -56,6 +57,12 @@ if ((file_exists($confDir . 'config.sample.json')) && (!file_exists($confDir . '
 }
 
 // Create folders that doesn't exist
+
+// Plugins Dir
+if (!file_exists($container->get('pluginsdir'))) {
+    mkdir($container->get('pluginsdir'), 0755, true);
+}
+
 // Pages Dir
 if (!file_exists($container->get('pagesdir'))) {
     mkdir($container->get('pagesdir'), 0755, true);
@@ -185,6 +192,7 @@ $app->post('/login', HomeController::class . ":loginPost")->setName('login-post'
 $app->group('/admin', function (RouteCollectorProxy $group) {
     $group->get('', AdminController::class . ":adminIndex")->setName('admin');
     $group->get('/social', AdminController::class . ":adminSocial")->setName('admin-social');
+    $group->get('/settings', AdminController::class . ":adminSettings")->setName('admin-settings');
     $group->get('/wallet', WalletController::class . ":viewWallet")->setName('admin-wallet');
     $group->get('/logout', AdminController::class . ":logout")->setName('admin-logout');
     $group->get('/posts', PostsController::class . ":adminPosts")->setName('admin-posts');
