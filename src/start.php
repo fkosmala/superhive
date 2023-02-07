@@ -191,7 +191,6 @@ $app->get('/login', HomeController::class . ":login")->setName('login');
 $app->post('/login', HomeController::class . ":loginPost")->setName('login-post');
 $app->group('/admin', function (RouteCollectorProxy $group) {
     $group->get('', AdminController::class . ":adminIndex")->setName('admin');
-    $group->get('/social', AdminController::class . ":adminSocial")->setName('admin-social');
     $group->get('/settings', AdminController::class . ":adminSettings")->setName('admin-settings');
     $group->get('/wallet', WalletController::class . ":viewWallet")->setName('admin-wallet');
     $group->get('/logout', AdminController::class . ":logout")->setName('admin-logout');

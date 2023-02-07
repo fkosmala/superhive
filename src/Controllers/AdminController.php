@@ -151,26 +151,6 @@ final class AdminController
             'nodes' => $nodes
         ]);
     }
-
-    /**
-     * Admin social function
-     *
-     * This function display tthe social pagewith a form.
-     * This page contains every social settings which can be modified.
-     *
-     * @param object $request
-     * @param object $response
-     * @param array $args
-     *
-     * @return object $response
-     */
-    public function adminSocial(Request $request, Response $response): Response
-    {
-        $settings = $this->app->get('settings');
-        return $this->app->get('view')->render($response, '/admin/admin-social.html', [
-                'settings' => $settings
-        ]);
-    }
     
     /**
      * Admin logout function

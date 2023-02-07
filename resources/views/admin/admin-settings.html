@@ -11,7 +11,7 @@
 		<input type="hidden" name="redirect" id="redirect" value="{{ current_url() }}">
 		<div class="grid">
 			<article>
-				<h5>Global Settings</h5>
+				<h3>Global Settings</h3>
 
 				<label for="author">Account</label>
 				<input name="author" id="author" type="text" value="{{ settings.author }}">
@@ -45,37 +45,66 @@
 				</select>
 
 			</article>
+            
+            <article>
+                <h3>SEO</h3>
 
-			<article>
-				<h5>System settings</h5>
+                <label for="socialDesc">Description</label>
+                <input name="socialDesc" id="socialDesc" type="text" value="{{ settings.social.description }}">
 
-				<label for="displayedPosts">Number of displayed post on homepage</label>
-				<input name="displayedPosts" id="displayedPosts" type="number" value="{{ settings.displayedPosts }}">
+                <label cfor="socialImage">Image</label>
+                <input id="socialImage" name="socialImage" type="text" value="{{ settings.social.image }}">
+                
+                <hr>
+                
+                <h3>Social Networks</h3>
 
-				<hr>
+                <label for="twitter">Twitter Account (without @)</label>
+                <input id="twitter" name="twitter"type="text" value="{{ settings.social.twitter }}">
 
-				<p class="contrast">The following settings are for power users ONLY. Change it at your own risk !</p>
+                <label for="facebook">Facebook Account</label>
+                <input id="facebook" name="facebook" type="text" value="{{ settings.social.facebook }}">
 
-				<label for="api">API Endpoint</label>
-				<select name="api" id="api">
-					{% for node in nodes %}<option value="{{ node }}" {% if node == settings.api %}selected{% endif %}>{{ node }}</option>{% endfor %}
-				</select>
+                <label for="instagram">Instagram Account (without @)</label>
+                <input id="instagram" name="instagram" type="text" value="{{ settings.social.instagram }}">
 
-				<div>
-					<label for="crosspost">
-					<input type="checkbox" id="crosspost" name="crosspost" {% if settings.crosspost == true %}checked{% endif %}>Display crossposting</label>
-                    <input type="hidden" id="cross" name="cross" {% if settings.crosspost == true %}value="1"{% else %}value=0{% endif %} />
-				</div>
-
-				<div>
-					<label for="devMode">
-					<input type="checkbox" id="devMode" name="devMode" {% if settings.devMode == true %}checked{% endif %}>Developer mode</label>
-                    <input type="hidden" id="devel" name="devel" {% if settings.devMode == true %}value="1"{% else %}value=0{% endif %} />
-				</div>
-
-			</article>
+                <label for="linkedin"> LinkedIn</label>
+                <input id="linkedin" name="linkedin" type="text" value="{{ settings.social.linkedin }}">
+            </article>
 		</div>
-		<input type="submit" value ="Save">
+        
+        <input type="submit" value="Save">
+        
+        <article>
+            <h5>Advanced settings</h5>
+            <div class="grid">
+                <div>
+                    <label for="displayedPosts">Number of displayed post on homepage</label>
+                    <input name="displayedPosts" id="displayedPosts" type="number" value="{{ settings.displayedPosts }}">
+                    
+                    <div>
+                        <label for="crosspost">
+                        <input type="checkbox" id="crosspost" name="crosspost" {% if settings.crosspost == true %}checked{% endif %}>Display crossposting</label>
+                        <input type="hidden" id="cross" name="cross" {% if settings.crosspost == true %}value="1"{% else %}value=0{% endif %} />
+                    </div>
+                    
+                    <div>
+                        <label for="devMode">
+                        <input type="checkbox" id="devMode" name="devMode" {% if settings.devMode == true %}checked{% endif %}>Developer mode</label>
+                        <input type="hidden" id="devel" name="devel" {% if settings.devMode == true %}value="1"{% else %}value=0{% endif %} />
+                    </div>
+                </div>
+                
+                <div>
+                    <label for="api">API Endpoint</label>
+                    <select name="api" id="api">
+                        {% for node in nodes %}<option value="{{ node }}" {% if node == settings.api %}selected{% endif %}>{{ node }}</option>{% endfor %}
+                    </select>
+                </div>
+                
+            </div>
+        </article>
+		<input type="submit" value="Save">
 	</form>
 </div>
 
