@@ -18,6 +18,8 @@
             {% else %}
             <a role="button" href="{{url_for('admin-savetheme', {theme: theme}) }}">Select</a>
             {% endif %}
+            <hr>
+            <img src="/themes/{{ theme }}/screenshot.jpg" alt="screenshot of {{ theme|capitalize }}">
         </article>
         {% endfor %}
     </div>
