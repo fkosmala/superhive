@@ -14,7 +14,7 @@
         <article class="center">
             <h3>{{ theme|capitalize }}</h3>
             {% if theme == settings.theme %}
-            <p><mark>Selected</mark></p>
+            <a role="button" class="secondary" disabled>Selected</a>
             {% else %}
             <a role="button" href="{{url_for('admin-savetheme', {theme: theme}) }}">Select</a>
             {% endif %}
