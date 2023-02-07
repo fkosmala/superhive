@@ -72,7 +72,6 @@ final class AdminController
      *
      * @param object $request
      * @param object $response
-     * @param array $args
      *
      * @return object $response
      */
@@ -112,7 +111,6 @@ final class AdminController
      *
      * @param object $request
      * @param object $response
-     * @param array $args
      *
      * @return object $response
      */
@@ -153,13 +151,34 @@ final class AdminController
     }
     
     /**
+     * Admin theme function
+     *
+     * This function is for the Theme page
+     *
+     * @param object $request
+     * @param object $response
+     *
+     * @return object $response
+     */
+    public function adminThemes(Request $request, Response $response): Response
+    {
+        // Create array from config file
+        $settings = $this->app->get('settings');
+
+        $themes = array_map('basename', glob($this->app->get('themesdir') . '*', GLOB_ONLYDIR));
+        return $this->app->get('view')->render($response, '/admin/admin-themes.html', [
+            'settings' => $settings,
+            'themes' => $themes
+        ]);
+    }
+    
+    /**
      * Admin logout function
      *
      * This function clear ther session, destroy it, and redirect to login page.
      *
      * @param object $request
      * @param object $response
-     * @param array $args
      *
      * @return object $response
      */
@@ -182,7 +201,6 @@ final class AdminController
      *
      * @param object $request
      * @param object $response
-     * @param array $args
      *
      * @return object $response
      */
@@ -207,7 +225,6 @@ final class AdminController
         $instagram = (!isset($data["instagram"])) ? $settings["social"]["instagram"] : $data["instagram"];
         $linkedin = (!isset($data["linkedin"])) ? $settings["social"]["linkedin"] : $data["linkedin"];
         $language = (!isset($data["lang"])) ? $settings["lang"] : $data["lang"];
-        $theme = (!isset($data["theme"])) ? $settings["theme"] : $data["theme"];
         $newSettings = array(
             'author' => $author,
             'title' => $title,
@@ -224,7 +241,7 @@ final class AdminController
                 'instagram' => $instagram,
                 'linkedin' => $linkedin
             ),
-            'theme' => $theme,
+            'theme' => $settings["theme"],
             'lang' => $language,
             'crosspost' => $crosspost,
             'api' => $api,
@@ -237,5 +254,31 @@ final class AdminController
         unlink($this->app->get('blogfile'));
 
         return $response->withHeader('Location', $redirect)->withStatus(302);
+    }
+    
+    /**
+     * Admin theme save function
+     *
+     * This function is for save the theme into the JSON config file
+     *
+     * @param object $request
+     * @param object $response
+     * @param array $args
+     *
+     * @return object $response
+     */
+    public function saveTheme(Request $request, Response $response, array $args): Response
+    {
+        $settings = $this->app->get('settings');
+        if (!isset($args['theme'])) {
+            return $response->withHeader('Location', '/admin/themes')->withStatus(302);
+        } else {
+            $settings['theme'] = $args['theme'];
+            $file = json_encode($settings, JSON_PRETTY_PRINT);
+            file_put_contents($this->app->get('configfile'), $file);
+            return $response->withHeader('Location', '/admin/themes')->withStatus(302);
+        }
+        
+        
     }
 }

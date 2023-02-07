@@ -38,12 +38,6 @@
 				<select name="lang" id="lang">
 					{% for language in languages %}<option value="{{ language.code }}" {% if language.code == settings.lang %}selected{% endif %}>{{ language.name }}</option>{% endfor %}
 				</select>
-
-				<label for="theme">Theme</label>
-				<select name="theme" id="theme">
-					{% for theme in themes %}<option value="{{ theme }}" {% if theme == settings.theme %}selected{% endif %}>{{ theme }}</option>{% endfor %}
-				</select>
-
 			</article>
             
             <article>

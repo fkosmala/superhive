@@ -191,17 +191,25 @@ $app->get('/login', HomeController::class . ":login")->setName('login');
 $app->post('/login', HomeController::class . ":loginPost")->setName('login-post');
 $app->group('/admin', function (RouteCollectorProxy $group) {
     $group->get('', AdminController::class . ":adminIndex")->setName('admin');
+    
     $group->get('/settings', AdminController::class . ":adminSettings")->setName('admin-settings');
+    $group->get('/themes', AdminController::class . ":adminThemes")->setName('admin-themes');
+    
+    
     $group->get('/wallet', WalletController::class . ":viewWallet")->setName('admin-wallet');
     $group->get('/logout', AdminController::class . ":logout")->setName('admin-logout');
+    
     $group->get('/posts', PostsController::class . ":adminPosts")->setName('admin-posts');
     $group->get('/newpost', PostsController::class . ":adminNewPost")->setName('admin-newpost');
     $group->get('/editpost/{post}', PostsController::class . ":adminEditPost")->setName('admin-editpost');
+    
     $group->get('/pages', PagesController::class . ":adminPages")->setName('admin-pages');
     $group->get('/newpage', PagesController::class . ":adminNewPage")->setName('admin-newpage');
     $group->get('/editpage/{file}', PagesController::class . ":adminEditPage")->setName('admin-editpage');
     $group->get('/delpage/{file}', PagesController::class . ":adminDelPage")->setName('admin-delpage');
     $group->post('/savepage', PagesController::class . ":adminSavePage")->setName('admin-savepage');
+    
+    $group->get('/savetheme/{theme}', AdminController::class . ":saveTheme")->setName('admin-savetheme');
     $group->post('/save', AdminController::class . ":save")->setName('admin-save');
 });
 
