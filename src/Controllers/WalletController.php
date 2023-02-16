@@ -14,12 +14,9 @@
 
 namespace App\Controllers;
 
-use DI\Container;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Container\ContainerInterface;
-use Slim\Factory\AppFactory;
-use Slim\Routing\RouteContext;
 use Hive\PhpLib\Hive\Condenser as HiveCondenser;
 use Hive\PhpLib\HiveEngine\Account as HeAccount;
 

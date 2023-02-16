@@ -13,13 +13,9 @@
 
 namespace App\Controllers;
 
-use DI\Container;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Container\ContainerInterface;
-use Slim\Factory\AppFactory;
-use Composer\Console\Application;
-use Composer\Command\UpdateCommand;
 
 final class InstallController
 {

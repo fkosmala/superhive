@@ -13,11 +13,7 @@
 
 namespace App\Controllers;
 
-use DI\Container;
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Container\ContainerInterface;
-use Slim\Factory\AppFactory;
 use Hive\PhpLib\Hive\Condenser as HiveCondenser;
 
 final class CommonController
@@ -35,7 +31,7 @@ final class CommonController
      * This function will query the blockchain to have posts
      * It will generate a JSON file stored in /resources/blog/ folder
      */
-    public function genPostsFile()
+    public function genPostsFile(): void 
     {
         $settings = $this->app->get('settings');
         $result = "";
