@@ -109,7 +109,7 @@ final class PagesController
         ]);
     }
 
-/**
+    /**
      * Administration delete page function
      *
      * called to delete fpage and return to administration Pages section
@@ -160,7 +160,7 @@ final class PagesController
         $acc = 'àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ';
         $noAcc = 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY';
         $title = mb_convert_encoding($pageTitle, 'UTF-8', mb_list_encodings());
-        $acc =  mb_convert_encoding($acc, 'UTF-8', mb_list_encodings());
+        $acc = mb_convert_encoding($acc, 'UTF-8', mb_list_encodings());
         $slug = mb_strtolower(strtr($title, $acc, $noAcc));
         $slug = preg_replace('~[^\pL\d]+~u', "-", $slug);
         $slug = preg_replace('~[^-\w]+~', '', $slug);
