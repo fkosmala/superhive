@@ -209,7 +209,7 @@ final class AdminController
         $crosspost = (!isset($data["cross"])) ? $settings["crosspost"] : (bool)$data["cross"];
         $devMode = (!isset($data["devel"])) ? $settings["devMode"] : (bool)$data["devel"];
         $api = (!isset($data["api"])) ? $settings["api"] : $data["api"];
-        $displayedPosts = (!isset($data["displayedPosts"])) ? $settings["displayedPosts"] : (int)$data["displayedPosts"];
+        $displayPosts = (!isset($data["displayedPosts"])) ? $settings["displayedPosts"] : (int)$data["displayedPosts"];
         $author = (!isset($data["author"])) ? $settings["author"] : $data["author"];
         $title = (!isset($data["title"])) ? $settings["title"] : $data["title"];
         $baseline = (!isset($data["baseline"])) ? $settings["baseline"] : $data["baseline"];
@@ -243,7 +243,7 @@ final class AdminController
             'crosspost' => $crosspost,
             'api' => $api,
             'devMode' => $devMode,
-            'displayedPosts' => (int)$displayedPosts
+            'displayedPosts' => (int)$displayPosts
         );
         $file = json_encode($newSettings, JSON_PRETTY_PRINT);
         // Create array from config file
@@ -275,7 +275,5 @@ final class AdminController
             file_put_contents($this->app->get('configfile'), $file);
             return $response->withHeader('Location', '/admin/themes')->withStatus(302);
         }
-        
-        
     }
 }

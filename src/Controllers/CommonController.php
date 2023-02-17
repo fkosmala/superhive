@@ -31,7 +31,7 @@ final class CommonController
      * This function will query the blockchain to have posts
      * It will generate a JSON file stored in /resources/blog/ folder
      */
-    public function genPostsFile(): void 
+    public function genPostsFile(): void
     {
         $settings = $this->app->get('settings');
         $result = "";

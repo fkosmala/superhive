@@ -39,7 +39,7 @@ $container->set('pagesdir', __DIR__ . '/../resources/blog/pages/');
 $container->set('themesdir', __DIR__ . '/../public/themes/');
 
 // Set settings array in container for use in all routes
-$container->set('settings', function() {
+$container->set('settings', function () {
     $config = file_get_contents(__DIR__ . '/../config/config.json');
     $settings = json_decode($config, true);
     return $settings;
@@ -104,7 +104,7 @@ if ((!file_exists($container->get('cachedir'))) && ($settings["devMode"] == fals
 AppFactory::setContainer($container);
 
 // Set Twig engine for templating
-$container->set('view', function() {
+$container->set('view', function () {
     $settings = json_decode(file_get_contents(__DIR__ . '/../config/config.json'), true);
     $tpls = [
         __DIR__ . "/../resources/views/",
@@ -132,7 +132,7 @@ $container->set('view', function() {
 });
 
 //Set Session engine
-$container->set('session', function() {
+$container->set('session', function () {
     return new \SlimSession\Helper();
 });
 
@@ -186,7 +186,7 @@ $app->get('/sitemap', HomeController::class . ":sitemap")->setName('sitemap');
 // Admin routes
 $app->get('/login', HomeController::class . ":login")->setName('login');
 $app->post('/login', HomeController::class . ":loginPost")->setName('login-post');
-$app->group('/admin', function(RouteCollectorProxy $group) {
+$app->group('/admin', function (RouteCollectorProxy $group) {
     $group->get('', AdminController::class . ":adminIndex")->setName('admin');
     
     $group->get('/settings', AdminController::class . ":adminSettings")->setName('admin-settings');
@@ -211,7 +211,7 @@ $app->group('/admin', function(RouteCollectorProxy $group) {
 });
 
 // generate routes from static pages
-$app->group('/pages/', function(RouteCollectorProxy $group) {
+$app->group('/pages/', function (RouteCollectorProxy $group) {
     $pagesDir = $this->get('pagesdir');
     $pages = preg_grep('~\.(html)$~', scandir($pagesDir));
     foreach ($pages as $page) {
