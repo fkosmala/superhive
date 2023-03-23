@@ -2,6 +2,20 @@
 
 All notable changes to this publication will be documented in this file.
 
+## 0.6.0 - 2023-03-23
+- [Feature] Popular tags
+- [Feature] Add tags page to display post with selected tag
+- [Feature] Search bar & page
+- [Feature] Add Whoops php debugger for dev mode
+- [Feature] Add pages to sitemap
+- [Update] Improve the about page
+- [Fix] Minimal theme Change icon set from IconMonstr to Typicons
+- [Fix] Fix data settings Admin save() function
+- [Feature] New Admin dashboard
+- [Feature] New Admin settings page
+- [Feature] Theme selector
+- [Fix] Tweak - Remove unused Classes in every PHP files
+
 ## 0.5.0 - 2023-01-22
 - [Feature] Add New Post button in Admin
 - [Feature] Minify HTML Code in production mode
@@ -34,7 +48,6 @@ All notable changes to this publication will be documented in this file.
 - [Fix] Fix social save button bug
 
 ## 0.4.0 - 2022-07-01
-
 - [Feature] Add 15 most used tags list
 - [Feature] Wallet Page
 - [Update] Change Markdown parser
@@ -48,7 +61,6 @@ All notable changes to this publication will be documented in this file.
 - [Fix] Fix invalid request from HiveMind node
 
 ## 0.3.0 - 2022-04-21
-
 - [Feature] Composer auto install
 - [Feature] Dependancies auto install by Composer
 - [Feature] Add Apache2 htaccess files for autoconfig
@@ -57,7 +69,6 @@ All notable changes to this publication will be documented in this file.
 - [Update] Update README
 
 ## 0.2.0 - 2022-02-26
-
 - [Fix] Admin : add images to json_metadata
 - [Fix] Recover wallet icon on admin newPost & newPage
 - [Fix] Remove some whitespaces in admin templates
@@ -69,13 +80,11 @@ All notable changes to this publication will be documented in this file.
 - [Theme] New theme : Classic
 
 ## 0.1.1 - 2021-11-12
-
 - [Fix] Sitemap
 - [Fix] RSS
 - [Update] WCAG & section508 accessibility compliance
 - [Update] Add title to Social networks icons
 
 ## 0.1.0 - 2021-11-03
-
 This is the first production release of SuperHive stand-alone version.
 You can use it on your PHP server (7.4 minimum).
