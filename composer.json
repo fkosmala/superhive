@@ -1,10 +1,14 @@
 {
   "name": "fkosmala/superhive",
   "description": "Generate a full real blog with your HIVE author feed",
-  "type": "project",
-  "keywords": ["hive", "blog", "blockchain", "generator"],
-  "homepage": "https://github.com/fkosmala/superhive",
   "license": "GPL-3.0-only",
+  "type": "project",
+  "keywords": [
+    "hive",
+    "blog",
+    "blockchain",
+    "generator"
+  ],
   "authors": [
     {
       "name": "Florent Kosmala",
@@ -13,38 +17,51 @@
       "role": "Founder & Developer"
     }
   ],
+  "homepage": "https://github.com/fkosmala/superhive",
   "support": {
     "email": "contact@florent-kosmala.fr",
-    "docs": "https://docs.superhive.me/",
     "issues": "https://github.com/fkosmala/superhive/issues",
+    "docs": "https://docs.superhive.me/",
     "rss": "https://blog.superhive.me/feed"
   },
   "require": {
     "php": ">=7.4",
-    "php-di/php-di": "^6.1",
-    "slim/slim": "4.*",
-    "slim/psr7": "^1.0",
-    "slim/twig-view": "^3.0",
-    "league/commonmark": "2.4.x-dev",
-    "hive/hive-php-lib": "dev-main",
     "bryanjhv/slim-session": "~4.0",
     "christianklisch/slim-minify": "^0.7.0",
+    "hive/hive-php-lib": "dev-main",
+    "league/commonmark": "2.4.x-dev",
+    "php-di/php-di": "^6.1",
+    "slim/psr7": "^1.0",
+    "slim/slim": "4.*",
+    "slim/twig-view": "^3.0",
     "zeuxisoo/slim-whoops": "0.7.*"
   },
   "require-dev": {
+    "ergebnis/composer-normalize": "^2.31",
+    "nunomaduro/phpinsights": "^2.8",
     "pds/skeleton": "^1.0",
     "squizlabs/php_codesniffer": "^3.7"
   },
+  "minimum-stability": "stable",
+  "prefer-stable": true,
   "autoload": {
     "psr-4": {
       "App\\": "src/"
     }
   },
-  "scripts": {
-    "start": "php -S localhost:8080 -t public",
-    "psr": ["vendor/bin/phpcs --standard=PSR1,PSR2,PSR12 ./src"],
-    "pds": ["vendor/bin/pds-skeleton validate"]
+  "config": {
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true,
+      "ergebnis/composer-normalize": true
+    }
   },
-  "minimum-stability": "stable",
-  "prefer-stable" : true
+  "scripts": {
+    "pds": [
+      "vendor/bin/pds-skeleton validate"
+    ],
+    "psr": [
+      "vendor/bin/phpcs --standard=PSR1,PSR2,PSR12 ./src"
+    ],
+    "start": "php -S localhost:8080 -t public"
+  }
 }

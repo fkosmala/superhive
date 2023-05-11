@@ -1,29 +1,31 @@
 <?php
 
 /**
- * Admin controller
- *
+ *  * Admin controller
+ *  *
  * The file contains all the functions used in all administration panel.
  * For admin posts function, please go to the Posts Controller
  * For admin pages function, please go to the Pages Controller
  *
- * @category   Controllers
- * @package    SuperHive
- * @author     Florent Kosmala <kosflorent@gmail.com>
- * @license    https://www.gnu.org/licenses/gpl-3.0.txt GPL-3.0
- */
+ *  * @category   Controllers
+ *  * @package    SuperHive
+ *  * @author     Florent Kosmala <kosflorent@gmail.com>
+ *  * @license    https://www.gnu.org/licenses/gpl-3.0.txt GPL-3.0
+ *  */
+
+declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\Controllers\CommonController as Common;
+use Hive\PhpLib\Hive\Condenser as HiveCondenser;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Psr\Container\ContainerInterface;
-use Hive\PhpLib\Hive\Condenser as HiveCondenser;
-use App\Controllers\CommonController as Common;
 
 final class AdminController
 {
-    private $app;
+    private ContainerInterface $app;
 
     /**
      * Admin part contructor
@@ -38,7 +40,7 @@ final class AdminController
         $this->app = $app;
         $genPosts = new Common($this->app);
         $genPosts->genPostsFile();
-        
+
         /*
          *  Check security in session for admin functions
          */
@@ -47,23 +49,22 @@ final class AdminController
         $cred = unserialize(file_get_contents($this->app->get('password')));
         $author = $settings['author'];
         $passwd = $cred[$author];
-        
+
         /* If sessons keys are not set */
-        if ((!isset($session['sh_author'])) || (!isset($session['sh_sign']))) {
-            header("Location: /login");
-            die();
-        } else {
-            /* If session keys are not good */
-            if (($settings['author'] != $session['sh_author']) || ($passwd != $session['sh_sign'])) {
-                header("Location: /login");
-                die();
-            }
+        if (! isset($session['sh_author']) || (! isset($session['sh_sign']))) {
+            header('Location: /login');
+            die;
+        }
+        /* If session keys are not good */
+        if (($settings['author'] !== $session['sh_author']) || ($passwd !== $session['sh_sign'])) {
+            header('Location: /login');
+            die;
         }
     }
 
     /**
-     * Admin index function
-     *
+     *  * Admin index function
+     *  *
      * This function display the admin index with some settings ready to be changed.
      * It call the admin save() functionwhen the button is clicked.
      *
@@ -71,7 +72,7 @@ final class AdminController
      * @param object $response
      *
      * @return object $response
-     */
+     *  */
     public function adminIndex(Request $request, Response $response): Response
     {
         // Create array from config file
@@ -79,15 +80,15 @@ final class AdminController
         $accountFile = $this->app->get('accountfile');
 
         $apiConfig = [
-            "hiveNode" => $settings['api'],
-            "debug" => false
+            'hiveNode' => $settings['api'],
+            'debug' => false,
         ];
         $api = new HiveCondenser($apiConfig);
 
         $cache_interval = 300;
 
         $current_time = time();
-        if ((!file_exists($accountFile)) || ($current_time - filemtime($accountFile) > $cache_interval)) {
+        if ((! file_exists($accountFile)) || ($current_time - filemtime($accountFile) > $cache_interval)) {
             $result = json_encode($api->getAccounts($settings['author']), JSON_PRETTY_PRINT);
             file_put_contents($accountFile, $result);
         }
@@ -96,13 +97,13 @@ final class AdminController
 
         return $this->app->get('view')->render($response, '/admin/admin-index.html', [
             'settings' => $settings,
-            'account' => $account[0]
+            'account' => $account[0],
         ]);
     }
-    
+
     /**
-     * Admin settings function
-     *
+     *  * Admin settings function
+     *  *
      * This function display tthe settings page
      * This page contains every Superhive settings (not plugins settings)..
      *
@@ -110,7 +111,7 @@ final class AdminController
      * @param object $response
      *
      * @return object $response
-     */
+     *  */
     public function adminSettings(Request $request, Response $response): Response
     {
         // Create array from config file
@@ -121,14 +122,14 @@ final class AdminController
 
         $apiConfig = [
             'hiveNode' => $settings['api'],
-            'debug' => false
+            'debug' => false,
         ];
         $api = new HiveCondenser($apiConfig);
 
         $cache_interval = 300;
 
         $current_time = time();
-        if ((!file_exists($accountFile)) || ($current_time - filemtime($accountFile) > $cache_interval)) {
+        if ((! file_exists($accountFile)) || ($current_time - filemtime($accountFile) > $cache_interval)) {
             $result = json_encode($api->getAccounts($settings['author']), JSON_PRETTY_PRINT);
             file_put_contents($accountFile, $result);
         }
@@ -143,20 +144,20 @@ final class AdminController
             'account' => $account[0],
             'themes' => $themes,
             'languages' => $langs,
-            'nodes' => $nodes
+            'nodes' => $nodes,
         ]);
     }
-    
+
     /**
-     * Admin theme function
-     *
+     *  * Admin theme function
+     *  *
      * This function is for the Theme page
      *
      * @param object $request
      * @param object $response
      *
      * @return object $response
-     */
+     *  */
     public function adminThemes(Request $request, Response $response): Response
     {
         // Create array from config file
@@ -165,34 +166,34 @@ final class AdminController
         $themes = array_map('basename', glob($this->app->get('themesdir') . '*', GLOB_ONLYDIR));
         return $this->app->get('view')->render($response, '/admin/admin-themes.html', [
             'settings' => $settings,
-            'themes' => $themes
+            'themes' => $themes,
         ]);
     }
-    
+
     /**
-     * Admin logout function
-     *
+     *  * Admin logout function
+     *  *
      * This function clear ther session, destroy it, and redirect to login page.
      *
      * @param object $request
      * @param object $response
      *
      * @return object $response
-     */
+     *  */
     public function logout(Request $request, Response $response): Response
     {
         $session = $this->app->get('session');
-        
+
         $session->delete('sh_author');
         $session->delete('sh_sign');
         $session::destroy();
-        
+
         return $response->withHeader('Location', '/login')->withStatus(302);
     }
-    
+
     /**
-     * Admin save function
-     *
+     *  * Admin save function
+     *  *
      * This function Take every fields in the form and convert the into a (human-readable))JSON file.
      * the generated file will be save in config folder.
      *
@@ -200,51 +201,51 @@ final class AdminController
      * @param object $response
      *
      * @return object $response
-     */
+     *  */
     public function save(Request $request, Response $response): Response
     {
         $data = $request->getParsedBody();
-        $redirect = $data["redirect"];
+        $redirect = $data['redirect'];
         $settings = $this->app->get('settings');
-        $crosspost = (!isset($data["cross"])) ? $settings["crosspost"] : (bool)$data["cross"];
-        $devMode = (!isset($data["devel"])) ? $settings["devMode"] : (bool)$data["devel"];
-        $api = (!isset($data["api"])) ? $settings["api"] : $data["api"];
-        $displayPosts = (!isset($data["displayedPosts"])) ? $settings["displayedPosts"] : (int)$data["displayedPosts"];
-        $author = (!isset($data["author"])) ? $settings["author"] : $data["author"];
-        $title = (!isset($data["title"])) ? $settings["title"] : $data["title"];
-        $baseline = (!isset($data["baseline"])) ? $settings["baseline"] : $data["baseline"];
-        $displayType = (!isset($data["displayTypes"])) ? $settings["displayType"]['type'] : $data["displayTypes"];
-        $displayedTag = (!isset($data["tag"])) ? $settings["displayType"]['tag'] : $data["tag"];
-        $socialDesc = (!isset($data["socialDesc"])) ? $settings["social"]["description"] : $data["socialDesc"];
-        $socialImage = (!isset($data["socialImage"])) ? $settings["social"]["image"] : $data["socialImage"];
-        $twitter = (!isset($data["twitter"])) ? $settings["social"]["twitter"] : $data["twitter"];
-        $facebook = (!isset($data["facebook"])) ? $settings["social"]["facebook"] : $data["facebook"];
-        $instagram = (!isset($data["instagram"])) ? $settings["social"]["instagram"] : $data["instagram"];
-        $linkedin = (!isset($data["linkedin"])) ? $settings["social"]["linkedin"] : $data["linkedin"];
-        $language = (!isset($data["lang"])) ? $settings["lang"] : $data["lang"];
-        $newSettings = array(
+        $crosspost = ! isset($data['cross']) ? $settings['crosspost'] : (bool) $data['cross'];
+        $devMode = ! isset($data['devel']) ? $settings['devMode'] : (bool) $data['devel'];
+        $api = ! isset($data['api']) ? $settings['api'] : $data['api'];
+        $displayPosts = ! isset($data['displayedPosts']) ? $settings['displayedPosts'] : (int) $data['displayedPosts'];
+        $author = ! isset($data['author']) ? $settings['author'] : $data['author'];
+        $title = ! isset($data['title']) ? $settings['title'] : $data['title'];
+        $baseline = ! isset($data['baseline']) ? $settings['baseline'] : $data['baseline'];
+        $displayType = ! isset($data['displayTypes']) ? $settings['displayType']['type'] : $data['displayTypes'];
+        $displayedTag = ! isset($data['tag']) ? $settings['displayType']['tag'] : $data['tag'];
+        $socialDesc = ! isset($data['socialDesc']) ? $settings['social']['description'] : $data['socialDesc'];
+        $socialImage = ! isset($data['socialImage']) ? $settings['social']['image'] : $data['socialImage'];
+        $twitter = ! isset($data['twitter']) ? $settings['social']['twitter'] : $data['twitter'];
+        $facebook = ! isset($data['facebook']) ? $settings['social']['facebook'] : $data['facebook'];
+        $instagram = ! isset($data['instagram']) ? $settings['social']['instagram'] : $data['instagram'];
+        $linkedin = ! isset($data['linkedin']) ? $settings['social']['linkedin'] : $data['linkedin'];
+        $language = ! isset($data['lang']) ? $settings['lang'] : $data['lang'];
+        $newSettings = [
             'author' => $author,
             'title' => $title,
             'baseline' => $baseline,
-            'displayType' => array(
+            'displayType' => [
                 'type' => $displayType,
                 'tag' => $displayedTag,
-            ),
-            'social' => array(
+            ],
+            'social' => [
                 'description' => $socialDesc,
                 'image' => $socialImage,
                 'twitter' => $twitter,
                 'facebook' => $facebook,
                 'instagram' => $instagram,
-                'linkedin' => $linkedin
-            ),
-            'theme' => $settings["theme"],
+                'linkedin' => $linkedin,
+            ],
+            'theme' => $settings['theme'],
             'lang' => $language,
             'crosspost' => $crosspost,
             'api' => $api,
             'devMode' => $devMode,
-            'displayedPosts' => (int)$displayPosts
-        );
+            'displayedPosts' => (int) $displayPosts,
+        ];
         $file = json_encode($newSettings, JSON_PRETTY_PRINT);
         // Create array from config file
         file_put_contents($this->app->get('configfile'), $file);
@@ -252,28 +253,27 @@ final class AdminController
 
         return $response->withHeader('Location', $redirect)->withStatus(302);
     }
-    
+
     /**
-     * Admin theme save function
-     *
+     *  * Admin theme save function
+     *  *
      * This function is for save the theme into the JSON config file
      *
      * @param object $request
      * @param object $response
-     * @param array $args
+     * @param array<string, string> $args
      *
      * @return object $response
-     */
+     *  */
     public function saveTheme(Request $request, Response $response, array $args): Response
     {
         $settings = $this->app->get('settings');
-        if (!isset($args['theme'])) {
-            return $response->withHeader('Location', '/admin/themes')->withStatus(302);
-        } else {
-            $settings['theme'] = $args['theme'];
-            $file = json_encode($settings, JSON_PRETTY_PRINT);
-            file_put_contents($this->app->get('configfile'), $file);
+        if (! isset($args['theme'])) {
             return $response->withHeader('Location', '/admin/themes')->withStatus(302);
         }
+        $settings['theme'] = $args['theme'];
+        $file = json_encode($settings, JSON_PRETTY_PRINT);
+        file_put_contents($this->app->get('configfile'), $file);
+        return $response->withHeader('Location', '/admin/themes')->withStatus(302);
     }
 }
