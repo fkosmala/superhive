@@ -35,13 +35,11 @@ final class InstallController
      * It will display the page with requirements check, account creation and
      * the form to create password file with encreypted key
      *
-     * @param object $request
      * @param object $response
-     * @param array $args
      *
      * @return object $response
      *  */
-    public function prepare(Request $request, Response $response): Response
+    public function prepare(Response $response): Response
     {
         $requirements = [];
 
@@ -86,7 +84,6 @@ final class InstallController
      *
      * @param object $request
      * @param object $response
-     * @param array $args
      *
      * @return object $response
      *  */

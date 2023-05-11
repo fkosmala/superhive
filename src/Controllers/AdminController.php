@@ -68,12 +68,11 @@ final class AdminController
      * This function display the admin index with some settings ready to be changed.
      * It call the admin save() functionwhen the button is clicked.
      *
-     * @param object $request
      * @param object $response
      *
      * @return object $response
      *  */
-    public function adminIndex(Request $request, Response $response): Response
+    public function adminIndex(Response $response): Response
     {
         // Create array from config file
         $settings = $this->app->get('settings');
@@ -107,12 +106,11 @@ final class AdminController
      * This function display tthe settings page
      * This page contains every Superhive settings (not plugins settings)..
      *
-     * @param object $request
      * @param object $response
      *
      * @return object $response
      *  */
-    public function adminSettings(Request $request, Response $response): Response
+    public function adminSettings(Response $response): Response
     {
         // Create array from config file
         $settings = $this->app->get('settings');
@@ -153,12 +151,11 @@ final class AdminController
      *  *
      * This function is for the Theme page
      *
-     * @param object $request
      * @param object $response
      *
      * @return object $response
      *  */
-    public function adminThemes(Request $request, Response $response): Response
+    public function adminThemes(Response $response): Response
     {
         // Create array from config file
         $settings = $this->app->get('settings');
@@ -175,12 +172,11 @@ final class AdminController
      *  *
      * This function clear ther session, destroy it, and redirect to login page.
      *
-     * @param object $request
      * @param object $response
      *
      * @return object $response
      *  */
-    public function logout(Request $request, Response $response): Response
+    public function logout(Response $response): Response
     {
         $session = $this->app->get('session');
 
@@ -259,19 +255,18 @@ final class AdminController
      *  *
      * This function is for save the theme into the JSON config file
      *
-     * @param object $request
+     * @param string $theme
      * @param object $response
-     * @param array<string, string> $args
      *
      * @return object $response
      *  */
-    public function saveTheme(Request $request, Response $response, array $args): Response
+    public function saveTheme(string $theme, Response $response): Response
     {
         $settings = $this->app->get('settings');
-        if (! isset($args['theme'])) {
+        if (! isset($theme)) {
             return $response->withHeader('Location', '/admin/themes')->withStatus(302);
         }
-        $settings['theme'] = $args['theme'];
+        $settings['theme'] = $theme;
         $file = json_encode($settings, JSON_PRETTY_PRINT);
         file_put_contents($this->app->get('configfile'), $file);
         return $response->withHeader('Location', '/admin/themes')->withStatus(302);

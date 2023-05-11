@@ -44,13 +44,11 @@ final class HomeController
      * It ocntians also the function to generate the blog.json file with all posts informations.
      * All the posts must be converted from MarkDown to HTML before display.
      *
-     * @param object $request
      * @param object $response
-     * @param array  $args
      *
      * @return object $response
      *  */
-    public function index(Request $request, Response $response): Response
+    public function index(Response $response): Response
     {
         $settings = $this->settings;
 
@@ -100,7 +98,6 @@ final class HomeController
      *
      * @param object $request
      * @param object $response
-     * @param array  $args
      *
      * @return object $response
      *  */
@@ -164,11 +161,10 @@ final class HomeController
      *
      * @param object $request
      * @param object $response
-     * @param array  $args
      *
      * @return object $response
      *  */
-    public function login(Request $request, Response $response): Response
+    public function login(Response $response): Response
     {
         $settings = $this->settings;
 
@@ -186,7 +182,6 @@ final class HomeController
      *
      * @param object $request
      * @param object $response
-     * @param array  $args
      *
      * @return object $response
      *  */
@@ -221,13 +216,11 @@ final class HomeController
      *
      * Generate the RSS feed of account's posts
      *
-     * @param object $request
      * @param object $response
-     * @param array  $args
      *
      * @return object $response
      */
-    public function feed(Request $request, Response $response): Response
+    public function feed(Response $response): Response
     {
         $settings = $this->settings;
 
@@ -246,13 +239,11 @@ final class HomeController
      *  *
      * Generate the Sitemap with all posts links.
      *
-     * @param object $request
      * @param object $response
-     * @param array  $args
      *
      * @return object $response
      *  */
-    public function sitemap(Request $request, Response $response): Response
+    public function sitemap(Response $response): Response
     {
         $settings = $this->settings;
 
@@ -283,13 +274,11 @@ final class HomeController
      *  *
      * Generate the about page with account information.
      *
-     * @param object $request
      * @param object $response
-     * @param array $args
      *
      * @return object $response
      *  */
-    public function about(Request $request, Response $response): Response
+    public function about(Response $response): Response
     {
         $settings = $this->settings;
         $accountFile = $this->app->get('accountfile');

@@ -21,7 +21,6 @@ use Hive\PhpLib\Hive\Condenser as HiveCondenser;
 use League\CommonMark\CommonMarkConverter;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
 
 final class PostsController
 {
@@ -40,13 +39,12 @@ final class PostsController
      * This function display the selected post in the blog.json (from Blockchain).
      * It also take all comments to display them in the end of post
      *
-     * @param object $request
+     * @param string $permlink
      * @param object $response
-     * @param array<string, string> $args
      *
      * @return object $response
      *  */
-    public function post(Request $request, Response $response, array $args): Response
+    public function post(string $permlink, Response $response): Response
     {
         $settings = $this->app->get('settings');
 
@@ -55,9 +53,7 @@ final class PostsController
             'debug' => false,
         ];
 
-        if (isset($args['permlink'])) {
-            $permlink = $args['permlink'];
-
+        if (isset($permlink)) {
             $converter = new CommonMarkConverter();
             $parsedReplies = [];
 
@@ -101,16 +97,16 @@ final class PostsController
      * This function display the selected post in the blog.json (from Blockchain).
      * It also take all comments to display them in the end of post
      *
+     * @param string $tag
      * @param object $request
      * @param object $response
      * @param array<string, string> $args
      *
      * @return object $response
      *  */
-    public function tag(Request $request, Response $response, array $args): Response
+    public function tag(string $tag, Response $response): Response
     {
         $settings = $this->app->get('settings');
-        $tag = $args['tag'];
         $posts = [];
         $result = [];
 
@@ -152,12 +148,11 @@ final class PostsController
      * This function display the post page in admin panel.
      * Contains every posts in blog.json file (from blockchain)
      *
-     * @param object $request
      * @param object $response
      *
      * @return object $response
      *  */
-    public function adminPosts(Request $request, Response $response): Response
+    public function adminPosts(Response $response): Response
     {
         $settings = $this->app->get('settings');
 
@@ -175,12 +170,11 @@ final class PostsController
      *  *
      * This function just display the new post page to write and send post.
      *
-     * @param object $request
      * @param object $response
      *
      * @return object $response
      *  */
-    public function adminNewPost(Request $request, Response $response): Response
+    public function adminNewPost(Response $response): Response
     {
         $settings = $this->app->get('settings');
 
@@ -194,16 +188,13 @@ final class PostsController
      *  *
      * Same as adminNewPost but with already written content from an old post.
      *
-     * @param object $request
+     * @param string $posted
      * @param object $response
-     * @param array<string, string> $args
      *
      * @return object $response
      *  */
-    public function adminEditPost(Request $request, Response $response, array $args): Response
+    public function adminEditPost(string $posted, Response $response): Response
     {
-        $posted = $args['post'];
-
         $file = $this->app->get('blogfile');
         $settings = $this->app->get('settings');
 

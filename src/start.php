@@ -10,10 +10,10 @@ use App\Controllers\InstallController;
 use App\Controllers\PagesController;
 use App\Controllers\PostsController;
 use App\Controllers\WalletController;
+use DI\Bridge\Slim\Bridge;
 use DI\Container;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
-use Slim\Factory\AppFactory;
 use Slim\Routing\RouteCollectorProxy;
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
@@ -102,7 +102,7 @@ if ((! file_exists($container->get('cachedir'))) && ($settings['devMode'] === fa
 }
 
 // Set container in App factory
-AppFactory::setContainer($container);
+//AppFactory::setContainer($container);
 
 // Set Twig engine for templating
 $container->set('view', static function () {
@@ -135,7 +135,8 @@ $container->set('session', static function () {
 });
 
 // Create App
-$app = AppFactory::create();
+//$app = AppFactory::create();
+$app = Bridge::create($container);
 $app->add(TwigMiddleware::createFromContainer($app));
 
 // Add Error Middleware on DevMode
@@ -184,7 +185,7 @@ $app->get('/sitemap', HomeController::class . ':sitemap')->setName('sitemap');
 // Admin routes
 $app->get('/login', HomeController::class . ':login')->setName('login');
 $app->post('/login', HomeController::class . ':loginPost')->setName('login-post');
-$app->group('/admin', function (RouteCollectorProxy $group): void {
+$app->group('/admin', static function (RouteCollectorProxy $group): void {
     $group->get('', AdminController::class . ':adminIndex')->setName('admin');
 
     $group->get('/settings', AdminController::class . ':adminSettings')->setName('admin-settings');
@@ -195,7 +196,7 @@ $app->group('/admin', function (RouteCollectorProxy $group): void {
 
     $group->get('/posts', PostsController::class . ':adminPosts')->setName('admin-posts');
     $group->get('/newpost', PostsController::class . ':adminNewPost')->setName('admin-newpost');
-    $group->get('/editpost/{post}', PostsController::class . ':adminEditPost')->setName('admin-editpost');
+    $group->get('/editpost/{posted}', PostsController::class . ':adminEditPost')->setName('admin-editpost');
 
     $group->get('/pages', PagesController::class . ':adminPages')->setName('admin-pages');
     $group->get('/newpage', PagesController::class . ':adminNewPage')->setName('admin-newpage');
@@ -208,8 +209,9 @@ $app->group('/admin', function (RouteCollectorProxy $group): void {
 });
 
 // generate routes from static pages
-$app->group('/pages/', function (RouteCollectorProxy $group): void {
-    $pagesDir = $this->get('pagesdir');
+/*$app->group('/pages/', function (RouteCollectorProxy $group) {
+    print_r($app);
+    $pagesDir = $group->container->get('pagesdir');
     $pages = preg_grep('~\.(html)$~', scandir($pagesDir));
     foreach ($pages as $page) {
         $route = substr($page, 0, strrpos($page, '.'));
@@ -222,6 +224,6 @@ $app->group('/pages/', function (RouteCollectorProxy $group): void {
             ]);
         })->setName($route);
     }
-});
+});*/
 
 return $app;

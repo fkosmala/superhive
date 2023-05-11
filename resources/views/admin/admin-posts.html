@@ -13,7 +13,7 @@
 <ul>
 {% for post in posts %}
 {% if post.author == settings.author %}
-	<li><a href="{{ url_for('admin-editpost', {post : post.permlink}) }}">{{ post.title }}</a></li>
+	<li><a href="{{ url_for('admin-editpost', {posted : post.permlink}) }}">{{ post.title }}</a></li>
 {% endif %}
 {% endfor %}
 </ul>

@@ -20,7 +20,6 @@ use Hive\PhpLib\Hive\Condenser as HiveCondenser;
 use Hive\PhpLib\HiveEngine\Account as HeAccount;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
 
 final class WalletController
 {
@@ -39,13 +38,11 @@ final class WalletController
      *
      * @since available since Realease 0.4.0
      *
-     * @param object $request
      * @param object $response
-     * @param array $args
      *
      * @return object $response
      *  */
-    public function viewWallet(Request $request, Response $response): Response
+    public function viewWallet(Response $response): Response
     {
         $settings = $this->app->get('settings');
         $accountFile = $this->app->get('accountfile');

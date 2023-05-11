@@ -34,12 +34,11 @@ final class PagesController
      *  *
      * This function display the already written pages and a button to create one.
      *
-     * @param object $request
      * @param object $response
      *
      * @return object $response
      *  */
-    public function adminPages(Request $request, Response $response): Response
+    public function adminPages(Response $response): Response
     {
         $pagesDir = $this->app->get('pagesdir');
         $settings = $this->app->get('settings');
@@ -61,12 +60,11 @@ final class PagesController
      *  *
      * This function just display editor to write new page.
      *
-     * @param object $request
      * @param object $response
      *
      * @return object $response
      *  */
-    public function adminNewPage(Request $request, Response $response): Response
+    public function adminNewPage(Response $response): Response
     {
         $settings = $this->app->get('settings');
 
@@ -80,15 +78,13 @@ final class PagesController
      *  *
      * Same as adminNewPage but with already written content from already written page.
      *
-     * @param object $request
+     * @param string $file
      * @param object $response
-     * @param array<string, string> $args
      *
      * @return object $response
      *  */
-    public function adminEditPage(Request $request, Response $response, array $args): Response
+    public function adminEditPage(string $file, Response $response): Response
     {
-        $file = $args['file'];
         $pageTitle = [];
 
         $pagesDir = $this->app->get('pagesdir');
@@ -114,18 +110,16 @@ final class PagesController
      *  *
      * called to delete fpage and return to administration Pages section
      *
-     * @param object $request
+     * @param string $file
      * @param object $response
      * @param array<string, string> $args
      *
      * @return object $response
      *  */
-    public function adminDelPage(Request $request, Response $response, array $args): Response
+    public function adminDelPage(string $file, Response $response): Response
     {
-        $name = $args['file'];
-
+        $name = $file;
         $pagesDir = $this->app->get('pagesdir');
-
         $filePath = $pagesDir . $name . '.html';
 
         if (unlink($filePath)) {
