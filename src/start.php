@@ -209,10 +209,10 @@ $app->group('/admin', static function (RouteCollectorProxy $group): void {
 });
 
 // generate routes from static pages
-/*$app->group('/pages/', function (RouteCollectorProxy $group) {
-    print_r($app);
-    $pagesDir = $group->container->get('pagesdir');
-    $pages = preg_grep('~\.(html)$~', scandir($pagesDir));
+$app->group("/pages", function (RouteCollectorProxy $group) {
+    
+    //$pagesDir = $this->get('pagesdir');
+    $pages = preg_grep('~\.(html)$~', scandir(__DIR__ . '/../resources/blog/pages/'));
     foreach ($pages as $page) {
         $route = substr($page, 0, strrpos($page, '.'));
         $group->get('' . $route, function ($request, $response) {
@@ -224,6 +224,6 @@ $app->group('/admin', static function (RouteCollectorProxy $group): void {
             ]);
         })->setName($route);
     }
-});*/
+});
 
 return $app;
