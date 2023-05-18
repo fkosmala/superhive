@@ -89,7 +89,7 @@ final class InstallController
      *  */
     public function install(Request $request, Response $response): Response
     {
-        if (! file_exists($this->app->get('password'))) {
+        if (!file_exists($this->app->get('password'))) {
             $data = $request->getParsedBody();
             // Create password file with  username and password (signed msg))
             $cred = [$data['username'] => $data['passwd']];

@@ -41,7 +41,7 @@ $container->set('pagesdir', __DIR__ . '/../resources/blog/pages/');
 $container->set('themesdir', __DIR__ . '/../public/themes/');
 
 // Set settings array in container for use in all routes
-$container->set('settings', static function () {
+$container->set('settings', static function() {
     $config = file_get_contents(__DIR__ . '/../config/config.json');
     return json_decode($config, true);
 });
@@ -50,34 +50,34 @@ $settings = $container->get('settings');
 
 // Rename config.sample.json to config.json
 $confDir = $container->get('configdir');
-if ((file_exists($confDir . 'config.sample.json')) && (! file_exists($confDir . 'config.json'))) {
+if ((file_exists($confDir . 'config.sample.json')) && (!file_exists($confDir . 'config.json'))) {
     rename($confDir . 'config.sample.json', $confDir . 'config.json');
 }
 
 // Create folders that doesn't exist
 
 // Plugins Dir
-if (! file_exists($container->get('pluginsdir'))) {
+if (!file_exists($container->get('pluginsdir'))) {
     mkdir($container->get('pluginsdir'), 0755, true);
 }
 
 // Pages Dir
-if (! file_exists($container->get('pagesdir'))) {
+if (!file_exists($container->get('pagesdir'))) {
     mkdir($container->get('pagesdir'), 0755, true);
 }
 
 // Data dir (to store blockchain data)
-if (! file_exists($container->get('datadir'))) {
+if (!file_exists($container->get('datadir'))) {
     mkdir($container->get('datadir'), 0755, true);
 }
 
 // Comments
-if (! file_exists($container->get('commentsdir'))) {
+if (!file_exists($container->get('commentsdir'))) {
     mkdir($container->get('commentsdir'), 0755, true);
 }
 
 // Create Cache dir only in Production mode
-if ((! file_exists($container->get('cachedir'))) && ($settings['devMode'] === false)) {
+if ((!file_exists($container->get('cachedir'))) && ($settings['devMode'] === false)) {
     mkdir($container->get('cachedir'), 0755, true);
 } else {
     // Flush Cache folder if disabled
@@ -105,7 +105,7 @@ if ((! file_exists($container->get('cachedir'))) && ($settings['devMode'] === fa
 //AppFactory::setContainer($container);
 
 // Set Twig engine for templating
-$container->set('view', static function () {
+$container->set('view', static function() {
     $settings = json_decode(file_get_contents(__DIR__ . '/../config/config.json'), true);
     $tpls = [
         __DIR__ . '/../resources/views/',
@@ -130,7 +130,7 @@ $container->set('view', static function () {
 });
 
 //Set Session engine
-$container->set('session', static function () {
+$container->set('session', static function() {
     return new \SlimSession\Helper();
 });
 
@@ -161,7 +161,7 @@ $link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'htt
 $actualLink = $link . "{$_SERVER['REQUEST_URI']}";
 $installLink = $link . '/prepare';
 
-if ((! file_exists($container->get('password'))) && ($actualLink !== $installLink)) {
+if ((!file_exists($container->get('password'))) && ($actualLink !== $installLink)) {
     header('Location: ' . $installLink);
     exit;
 }
@@ -185,7 +185,7 @@ $app->get('/sitemap', HomeController::class . ':sitemap')->setName('sitemap');
 // Admin routes
 $app->get('/login', HomeController::class . ':login')->setName('login');
 $app->post('/login', HomeController::class . ':loginPost')->setName('login-post');
-$app->group('/admin', static function (RouteCollectorProxy $group): void {
+$app->group('/admin', static function(RouteCollectorProxy $group): void {
     $group->get('', AdminController::class . ':adminIndex')->setName('admin');
 
     $group->get('/settings', AdminController::class . ':adminSettings')->setName('admin-settings');
@@ -209,13 +209,13 @@ $app->group('/admin', static function (RouteCollectorProxy $group): void {
 });
 
 // generate routes from static pages
-$app->group("/pages", function (RouteCollectorProxy $group) {
+$app->group("/pages", function(RouteCollectorProxy $group) {
     
     //$pagesDir = $this->get('pagesdir');
     $pages = preg_grep('~\.(html)$~', scandir(__DIR__ . '/../resources/blog/pages/'));
     foreach ($pages as $page) {
         $route = substr($page, 0, strrpos($page, '.'));
-        $group->get('' . $route, function ($request, $response) {
+        $group->get('' . $route, function($request, $response) {
             $settings = $this->get('settings');
             $uri = $request->getUri();
             $route = substr(strrchr($uri, '/'), 1);
