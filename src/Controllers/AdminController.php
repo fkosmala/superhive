@@ -33,7 +33,7 @@ final class AdminController
      * This constructor is not the same as other controllers.
      * Administration need  to control if session exists with good account & encrypted key.
      *
-     * @param object $app
+     * @param \Psr\Container\ContainerInterface $app
      */
     public function __construct(ContainerInterface $app)
     {
@@ -68,9 +68,9 @@ final class AdminController
      * This function display the admin index with some settings ready to be changed.
      * It call the admin save() functionwhen the button is clicked.
      *
-     * @param object $response
+     * @param \Psr\Http\Message\ResponseInterface $response
      *
-     * @return object $response
+     * @return \Psr\Http\Message\ResponseInterface $response
      *  */
     public function adminIndex(Response $response): Response
     {
@@ -106,9 +106,9 @@ final class AdminController
      * This function display tthe settings page
      * This page contains every Superhive settings (not plugins settings)..
      *
-     * @param object $response
+     * @param \Psr\Http\Message\ResponseInterface $response
      *
-     * @return object $response
+     * @return \Psr\Http\Message\ResponseInterface $response
      *  */
     public function adminSettings(Response $response): Response
     {
@@ -151,9 +151,9 @@ final class AdminController
      *  *
      * This function is for the Theme page
      *
-     * @param object $response
+     * @param \Psr\Http\Message\ResponseInterface $response
      *
-     * @return object $response
+     * @return \Psr\Http\Message\ResponseInterface $response
      *  */
     public function adminThemes(Response $response): Response
     {
@@ -172,9 +172,9 @@ final class AdminController
      *  *
      * This function clear ther session, destroy it, and redirect to login page.
      *
-     * @param object $response
+     * @param \Psr\Http\Message\ResponseInterface $response
      *
-     * @return object $response
+     * @return \Psr\Http\Message\ResponseInterface $response
      *  */
     public function logout(Response $response): Response
     {
@@ -193,15 +193,17 @@ final class AdminController
      * This function Take every fields in the form and convert the into a (human-readable))JSON file.
      * the generated file will be save in config folder.
      *
-     * @param object $request
-     * @param object $response
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Psr\Http\Message\ResponseInterface $response
      *
-     * @return object $response
+     * @return \Psr\Http\Message\ResponseInterface $response
      *  */
     public function save(Request $request, Response $response): Response
     {
         $data = $request->getParsedBody();
-        $redirect = $data['redirect'];
+        if (isset($data['redirect'])) {
+            $redirect = $data['redirect'];
+        } else $redirect = '/admin/';
         $settings = $this->app->get('settings');
         $crosspost = ! isset($data['cross']) ? $settings['crosspost'] : (bool) $data['cross'];
         $devMode = ! isset($data['devel']) ? $settings['devMode'] : (bool) $data['devel'];
@@ -256,16 +258,13 @@ final class AdminController
      * This function is for save the theme into the JSON config file
      *
      * @param string $theme
-     * @param object $response
+     * @param \Psr\Http\Message\ResponseInterface $response
      *
-     * @return object $response
+     * @return \Psr\Http\Message\ResponseInterface $response
      *  */
     public function saveTheme(string $theme, Response $response): Response
     {
         $settings = $this->app->get('settings');
-        if (! isset($theme)) {
-            return $response->withHeader('Location', '/admin/themes')->withStatus(302);
-        }
         $settings['theme'] = $theme;
         $file = json_encode($settings, JSON_PRETTY_PRINT);
         file_put_contents($this->app->get('configfile'), $file);
