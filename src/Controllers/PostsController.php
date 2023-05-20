@@ -40,10 +40,8 @@ final class PostsController
      * It also take all comments to display them in the end of post
      *
      * @param string $permlink
-     * @param object $response
-     *
-     * @return object $response
-     *  */
+     * @param Response $response
+     */
     public function post(string $permlink, Response $response): Response
     {
         $settings = $this->app->get('settings');
@@ -99,11 +97,9 @@ final class PostsController
      *
      * @param string $tag
      * @param object $request
-     * @param object $response
+     * @param Response $response
      * @param array<string, string> $args
-     *
-     * @return object $response
-     *  */
+     */
     public function tag(string $tag, Response $response): Response
     {
         $settings = $this->app->get('settings');
@@ -148,10 +144,8 @@ final class PostsController
      * This function display the post page in admin panel.
      * Contains every posts in blog.json file (from blockchain)
      *
-     * @param object $response
-     *
-     * @return object $response
-     *  */
+     * @param Response $response
+     */
     public function adminPosts(Response $response): Response
     {
         $settings = $this->app->get('settings');
@@ -170,10 +164,8 @@ final class PostsController
      *  *
      * This function just display the new post page to write and send post.
      *
-     * @param object $response
-     *
-     * @return object $response
-     *  */
+     * @param Response $response
+     */
     public function adminNewPost(Response $response): Response
     {
         $settings = $this->app->get('settings');
@@ -189,10 +181,8 @@ final class PostsController
      * Same as adminNewPost but with already written content from an old post.
      *
      * @param string $posted
-     * @param object $response
-     *
-     * @return object $response
-     *  */
+     * @param Response $response
+     */
     public function adminEditPost(string $posted, Response $response): Response
     {
         $file = $this->app->get('blogfile');

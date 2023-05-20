@@ -35,10 +35,8 @@ final class InstallController
      * It will display the page with requirements check, account creation and
      * the form to create password file with encreypted key
      *
-     * @param object $response
-     *
-     * @return object $response
-     *  */
+     * @param Response $response
+     */
     public function prepare(Response $response): Response
     {
         $requirements = [];
@@ -82,11 +80,9 @@ final class InstallController
      *  *
      * This function dis called after the prepare function to generate the file and store it in ocnfig folder.
      *
-     * @param object $request
-     * @param object $response
-     *
-     * @return object $response
-     *  */
+     * @param Request $request
+     * @param Response $response
+     */
     public function install(Request $request, Response $response): Response
     {
         if (!file_exists($this->app->get('password'))) {

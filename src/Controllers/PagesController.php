@@ -34,10 +34,8 @@ final class PagesController
      *  *
      * This function display the already written pages and a button to create one.
      *
-     * @param object $response
-     *
-     * @return object $response
-     *  */
+     * @param Response $response
+     */
     public function adminPages(Response $response): Response
     {
         $pagesDir = $this->app->get('pagesdir');
@@ -60,10 +58,8 @@ final class PagesController
      *  *
      * This function just display editor to write new page.
      *
-     * @param object $response
-     *
-     * @return object $response
-     *  */
+     * @param Response $response
+     */
     public function adminNewPage(Response $response): Response
     {
         $settings = $this->app->get('settings');
@@ -79,10 +75,8 @@ final class PagesController
      * Same as adminNewPage but with already written content from already written page.
      *
      * @param string $file
-     * @param object $response
-     *
-     * @return object $response
-     *  */
+     * @param Response $response
+     */
     public function adminEditPage(string $file, Response $response): Response
     {
         $pageTitle = [];
@@ -111,11 +105,9 @@ final class PagesController
      * called to delete fpage and return to administration Pages section
      *
      * @param string $file
-     * @param object $response
+     * @param Response $response
      * @param array<string, string> $args
-     *
-     * @return object $response
-     *  */
+     */
     public function adminDelPage(string $file, Response $response): Response
     {
         $name = $file;
@@ -136,11 +128,9 @@ final class PagesController
      *  *
      * Used to generate slug, html code and save page in file.
      *
-     * @param object $request
-     * @param object $response
-     *
-     * @return object $response
-     *  */
+     * @param Request $request
+     * @param Response $response
+     */
     public function adminSavePage(Request $request, Response $response): Response
     {
         $data = $request->getParsedBody();

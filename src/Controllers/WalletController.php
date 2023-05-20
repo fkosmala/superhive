@@ -38,10 +38,8 @@ final class WalletController
      *
      * @since available since Realease 0.4.0
      *
-     * @param object $response
-     *
-     * @return object $response
-     *  */
+     * @param Response $response
+     */
     public function viewWallet(Response $response): Response
     {
         $settings = $this->app->get('settings');
