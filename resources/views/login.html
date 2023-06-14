@@ -1,12 +1,12 @@
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
 
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>SuperHive - Login</title>
-    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+    <link rel="stylesheet" href="/css/pico.min.css">
     <style>
 		body > main {
 		  display: flex;
@@ -62,9 +62,8 @@
         <div>
           <hgroup>
             <h1>SuperHive Login</h1>
-            <h2>Enter the account name and click "Login button"</h2>
           </hgroup>
-            <input type="text" name="account" id="account" placeholder="Login" aria-label="Login" required>
+            <input type="text" name="account" id="account" placeholder="Hive account name" aria-label="Login" required>
             <button id="signMessage">Login with Hive Keychain</button>
             <p id="signEvent"></p>
         </div>

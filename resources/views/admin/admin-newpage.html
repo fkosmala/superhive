@@ -7,37 +7,49 @@
     .editor-toolbar > button {
         width: 30px !important;
     }
+
+    button {width: 100%;}
+
+    #results {
+        padding: 2%;
+        text-align: center;
+        font-weight: bolder;
+    }
 </style>
 {% endblock %}
 
 {% block content %}
-<h3>New Page</h3>
+<h1>New Page</h1>
 
-<label for="pageTitle">Title</label>
-<input name="pageTitle" id="pageTitle" type="text" placeholder="Make a great title for this page :)" {% if pageTitle %}value="{{ pageTitle }}"{% endif %}>
+<article>
+    <h2>
+        <label for="pageTitle">Title</label>
+    </h2>
+    <input name="pageTitle" id="pageTitle" type="text" placeholder="Make a great title for this page :)" {% if pageTitle %}value="{{ pageTitle }}"{% endif %}>
+</article>
 
 <article class="lightning" data-theme="light">
 	<textarea id="mde" name="mde">{% if pageContent %}{{ pageContent }}{% endif %}</textarea>
 </article>
 
-<div id="results" class="w-full text-center">
+<article class="actions">
+    <div id="results" class="w-full text-center">
 
-{% if pageContent %}
-<div class="grid">
-	<button id="pageDelete">Delete</button>
-	<button id="pageCreate">Update</button>
-</div>
-{% else %}
-<div>
-	<button id="pageCreate">Create</button>
-</div>
-{% endif %}
-
-			</div>
-		</div>
-	</div>
-
-</div>
+    {% if pageContent %}
+    <div class="grid">
+        <div>
+            <button id="pageDelete">Delete</button>
+        </div>
+        <div>
+            <button id="pageCreate">Update</button>
+        </div>
+    </div>
+    {% else %}
+    <div>
+        <button id="pageCreate">Create</button>
+    </div>
+    {% endif %}
+</article>
 {% endblock %}
 
 {% block scripts %}
@@ -51,6 +63,7 @@
 	$(function() {
         $('#pageCreate').on('click tap', function(event) {
             event.preventDefault();
+            $('#results').html('<progress />');
             var title = $('#pageTitle').val();
             var mde = easyMDE.value();
             $.post(

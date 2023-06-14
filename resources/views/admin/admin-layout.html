@@ -4,19 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Administration dashboard</title>
-  <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+  <link rel="stylesheet" href="/css/pico.min.css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-  {% block styles %}{% endblock %}
+  <style>button {width: 100%;margin:1% 0;}</style>
+  {% block styles %}
+  {% endblock %}
 </head>
 
 <body>
-
   <nav class="container-fluid">
     <ul>
       <li>
-        <details role="list" dir="ltr">
-          <summary aria-haspopup="listbox" role="link" class="secondary">Menu</summary>
-          <ul role="listbox">
+        <details class="dropdown">
+          <summary>Menu</summary>
+          <ul>
             <li><a href="{{ url_for('admin') }}"><i class="fas fa-home fa-fw"></i> Dashboard</a></li>
             <li><a href="{{ url_for('admin-posts') }}"><i class="fas fa-paste fa-fw"></i> Posts</a></li>
             <li><a href="{{ url_for('admin-pages') }}"><i class="fas fa-file-alt fa-fw"></i> Pages</a></li>
@@ -34,9 +35,9 @@
     </ul>
   </nav>
 
-  <div class="container">
+  <main class="container">
     {% block content %}{% endblock %}
-  </div>
+  </main>
 
 
 <footer class="container">

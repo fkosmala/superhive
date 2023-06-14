@@ -40,6 +40,12 @@ $container->set('pagesdir', __DIR__ . '/../resources/blog/pages/');
 
 $container->set('themesdir', __DIR__ . '/../public/themes/');
 
+// Rename config.sample.json to config.json
+$confDir =  __DIR__ . '/../config/';
+if ((file_exists($confDir . 'config.sample.json')) && (!file_exists($confDir . 'config.json'))) {
+    rename($confDir . 'config.sample.json', $confDir . 'config.json');
+}
+
 // Set settings array in container for use in all routes
 $container->set('settings', static function() {
     $config = file_get_contents(__DIR__ . '/../config/config.json');
@@ -47,12 +53,6 @@ $container->set('settings', static function() {
 });
 
 $settings = $container->get('settings');
-
-// Rename config.sample.json to config.json
-$confDir = $container->get('configdir');
-if ((file_exists($confDir . 'config.sample.json')) && (!file_exists($confDir . 'config.json'))) {
-    rename($confDir . 'config.sample.json', $confDir . 'config.json');
-}
 
 // Create folders that doesn't exist
 

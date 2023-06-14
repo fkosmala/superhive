@@ -4,60 +4,95 @@
 <link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
 <style media="screen">
 	.lightning button{color:black;}
+	#actions button {width: 80%;margin: 0 10%;}
+	.post {padding: 1%;}
 	.upload-area{
-		  width: 100%;
-		  height: 150px;
+		  width: auto;
 		  text-align:center;
-		  border: 2px solid;
-		  padding: 2%;
-  }
-  .editor-toolbar > button {
-      width: 30px !important;
-  }
+		  border: 2px dashed;
+		  padding: 1%;
+		  margin: 1% 20%;
+ 	 }
+	.editor-toolbar > button {width: 30px !important;}
+	.options article {
+		padding: 3%;
+		margin-bottom: 2%;
+	}
+	#results {
+		padding: 2%;
+		text-align: center;
+		font-weight: bolder;
+	}
 </style>
 {% endblock %}
 
 {% block content %}
-<h3>New Post</h3>
+<h1>New Post</h1>
 <p>Don't forget : this post will be posted on Blockchain and cannot be deleted (but you can edit it)</p>
+
 {% if 'hive-' in settings.author %}
-<label for="postTitle">HIVE account</label>
-<input name="postAuthor" id="postAuthor" type="text" placeholder="Enter your HIVE author account">
+<article>
+	<label for="postTitle">HIVE account</label>
+	<input name="postAuthor" id="postAuthor" type="text" placeholder="Enter your HIVE author account">
+</article>
 {% else %}
 <input id="postAuthor" type="hidden" value="{{ settings.author }}">
 {% endif %}
 
-<label for="postTitle">Title</label>
-<input name="postTitle" id="postTitle" type="text" placeholder="Make a great title for this post :)" {% if postTitle %}value="{{ postTitle }}"{% endif %}>
+<section class="grid options">
+	<article>
+		<h2>
+			<label for="postTitle">Title</label>
+		</h2>
+		<input name="postTitle" id="postTitle" type="text" placeholder="Make a great title for this post :)" {% if postTitle %}value="{{ postTitle }}"{% endif %}>
+	</article>
 
-<div class="upload-area">
-	<p id="uplText">Drag and Drop image here / Click to select image</p>
-</div>
-<input type="file" name="imgupload" id="imgupload" style="display:none"/>
+	<article>
+		<h2>
+			<label for="postTags">Tags</label>
+		</h2>
+		{% if postTags %}
+		<span id="tag1">{{ postTags[0] }}</span> <input name="postTags" id="postTags" type="text" placeholder="Find some tags" value="{% for tag in postTags %}{% if loop.index > 1 %}{{ tag }} {% endif %}{% endfor %}">
+		{% else %}
+		<input name="postTags" id="postTags" type="text" placeholder="Find some tags">
+		{% endif %}
+		<small>Tags MUST be separated by spaces</small>
+	</article>
+</section>
 
-<article class="lightning" data-theme="light">
-	<textarea id="mde" name="mde">{% if postContent %}{{ postContent }}{% endif %}</textarea>
+<section>
+	<article class="lightning">
+		<h2>
+			Post
+		</h2>
+		<div class="upload-area">
+			<p><span class="fas fa-images fa-5x"></span></p>
+			<p id="uplText">Drag and Drop image here / Click to select image</p>
+		</div>
+		<input type="file" name="imgupload" id="imgupload" style="display:none"/>
+		<article class="post" data-theme="light">
+			<textarea id="mde" name="mde">{% if postContent %}{{ postContent }}{% endif %}</textarea>
+		</article>
+	</article>
+</section>
+
+
+<article>
+	<h2>Send</h2>
+	<p>If you're okay with your content, just press the button to save the post</p>
+
+	<div id="results"></div>
+
+	{% if postContent %}
+	<div id="actions">
+		<button id="postUpdate">Update</button>
+	</div>
+	{% else %}
+	<div id="actions">
+		<button id="postCreate">Create</button>
+	</div>
+	{% endif %}
 </article>
-
-
-<label for="postTags">Tags (separated by space)</label>
-{% if postTags %}
-<span id="tag1">{{ postTags[0] }}</span> <input name="postTags" id="postTags" type="text" placeholder="Find some tags" value="{% for tag in postTags %}{% if loop.index > 1 %}{{ tag }} {% endif %}{% endfor %}">
-{% else %}
-<input name="postTags" id="postTags" type="text" placeholder="Find some tags">
-{% endif %}
-
-<div id="results"></div>
-
-{% if postContent %}
-<div id="actions">
-	<button id="postUpdate">Update</button>
-</div>
-{% else %}
-<div id="actions">
-	<button id="postCreate">Create</button>
-</div>
-{% endif %}
 
 {% endblock %}
 
@@ -203,6 +238,7 @@
 		{% if postPermlink %}
     $('#postUpdate').on('click tap', function(event) {
     	event.preventDefault();
+		$('#results').html('<progress />');
     	account = $('#postAuthor').val();
 			title = $('#postTitle').val();
 			slug = "{{ postPermlink }}";
@@ -238,6 +274,7 @@
     {% else %}
     $('#postCreate').on('click tap', function(event) {
     	event.preventDefault();
+		$('#results').html('<progress />');
     	account = $('#postAuthor').val();
 			title = $('#postTitle').val();
 			slug = title.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'-')+'-'+Math.random().toString(36).substring(2);
@@ -252,7 +289,6 @@
 					images[i] = str[0].slice(1, -1)
 				}
 			} else images = ["{{ settings.social.image }}"];
-			console.log(images);
 			json_metadata = JSON.stringify({ tags: taglist, image: images, app: "SuperHive", format: "markdown" });
 			hive_keychain.requestHandshake(function() {
 				hive_keychain.requestPost(

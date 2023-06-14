@@ -1,12 +1,12 @@
 {% extends "admin/admin-layout.html" %}
 
 {% block content %}
-<h3>Posts</h3>
+<h1>Posts</h1>
 
 <a role="button" href="{{ url_for('admin-newpost') }}">Create new post on Blockchain</a>
 <hr>
 
-<h3 >Last posts:</h3>
+<h2>Last posts:</h2>
 <p>Click on a title to edit your post</p>
 <div>
 {% if posts %}

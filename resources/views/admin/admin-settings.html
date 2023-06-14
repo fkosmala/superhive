@@ -7,11 +7,12 @@
 {% endblock %}
 
 {% block content %}
+    <h1>Settings</h1>
 	<form method="post" action="{{ url_for('admin-save') }}">
 		<input type="hidden" name="redirect" id="redirect" value="{{ current_url() }}">
 		<div class="grid">
 			<article>
-				<h3>Global Settings</h3>
+				<h2>Global Settings</h2>
 
 				<label for="author">Account</label>
 				<input name="author" id="author" type="text" value="{{ settings.author }}">
@@ -41,7 +42,7 @@
 			</article>
             
             <article>
-                <h3>SEO</h3>
+                <h2>SEO</h2>
 
                 <label for="socialDesc">Description</label>
                 <input name="socialDesc" id="socialDesc" type="text" value="{{ settings.social.description }}">
@@ -51,7 +52,7 @@
                 
                 <hr>
                 
-                <h3>Social Networks</h3>
+                <h2>Social Networks</h2>
 
                 <label for="twitter">Twitter Account (without @)</label>
                 <input id="twitter" name="twitter"type="text" value="{{ settings.social.twitter }}">
@@ -67,10 +68,8 @@
             </article>
 		</div>
         
-        <input type="submit" value="Save">
-        
         <article>
-            <h5>Advanced settings</h5>
+            <h2>Advanced settings</h2>
             <div class="grid">
                 <div>
                     <label for="displayedPosts">Number of displayed post on homepage</label>
