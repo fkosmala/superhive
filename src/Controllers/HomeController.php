@@ -212,12 +212,38 @@ final class HomeController
      *
      * @return object $response
      */
-    public function feed(Response $response): Response
+    public function feed(Request $request, Response $response): Response
     {
         $settings = $this->settings;
+        $data = $request->getQueryParams();
+        $tag = $data['tag'] ?? null;
+        $matches = [];
 
         $file = $this->app->get('blogfile');
         $articles = json_decode(file_get_contents($file), true);
+
+        if($tag !== null) {
+            foreach ($articles as $article) {
+                $metadata = json_decode($article['json_metadata'], true);
+                $tags = implode(',', $metadata['tags']);
+                if (preg_match("/\b{$tag}\b/i", $tags)) {
+                    $matches[] = $article['title'];
+                }
+            }
+        }
+
+        $result = array_unique($matches);
+
+        if ($result !== null) {
+            foreach ($articles as $article) {
+                if (in_array($article['title'], $result)) {
+                    $posts[] = $article;
+                }
+            }
+        }
+        if (!empty($posts)) {
+            $articles = $posts;
+        }
 
         header('Content-Type: text/xml');
         return $this->app->get('view')->render($response, '/feed.xml', [
