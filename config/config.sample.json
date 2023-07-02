@@ -15,7 +15,7 @@
         "linkedin": ""
     },
     "lang": "mul",
-    "theme": "default",
+    "theme": "minimal",
     "crosspost": false,
     "api": "anyx.io",
     "devMode": true,
