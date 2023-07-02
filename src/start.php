@@ -43,7 +43,7 @@ $container->set('themesdir', __DIR__ . '/../public/themes/');
 // Rename config.sample.json to config.json
 $confDir =  __DIR__ . '/../config/';
 if ((file_exists($confDir . 'config.sample.json')) && (!file_exists($confDir . 'config.json'))) {
-    rename($confDir . 'config.sample.json', $confDir . 'config.json');
+    copy($confDir . 'config.sample.json', $confDir . 'config.json');
 }
 
 // Set settings array in container for use in all routes
@@ -208,6 +208,7 @@ $app->group('/admin', static function(RouteCollectorProxy $group): void {
     $group->post('/save', AdminController::class . ':save')->setName('admin-save');
 });
 
+/* TODO : create a real Pages routing system
 // generate routes from static pages
 $app->group("/pages", function(RouteCollectorProxy $group) {
     
@@ -225,5 +226,6 @@ $app->group("/pages", function(RouteCollectorProxy $group) {
         })->setName($route);
     }
 });
+*/
 
 return $app;
