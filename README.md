@@ -4,6 +4,7 @@
 [![Latest Unstable Version](http://poser.pugx.org/fkosmala/superhive/v/unstable)](https://packagist.org/packages/fkosmala/superhive)
 [![License](http://poser.pugx.org/fkosmala/superhive/license)](https://packagist.org/packages/fkosmala/superhive)
 [![PHP Version Require](http://poser.pugx.org/fkosmala/superhive/require/php)](https://packagist.org/packages/fkosmala/superhive)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/fkosmala/superhive/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/fkosmala/superhive/?branch=master)
 
 SuperHive is a blockchain-based blog engine.
 All your posts are saved into the [Hive Blockchain](https://hive.io) and SuperHive use them to create your custom beautiful blog.
