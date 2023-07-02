@@ -106,14 +106,11 @@ final class HomeController
 
         $settings = $this->settings;
 
-        if ($term === '') {
-            $result = [];
-        } else {
+        if ($term !== '') {
             $file = $this->app->get('blogfile');
             $articles = json_decode(file_get_contents($file), true);
 
             $matches = [];
-            $tags = [];
 
             foreach ($articles as $article) {
                 // Check in Title
