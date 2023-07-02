@@ -14,9 +14,12 @@ use DI\Bridge\Slim\Bridge;
 use DI\Container;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use Slim\Middleware\Minify;
+use Slim\Middleware\Session;
 use Slim\Routing\RouteCollectorProxy;
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
+use SlimSession\Helper;
 use Zeuxisoo\Whoops\Slim\WhoopsMiddleware as Whoops;
 
 require __DIR__ . '/../vendor/autoload.php';
@@ -47,7 +50,7 @@ if ((file_exists($confDir . 'config.sample.json')) && (!file_exists($confDir . '
 }
 
 // Set settings array in container for use in all routes
-$container->set('settings', static function() {
+$container->set('settings', static function () {
     $config = file_get_contents(__DIR__ . '/../config/config.json');
     return json_decode($config, true);
 });
@@ -105,7 +108,7 @@ if ((!file_exists($container->get('cachedir'))) && ($settings['devMode'] === fal
 //AppFactory::setContainer($container);
 
 // Set Twig engine for templating
-$container->set('view', static function() {
+$container->set('view', static function () {
     $settings = json_decode(file_get_contents(__DIR__ . '/../config/config.json'), true);
     $tpls = [
         __DIR__ . '/../resources/views/',
@@ -130,8 +133,8 @@ $container->set('view', static function() {
 });
 
 //Set Session engine
-$container->set('session', static function() {
-    return new \SlimSession\Helper();
+$container->set('session', static function () {
+    return new Helper();
 });
 
 // Create App
@@ -149,7 +152,7 @@ if ($settings['devMode'] === true) {
 
 // Add Basic Auth for admin panel
 $app->add(
-    new \Slim\Middleware\Session([
+    new Session([
         'name' => 'sh_session',
         'autorefresh' => true,
         'lifetime' => '1 hour',
@@ -171,21 +174,23 @@ $app->get('/prepare', InstallController::class . ':prepare')->setName('prepare')
 $app->post('/prepare', InstallController::class . ':install')->setName('install');
 
 // Global routes
-$app->get('/', HomeController::class . ':index')->setName('index')->add(new \Slim\Middleware\Minify($minify));
-$app->post('/search', HomeController::class . ':search')->setName('search')->add(new \Slim\Middleware\Minify($minify));
-$app->get('/about', HomeController::class . ':about')->setName('about')->add(new \Slim\Middleware\Minify($minify));
-$app->get('/tag/{tag}', PostsController::class . ':tag')->setName('tag')->add(new \Slim\Middleware\Minify($minify));
+$app->get('/', HomeController::class . ':index')->setName('index')->add(new Minify($minify));
+$app->post('/search', HomeController::class . ':search')->setName('search')->add(new Minify($minify));
+$app->get('/about', HomeController::class . ':about')->setName('about')->add(new Minify($minify));
+$app->get('/tag/{tag}', PostsController::class . ':tag')->setName('tag')->add(new Minify($minify));
 $app->get('/post/{permlink}', PostsController::class . ':post')->setName('post')
-    ->add(new \Slim\Middleware\Minify($minify));
+    ->add(new Minify($minify));
 
 // SEO routes
 $app->get('/feed', HomeController::class . ':feed')->setName('feed');
 $app->get('/sitemap', HomeController::class . ':sitemap')->setName('sitemap');
 
-// Admin routes
+// Login routes
 $app->get('/login', HomeController::class . ':login')->setName('login');
 $app->post('/login', HomeController::class . ':loginPost')->setName('login-post');
-$app->group('/admin', static function(RouteCollectorProxy $group): void {
+
+// Admin routes
+$app->group('/admin', static function (RouteCollectorProxy $group): void {
     $group->get('', AdminController::class . ':adminIndex')->setName('admin');
 
     $group->get('/settings', AdminController::class . ':adminSettings')->setName('admin-settings');
@@ -209,9 +214,7 @@ $app->group('/admin', static function(RouteCollectorProxy $group): void {
 });
 
 /* TODO : create a real Pages routing system
-// generate routes from static pages
 $app->group("/pages", function(RouteCollectorProxy $group) {
-    
     //$pagesDir = $this->get('pagesdir');
     $pages = preg_grep('~\.(html)$~', scandir(__DIR__ . '/../resources/blog/pages/'));
     foreach ($pages as $page) {
