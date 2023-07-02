@@ -44,7 +44,7 @@ $container->set('pagesdir', __DIR__ . '/../resources/blog/pages/');
 $container->set('themesdir', __DIR__ . '/../public/themes/');
 
 // Rename config.sample.json to config.json
-$confDir =  __DIR__ . '/../config/';
+$confDir = __DIR__ . '/../config/';
 if ((file_exists($confDir . 'config.sample.json')) && (!file_exists($confDir . 'config.json'))) {
     copy($confDir . 'config.sample.json', $confDir . 'config.json');
 }

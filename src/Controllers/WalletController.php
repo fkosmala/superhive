@@ -53,7 +53,7 @@ final class WalletController
         /*
          *  Get Hive engine tokens from account
          */
-        if ((! file_exists($heFile)) || ($current_time - filemtime($heFile) > $cache_interval)) {
+        if ((!file_exists($heFile)) || ($current_time - filemtime($heFile) > $cache_interval)) {
             $config = [
                 'debug' => false,
                 'heNode' => 'api.hive-engine.com/rpc',
@@ -78,12 +78,12 @@ final class WalletController
         ];
         $api = new HiveCondenser($apiConfig);
 
-        if ((! file_exists($accountFile)) || ($current_time - filemtime($accountFile) > $cache_interval)) {
+        if ((!file_exists($accountFile)) || ($current_time - filemtime($accountFile) > $cache_interval)) {
             $result = json_encode($api->getAccounts($settings['author']), JSON_PRETTY_PRINT);
             file_put_contents($accountFile, $result);
         }
 
-        if ((! file_exists($bcFile)) || ($current_time - filemtime($bcFile) > 600)) {
+        if ((!file_exists($bcFile)) || ($current_time - filemtime($bcFile) > 600)) {
             $result = json_encode($api->getDynamicGlobalProperties(), JSON_PRETTY_PRINT);
             file_put_contents($bcFile, $result);
         }
@@ -95,11 +95,11 @@ final class WalletController
          */
         $bcVars = json_decode(file_get_contents($bcFile), true);
         $vests = [];
-        $vests['tvfh'] = (float) $bcVars['total_vesting_fund_hive'];
-        $vests['tvs'] = (float) $bcVars['total_vesting_shares'];
+        $vests['tvfh'] = (float)$bcVars['total_vesting_fund_hive'];
+        $vests['tvs'] = (float)$bcVars['total_vesting_shares'];
         $vests['totalVests'] = $vests['tvfh'] / $vests['tvs'];
-        $vests['userHP'] = round((float) $account[0]['vesting_shares'] * $vests['totalVests'], 3);
-        $vests['delegHP'] = round((float) $account[0]['delegated_vesting_shares'] * $vests['totalVests'], 3);
+        $vests['userHP'] = round((float)$account[0]['vesting_shares'] * $vests['totalVests'], 3);
+        $vests['delegHP'] = round((float)$account[0]['delegated_vesting_shares'] * $vests['totalVests'], 3);
 
         /*
          * Just render the view with vars

@@ -222,7 +222,7 @@ final class HomeController
         $file = $this->app->get('blogfile');
         $articles = json_decode(file_get_contents($file), true);
 
-        if($tag !== null) {
+        if ($tag !== null) {
             foreach ($articles as $article) {
                 $metadata = json_decode($article['json_metadata'], true);
                 $tags = implode(',', $metadata['tags']);

@@ -201,7 +201,9 @@ final class AdminController
         $data = $request->getParsedBody();
         if (isset($data['redirect'])) {
             $redirect = $data['redirect'];
-        } else $redirect = '/admin/';
+        } else {
+            $redirect = '/admin/';
+        }
         $settings = $this->app->get('settings');
 
         foreach ($data as $key => $value) {
