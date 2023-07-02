@@ -106,9 +106,7 @@ final class PostsController
         $posts = [];
         $result = [];
 
-        if (!isset($tag)) {
-            $result = [];
-        } else {
+        if (isset($tag)) {
             $matches = [];
             $file = $this->app->get('blogfile');
             $articles = json_decode(file_get_contents($file), true);
