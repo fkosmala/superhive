@@ -51,7 +51,7 @@ final class AdminController
         $passwd = $cred[$author];
 
         /* If sessons keys are not set */
-        if (! isset($session['sh_author']) || (! isset($session['sh_sign']))) {
+        if (!isset($session['sh_author']) || (!isset($session['sh_sign']))) {
             header('Location: /login');
             die;
         }
@@ -87,7 +87,7 @@ final class AdminController
         $cache_interval = 300;
 
         $current_time = time();
-        if ((! file_exists($accountFile)) || ($current_time - filemtime($accountFile) > $cache_interval)) {
+        if ((!file_exists($accountFile)) || ($current_time - filemtime($accountFile) > $cache_interval)) {
             $result = json_encode($api->getAccounts($settings['author']), JSON_PRETTY_PRINT);
             file_put_contents($accountFile, $result);
         }
@@ -127,7 +127,7 @@ final class AdminController
         $cache_interval = 300;
 
         $current_time = time();
-        if ((! file_exists($accountFile)) || ($current_time - filemtime($accountFile) > $cache_interval)) {
+        if ((!file_exists($accountFile)) || ($current_time - filemtime($accountFile) > $cache_interval)) {
             $result = json_encode($api->getAccounts($settings['author']), JSON_PRETTY_PRINT);
             file_put_contents($accountFile, $result);
         }
@@ -136,11 +136,9 @@ final class AdminController
         $langs = json_decode(file_get_contents($langFile), true);
         $nodes = json_decode(file_get_contents($nodesFile), true);
 
-        $themes = array_map('basename', glob($this->app->get('themesdir') . '*', GLOB_ONLYDIR));
         return $this->app->get('view')->render($response, '/admin/admin-settings.html', [
             'settings' => $settings,
             'account' => $account[0],
-            'themes' => $themes,
             'languages' => $langs,
             'nodes' => $nodes,
         ]);
@@ -207,7 +205,7 @@ final class AdminController
         $settings = $this->app->get('settings');
 
         foreach ($data as $key => $value) {
-            if(mb_strpos($key, "-") !== false){
+            if (mb_strpos($key, "-") !== false) {
                 $pieces = explode("-", $key);
                 if (array_key_exists($pieces[1], $settings[$pieces[0]])) {
                     $settings[$pieces[0]][$pieces[1]] = $value;
