@@ -205,46 +205,21 @@ final class AdminController
             $redirect = $data['redirect'];
         } else $redirect = '/admin/';
         $settings = $this->app->get('settings');
-        $crosspost = ! isset($data['cross']) ? $settings['crosspost'] : (bool) $data['cross'];
-        $devMode = ! isset($data['devel']) ? $settings['devMode'] : (bool) $data['devel'];
-        $api = ! isset($data['api']) ? $settings['api'] : $data['api'];
-        $displayPosts = ! isset($data['displayedPosts']) ? $settings['displayedPosts'] : (int) $data['displayedPosts'];
-        $author = ! isset($data['author']) ? $settings['author'] : $data['author'];
-        $title = ! isset($data['title']) ? $settings['title'] : $data['title'];
-        $baseline = ! isset($data['baseline']) ? $settings['baseline'] : $data['baseline'];
-        $displayType = ! isset($data['displayTypes']) ? $settings['displayType']['type'] : $data['displayTypes'];
-        $displayedTag = ! isset($data['tag']) ? $settings['displayType']['tag'] : $data['tag'];
-        $socialDesc = ! isset($data['socialDesc']) ? $settings['social']['description'] : $data['socialDesc'];
-        $socialImage = ! isset($data['socialImage']) ? $settings['social']['image'] : $data['socialImage'];
-        $twitter = ! isset($data['twitter']) ? $settings['social']['twitter'] : $data['twitter'];
-        $facebook = ! isset($data['facebook']) ? $settings['social']['facebook'] : $data['facebook'];
-        $instagram = ! isset($data['instagram']) ? $settings['social']['instagram'] : $data['instagram'];
-        $linkedin = ! isset($data['linkedin']) ? $settings['social']['linkedin'] : $data['linkedin'];
-        $language = ! isset($data['lang']) ? $settings['lang'] : $data['lang'];
-        $newSettings = [
-            'author' => $author,
-            'title' => $title,
-            'baseline' => $baseline,
-            'displayType' => [
-                'type' => $displayType,
-                'tag' => $displayedTag,
-            ],
-            'social' => [
-                'description' => $socialDesc,
-                'image' => $socialImage,
-                'twitter' => $twitter,
-                'facebook' => $facebook,
-                'instagram' => $instagram,
-                'linkedin' => $linkedin,
-            ],
-            'theme' => $settings['theme'],
-            'lang' => $language,
-            'crosspost' => $crosspost,
-            'api' => $api,
-            'devMode' => $devMode,
-            'displayedPosts' => (int) $displayPosts,
-        ];
-        $file = json_encode($newSettings, JSON_PRETTY_PRINT);
+
+        foreach ($data as $key => $value) {
+            if(mb_strpos($key, "-") !== false){
+                $pieces = explode("-", $key);
+                if (array_key_exists($pieces[1], $settings[$pieces[0]])) {
+                    $settings[$pieces[0]][$pieces[1]] = $value;
+                }
+            } else {
+                if (array_key_exists($key, $settings)) {
+                    $settings[$key] = $value;
+                }
+            }
+        }
+
+        $file = json_encode($settings, JSON_PRETTY_PRINT);
         // Create array from config file
         file_put_contents($this->app->get('configfile'), $file);
         unlink($this->app->get('blogfile'));

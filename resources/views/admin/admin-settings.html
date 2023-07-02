@@ -17,16 +17,16 @@
 				<label for="author">Account</label>
 				<input name="author" id="author" type="text" value="{{ settings.author }}">
 				
-				<label for="displayTypes">What to display ?</label>
-				<select name="displayTypes" id="displayTypes">
+				<label for="displayType-type">What to display ?</label>
+				<select name="displayType-type" id="displayType-type">
 					<option value="author" {% if settings.displayType.type == "author" %}selected{% endif %}>Author posts only</option>
 					<option value="tag" {% if settings.displayType.type == "tag" %}selected{% endif %}>Selected Tag only</option>
 					<option value="reblog" {% if settings.displayType.type == "reblog" %}selected{% endif %}>Reblogs only</option>
 				</select>
 				
 				<div id="tagPosts">
-					<label for="tag">Tag (without #)</label>
-					<input name="tag" id="tag" type="text" value="{{ settings.displayType.tag }}">
+					<label for="displayType-tag">Tag (without #)</label>
+					<input name="displayType-tag" id="displayType-tag" type="text" value="{{ settings.displayType.tag }}">
 				</div>
 
 				<label for="title">Title</label>
@@ -44,27 +44,27 @@
             <article>
                 <h2>SEO</h2>
 
-                <label for="socialDesc">Description</label>
-                <input name="socialDesc" id="socialDesc" type="text" value="{{ settings.social.description }}">
+                <label for="social-description">Description</label>
+                <input name="social-description" id="social-description" type="text" value="{{ settings.social.description }}">
 
-                <label cfor="socialImage">Image</label>
-                <input id="socialImage" name="socialImage" type="text" value="{{ settings.social.image }}">
+                <label cfor="social-image">Image</label>
+                <input id="social-image" name="social-image" type="text" value="{{ settings.social.image }}">
                 
                 <hr>
                 
                 <h2>Social Networks</h2>
 
-                <label for="twitter">Twitter Account (without @)</label>
-                <input id="twitter" name="twitter"type="text" value="{{ settings.social.twitter }}">
+                <label for="social-twitter">Twitter Account (without @)</label>
+                <input id="social-twitter" name="social-twitter" type="text" value="{{ settings.social.twitter }}">
 
-                <label for="facebook">Facebook Account</label>
-                <input id="facebook" name="facebook" type="text" value="{{ settings.social.facebook }}">
+                <label for="social-facebook">Facebook Account</label>
+                <input id="social-facebook" name="social-facebook" type="text" value="{{ settings.social.facebook }}">
 
-                <label for="instagram">Instagram Account (without @)</label>
-                <input id="instagram" name="instagram" type="text" value="{{ settings.social.instagram }}">
+                <label for="social-instagram">Instagram Account (without @)</label>
+                <input id="social-instagram" name="social-instagram" type="text" value="{{ settings.social.instagram }}">
 
-                <label for="linkedin"> LinkedIn</label>
-                <input id="linkedin" name="linkedin" type="text" value="{{ settings.social.linkedin }}">
+                <label for="social-linkedin"> LinkedIn</label>
+                <input id="social-linkedin" name="social-linkedin" type="text" value="{{ settings.social.linkedin }}">
             </article>
 		</div>
         
@@ -76,15 +76,15 @@
                     <input name="displayedPosts" id="displayedPosts" type="number" value="{{ settings.displayedPosts }}">
                     
                     <div>
-                        <label for="crosspost">
-                        <input type="checkbox" id="crosspost" name="crosspost" {% if settings.crosspost == true %}checked{% endif %}>Display crossposting</label>
-                        <input type="hidden" id="cross" name="cross" {% if settings.crosspost == true %}value="1"{% else %}value=0{% endif %} />
+                        <label for="cross">
+                        <input type="checkbox" id="cross" name="cross" {% if settings.crosspost == true %}checked{% endif %}>Display crossposting</label>
+                        <input type="hidden" id="crosspost" name="crosspost" {% if settings.crosspost == true %}value="true"{% else %}value="false"{% endif %} />
                     </div>
                     
                     <div>
-                        <label for="devMode">
-                        <input type="checkbox" id="devMode" name="devMode" {% if settings.devMode == true %}checked{% endif %}>Developer mode</label>
-                        <input type="hidden" id="devel" name="devel" {% if settings.devMode == true %}value="1"{% else %}value=0{% endif %} />
+                        <label for="develMode">
+                        <input type="checkbox" id="develMode" name="develMode" {% if settings.devMode == true %}checked{% endif %}>Developer mode</label>
+                        <input type="hidden" id="devMode" name="devMode" {% if settings.devMode == true %}value="true"{% else %}value="false"{% endif %} />
                     </div>
                 </div>
                 
@@ -106,18 +106,18 @@
 {% block scripts %}
 <script>
 	$(function() {
-        $('#devMode').on('change', function() {
+        $('#develMode').on('change', function() {
             if($(this).prop('checked')) {
-                $('#devel').val(1);
+                $('#devMode').val(true);
             } else {
-                $('#devel').val(0);
+                $('#devMode').val(false);
             }
         });
-        $('#crosspost').on('change', function() {
+        $('#cross').on('change', function() {
             if($(this).prop('checked')) {
-                $('#cross').val(1);
+                $('#crosspost').val(true);
             } else {
-                $('#cross').val(0);
+                $('#crosspost').val(false);
             }
         });
         
