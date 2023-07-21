@@ -207,6 +207,12 @@ final class AdminController
         $settings = $this->app->get('settings');
 
         foreach ($data as $key => $value) {
+            if ($value === "true") {
+                $value = (bool) true;
+            }
+            if ($value === "false") {
+                $value = (bool) false;
+            }
             if (mb_strpos($key, "-") !== false) {
                 $pieces = explode("-", $key);
                 if (array_key_exists($pieces[1], $settings[$pieces[0]])) {
