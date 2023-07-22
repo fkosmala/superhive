@@ -2,6 +2,18 @@
 
 All notable changes to this publication will be documented in this file.
 
+## 0.7.0 - 2023-07-22
+- [Feature] Add [Slim-Bridge](https://github.com/PHP-DI/Slim-Bridge) for better dependency injection
+- [Feature] Refactor Admin UI with PicoCSS v2 & Nord theme
+- [Feature] Add custom RSS feed by tag
+- [Fix] Copy `config.sample.json` file instead of rename
+- [Fix] Remove messy and bad code.
+- [Fix] Admin `save()` function refactor
+- [Fix] Some Coding standards fixes
+- [Update] Remove Themes and move them to superhive-themes repo
+- [Update] Small refactor of classes names
+- [Update] Temporary remove the off-chain pages routes
+
 ## 0.6.0 - 2023-03-23
 - [Feature] Popular tags
 - [Feature] Add tags page to display post with selected tag
