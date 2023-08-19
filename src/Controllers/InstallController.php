@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use phpseclib3\File\ASN1\Maps\UserNotice;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -85,22 +86,25 @@ final class InstallController
      */
     public function install(Request $request, Response $response): Response
     {
+        $response->getBody()->write('notok');
+
         if (!file_exists($this->app->get('password'))) {
             $data = $request->getParsedBody();
-            // Create password file with  username and password (signed msg))
-            $cred = [$data['username'] => $data['passwd']];
-            file_put_contents($this->app->get('password'), serialize($cred));
+            // Create password file with username and password (signed msg))
+            if ((isset($data['username'])) && (isset($data['password']))) {
+                $cred = [$data['username'] => $data['passwd']];
+                file_put_contents($this->app->get('password'), serialize($cred));
 
-            // Changeaccount name in config file
-            $settings = $this->app->get('settings');
-            $settings['author'] = $data['username'];
-            $file = json_encode($settings, JSON_PRETTY_PRINT);
-            file_put_contents($this->app->get('configfile'), $file);
+                // Change account name in config file
+                $settings = $this->app->get('settings');
+                $settings['author'] = $data['username'];
+                $file = json_encode($settings, JSON_PRETTY_PRINT);
+                file_put_contents($this->app->get('configfile'), $file);
 
-            $response->getBody()->write('ok');
-        } else {
-            $response->getBody()->write('notok');
+                $response->getBody()->write('ok');
+            }
         }
+        
         return $response;
     }
 }
