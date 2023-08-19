@@ -98,7 +98,7 @@ final class PostsController
      * @param string $tag
      * @param object $request
      * @param Response $response
-     * 
+     *
      * @return Response $response
      */
     public function tag(string $tag, Response $response): Response

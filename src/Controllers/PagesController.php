@@ -136,8 +136,18 @@ final class PagesController
         $data = $request->getParsedBody();
         $pagesDir = $this->app->get('pagesdir');
 
-        $pageTitle = $data['title'];
-        $pageContent = $data['mde'];
+        if (!empty($data['title'])) {
+            $pageTitle = $data['title'];
+        } else {
+            $pageTitle = "No Title";
+        }
+        
+        if (!empty($data['mde'])) {
+            $pageContent = $data['mde'];
+        } else {
+            $pageContent = 'No content in this page';
+        }
+        
 
         // Some functions to slugify title to create very cool URL
         $acc = 'àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ';
@@ -152,7 +162,7 @@ final class PagesController
 
         // apply Twig to the page to display with selected theme
         $page = '{% extends settings.theme ~ "/page.html" %}';
-        $page .= "\n{% block title %}" . $pageTitle . "{% endblock %}\n";
+        $page .= "\n{% block title %}" . $title . "{% endblock %}\n";
         $page .= "\n{% block page %}\n" . $pageContent . "\n{% endblock %}\n";
 
         $file = $pagesDir . $slug . '.html';
@@ -166,7 +176,15 @@ final class PagesController
             } else {
                 $scheme = 'http';
             }
-            $pageUrl = $scheme . '://' . $_SERVER['HTTP_HOST'] . '/pages/' . $slug;
+
+            if (isset($_SERVER['HTTP_HOST'])) {
+                $host = $_SERVER['HTTP_HOST'];
+            } else {
+                $host = "unknown_host.com";
+            }
+
+
+            $pageUrl = $scheme . '://' . $host . '/pages/' . $slug;
             $response->getBody()->write($pageUrl);
         } else {
             $response->getBody()->write('Error');
