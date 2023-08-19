@@ -51,7 +51,7 @@ final class PostsController
             'debug' => false,
         ];
 
-        if (isset($permlink)) {
+        if (!empty($permlink)) {
             $converter = new CommonMarkConverter();
             $parsedReplies = [];
 
@@ -98,7 +98,8 @@ final class PostsController
      * @param string $tag
      * @param object $request
      * @param Response $response
-     * @param array<string, string> $args
+     * 
+     * @return Response $response
      */
     public function tag(string $tag, Response $response): Response
     {
@@ -106,7 +107,7 @@ final class PostsController
         $posts = [];
         $result = [];
 
-        if (isset($tag)) {
+        if (!empty($tag)) {
             $matches = [];
             $file = $this->app->get('blogfile');
             $articles = json_decode(file_get_contents($file), true);
