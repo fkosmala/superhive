@@ -91,7 +91,7 @@ final class InstallController
         if (!file_exists($this->app->get('password'))) {
             $data = $request->getParsedBody();
             // Create password file with username and password (signed msg))
-            if ((isset($data['username'])) && (isset($data['password']))) {
+            if ((isset($data['username'])) && (isset($data['passwd']))) {
                 $cred = [$data['username'] => $data['passwd']];
                 file_put_contents($this->app->get('password'), serialize($cred));
 
