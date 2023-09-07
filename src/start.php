@@ -213,22 +213,16 @@ $app->group('/admin', static function (RouteCollectorProxy $group): void {
     $group->post('/save', AdminController::class . ':save')->setName('admin-save');
 });
 
-/* TODO : create a real Pages routing system
-$app->group("/pages", function(RouteCollectorProxy $group) {
-    //$pagesDir = $this->get('pagesdir');
-    $pages = preg_grep('~\.(html)$~', scandir(__DIR__ . '/../resources/blog/pages/'));
-    foreach ($pages as $page) {
-        $route = substr($page, 0, strrpos($page, '.'));
-        $group->get('' . $route, function($request, $response) {
-            $settings = $this->get('settings');
-            $uri = $request->getUri();
-            $route = substr(strrchr($uri, '/'), 1);
-            return $this->get('view')->render($response, $route . '.html', [
-                'settings' => $settings,
-            ]);
-        })->setName($route);
-    }
-});
-*/
+$pages = preg_grep('~\.(html)$~', scandir(__DIR__ . '/../resources/blog/pages/'));
+foreach ($pages as $page) {
+    $route = substr($page, 0, strrpos($page, '.'));
+
+    $app->get('/pages/{route}', function (string $route, $response, Container $container) {
+        $settings = $container->get('settings');
+        return $container->get('view')->render($response, $route . '.html', [
+            'settings' => $settings,
+        ]);
+    });
+}
 
 return $app;
