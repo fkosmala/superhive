@@ -12,6 +12,7 @@ use App\Controllers\PostsController;
 use App\Controllers\WalletController;
 use DI\Bridge\Slim\Bridge;
 use DI\Container;
+use Psr\Http\Message\ResponseInterface as Response;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use Slim\Middleware\Minify;
@@ -50,7 +51,7 @@ if ((file_exists($confDir . 'config.sample.json')) && (!file_exists($confDir . '
 }
 
 // Set settings array in container for use in all routes
-$container->set('settings', static function () {
+$container->set('settings', static function () : array {
     $config = file_get_contents(__DIR__ . '/../config/config.json');
     return json_decode($config, true);
 });
@@ -138,7 +139,6 @@ $container->set('session', static function () {
 });
 
 // Create App
-//$app = AppFactory::create();
 $app = Bridge::create($container);
 $app->add(TwigMiddleware::createFromContainer($app));
 
@@ -159,9 +159,10 @@ $app->add(
     ])
 );
 
-//Check if password file exists
-$link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . "://{$_SERVER['HTTP_HOST']}";
-$actualLink = $link . "{$_SERVER['REQUEST_URI']}";
+// create vars to see if install is needed
+$scheme = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http');
+$link = (isset($_SERVER['HTTP_HOST']) ? $scheme . '://' . $_SERVER['HTTP_HOST'] : die("error"));
+$actualLink = (isset($_SERVER['REQUEST_URI']) ? $link . $_SERVER['REQUEST_URI'] : $link . 'lol');
 $installLink = $link . '/prepare';
 
 if ((!file_exists($container->get('password'))) && ($actualLink !== $installLink)) {
@@ -215,14 +216,17 @@ $app->group('/admin', static function (RouteCollectorProxy $group): void {
 
 $pages = preg_grep('~\.(html)$~', scandir(__DIR__ . '/../resources/blog/pages/'));
 foreach ($pages as $page) {
-    $route = substr($page, 0, strrpos($page, '.'));
+    $charPos = strrpos($page, '.');
+    if ($charPos !== false) {
+        $route = substr($page, 0, $charPos);
 
-    $app->get('/pages/{route}', function (string $route, $response, Container $container) {
-        $settings = $container->get('settings');
-        return $container->get('view')->render($response, $route . '.html', [
-            'settings' => $settings,
-        ]);
-    });
+        $app->get('/pages/{route}', function (string $route, Response $response, Container $container) : Response {
+            $settings = $container->get('settings');
+            return $container->get('view')->render($response, $route . '.html', [
+                'settings' => $settings,
+            ]);
+        });
+}
 }
 
 return $app;
