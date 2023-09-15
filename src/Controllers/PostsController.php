@@ -18,7 +18,7 @@ namespace App\Controllers;
 
 use App\Controllers\CommonController as Common;
 use Hive\PhpLib\Hive\Condenser as HiveCondenser;
-use League\CommonMark\CommonMarkConverter;
+use League\CommonMark\GithubFlavoredMarkdownConverter;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 
@@ -52,7 +52,7 @@ final class PostsController
         ];
 
         if (!empty($permlink)) {
-            $converter = new CommonMarkConverter();
+            $converter = new GithubFlavoredMarkdownConverter();
             $parsedReplies = [];
 
             $file = $this->app->get('blogfile');
