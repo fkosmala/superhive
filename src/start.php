@@ -51,7 +51,7 @@ if ((file_exists($confDir . 'config.sample.json')) && (!file_exists($confDir . '
 }
 
 // Set settings array in container for use in all routes
-$container->set('settings', static function () : array {
+$container->set('settings', static function (): array {
     $config = file_get_contents(__DIR__ . '/../config/config.json');
     return json_decode($config, true);
 });
@@ -104,9 +104,6 @@ if ((!file_exists($container->get('cachedir'))) && ($settings['devMode'] === fal
         rmdir($path);
     }
 }
-
-// Set container in App factory
-//AppFactory::setContainer($container);
 
 // Set Twig engine for templating
 $container->set('view', static function () {
@@ -220,13 +217,13 @@ foreach ($pages as $page) {
     if ($charPos !== false) {
         $route = substr($page, 0, $charPos);
 
-        $app->get('/pages/{route}', function (string $route, Response $response, Container $container) : Response {
+        $app->get('/pages/{route}', function (string $route, Response $response, Container $container): Response {
             $settings = $container->get('settings');
             return $container->get('view')->render($response, $route . '.html', [
                 'settings' => $settings,
             ]);
         });
-}
+    }
 }
 
 return $app;

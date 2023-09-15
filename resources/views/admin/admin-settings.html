@@ -93,6 +93,9 @@
                     <select name="api" id="api">
                         {% for node in nodes %}<option value="{{ node }}" {% if node == settings.api %}selected{% endif %}>{{ node }}</option>{% endfor %}
                     </select>
+
+                    <label for="delay">Delay (to take data from blockchain)</label>
+                    <input id="delay" name="delay" type="number" value="{{ settings.delay }}">
                 </div>
                 
             </div>

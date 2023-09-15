@@ -47,7 +47,7 @@ final class WalletController
         $bcFile = $this->app->get('datadir') . 'bcVars.json';
         $heFile = $this->app->get('datadir') . 'heTokens.json';
 
-        $cache_interval = 120;
+        $cache_interval = $settings['delay'];
         $current_time = time();
 
         /*
@@ -83,7 +83,7 @@ final class WalletController
             file_put_contents($accountFile, $result);
         }
 
-        if ((!file_exists($bcFile)) || ($current_time - filemtime($bcFile) > 600)) {
+        if ((!file_exists($bcFile)) || ($current_time - filemtime($bcFile) > ($cache_interval*2))) {
             $result = json_encode($api->getDynamicGlobalProperties(), JSON_PRETTY_PRINT);
             file_put_contents($bcFile, $result);
         }

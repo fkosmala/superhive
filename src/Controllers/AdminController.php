@@ -84,7 +84,7 @@ final class AdminController
         ];
         $api = new HiveCondenser($apiConfig);
 
-        $cache_interval = 300;
+        $cache_interval = $settings['delay'];
 
         $current_time = time();
         if ((!file_exists($accountFile)) || ($current_time - filemtime($accountFile) > $cache_interval)) {
@@ -124,7 +124,7 @@ final class AdminController
         ];
         $api = new HiveCondenser($apiConfig);
 
-        $cache_interval = 300;
+        $cache_interval = $settings['delay'];
 
         $current_time = time();
         if ((!file_exists($accountFile)) || ($current_time - filemtime($accountFile) > $cache_interval)) {

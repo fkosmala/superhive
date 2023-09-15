@@ -19,5 +19,6 @@
     "crosspost": false,
     "api": "anyx.io",
     "devMode": true,
-    "displayedPosts": 15
+    "displayedPosts": 15,
+    "delay": 300
 }
