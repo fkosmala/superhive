@@ -124,11 +124,11 @@
             }
         });
         
-		if($('#displayTypes option:selected').val() == 'tag') {
+		if($('#displayType-type option:selected').val() == 'tag') {
 			$('#tagPosts').show();
 		};
-		$( "#displayTypes" ).change(function() {
-			if($('#displayTypes option:selected').val() == 'tag') {
+		$( "#displayType-type" ).change(function() {
+			if($('#displayType-type option:selected').val() == 'tag') {
 				$('#tagPosts').show();
 			} else $('#tagPosts').hide();
 		});
