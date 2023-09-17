@@ -11,8 +11,8 @@
     <div class="grid">
         <article>
             <p>Posts:</p>
-            <h2>{{ account.post_count }} posts</h2>
-            <a href="{{ url_for('admin-posts') }}" class="secondary"><button class="secondary">See your posts</button></a>
+            <h3>{{ nbPosts }} posts</h3>
+            <h3>{{ (account.post_count - nbPosts) }} comments</h3>
             <a href="{{ url_for('admin-newpost') }}"><button>Write a post</button></a>
         </article>
         <article>

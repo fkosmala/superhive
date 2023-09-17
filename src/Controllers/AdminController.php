@@ -77,6 +77,10 @@ final class AdminController
         // Create array from config file
         $settings = $this->app->get('settings');
         $accountFile = $this->app->get('accountfile');
+        $blogFile = $this->app->get('blogfile');
+        
+        $posts = json_decode(file_get_contents($blogFile), true);
+        $nbPosts = count($posts);
 
         $apiConfig = [
             'hiveNode' => $settings['api'],
@@ -97,6 +101,7 @@ final class AdminController
         return $this->app->get('view')->render($response, '/admin/admin-index.html', [
             'settings' => $settings,
             'account' => $account[0],
+            'nbPosts' => $nbPosts
         ]);
     }
 
