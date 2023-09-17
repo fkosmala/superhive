@@ -79,11 +79,12 @@ final class HomeController
 
         $common = new Common($this->app);
         $mostUsedTags = $common->getMostUsedTags();
-
+        $popular = $common->getPopularPosts();
         // Return view with articles
         return $this->app->get('view')->render($response, $settings['theme'] . '/index.html', [
             'articles' => $parsedPosts,
             'tags' => $mostUsedTags,
+            'popular' => $popular,
             'settings' => $settings,
         ]);
     }

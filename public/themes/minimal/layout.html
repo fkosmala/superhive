@@ -51,6 +51,17 @@
                     </ul>
                 </section>
                 {% endif %}
+
+                {% if popular %}
+                <section>
+                    <h2>Popular posts</h2>
+                    <ul>
+                    {% for post in popular %}
+                        <li><a href="{{ url_for('post', { 'permlink': post.permlink }) }}">{{ post.title }}</a> (<span>{{ post.active_votes|length }}</span>)</li>
+                    {% endfor %}
+                    </ul>
+                </section>
+                {% endif %}
             </aside>
         </div>
 	</main>

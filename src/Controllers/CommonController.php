@@ -104,7 +104,7 @@ final class CommonController
     /**
      *  * getMostUsedTags function
      *  *
-     * This function will get tags from eac post and sort them
+     * This function will get tags from each post and sort them
      * by occurence.
      *
      * @return array<string, int> $mostUsedTags
@@ -128,5 +128,30 @@ final class CommonController
         $mostUsedTags = array_slice($mostUsedTags, 0, 10, true);
 
         return $mostUsedTags;
+    }
+
+    /**
+     *  * getPopularPosts function
+     *  *
+     * This function will get 5 posts with most upvotes
+     *
+     * @return array<string, int> $popularPosts
+     *  */
+    public function getPopularPosts(): array
+    {
+        $file = $this->app->get('blogfile');
+        $data = json_decode(file_get_contents($file), true);
+
+        uasort($data, function ($a, $b) {
+            if(strpos($a['body'],'cross post') === false) {
+                $a = count($a['active_votes']);
+                $b = count($b['active_votes']);
+                return ($a == $b) ? 0 : (($a > $b) ? -1 : 1);
+            }
+        });
+
+        $mostPopular = array_slice($data, 0, 5, true);
+
+        return $mostPopular;
     }
 }
