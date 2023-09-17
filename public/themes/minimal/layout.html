@@ -62,6 +62,17 @@
                     </ul>
                 </section>
                 {% endif %}
+
+                {% if last %}
+                <section>
+                    <h2>Last posts</h2>
+                    <ul>
+                    {% for post in last %}
+                        <li><a href="{{ url_for('post', { 'permlink': post.permlink }) }}">{{ post.title }}</a></li>
+                    {% endfor %}
+                    </ul>
+                </section>
+                {% endif %}
             </aside>
         </div>
 	</main>

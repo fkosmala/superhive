@@ -150,8 +150,25 @@ final class CommonController
             }
         });
 
-        $mostPopular = array_slice($data, 0, 5, true);
+        $popularPosts = array_slice($data, 0, 5, true);
 
-        return $mostPopular;
+        return $popularPosts;
+    }
+
+    /**
+     *  * getLastPosts function
+     *  *
+     * This function will get 5 posts with most upvotes
+     *
+     * @return array<string, int> $lastPosts
+     *  */
+    public function getLastPosts(): array
+    {
+        $file = $this->app->get('blogfile');
+        $data = json_decode(file_get_contents($file), true);
+
+        $lastPosts = array_slice($data, 0, 5, true);
+
+        return $lastPosts;
     }
 }
