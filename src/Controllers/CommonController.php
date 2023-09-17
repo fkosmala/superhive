@@ -53,16 +53,25 @@ final class CommonController
             // Prepare API call according to displayed posts type
             $displayType = $settings['displayType']['type'];
             if ($displayType === 'author') {
-                $dateNow = (new \DateTime())->format('Y-m-d\TH:i:s');
-                $result = json_encode(
-                    $api->getDiscussionsByAuthorBeforeDate(
-                        $settings['author'],
-                        '',
-                        $dateNow,
-                        100
-                    ),
-                    JSON_PRETTY_PRINT
-                );
+                if (preg_match('/(hive-\d{6})/i', $settings['author']) == 1) {
+                    $result = json_encode(
+                        $api->getDiscussionsByCreated(
+                            $settings['author']
+                        ),
+                        JSON_PRETTY_PRINT
+                    );
+                } else {
+                    $dateNow = (new \DateTime())->format('Y-m-d\TH:i:s');
+                    $result = json_encode(
+                        $api->getDiscussionsByAuthorBeforeDate(
+                            $settings['author'],
+                            '',
+                            $dateNow,
+                            100
+                        ),
+                        JSON_PRETTY_PRINT
+                    );
+                }
             } elseif (($displayType === 'tag')) {
                 $displayTag = $settings['displayType']['tag'];
                 $taggedPosts = [];
@@ -75,9 +84,7 @@ final class CommonController
                     )
                 );
                 $allPosts = json_decode($allPosts, true);
-                //print_r($allPosts);
                 foreach ($allPosts as &$post) {
-                    //$postTags = json_encode($post['json_metadata'], JSON_PRETTY_PRINT);
                     $postMeta = json_decode($post['json_metadata'], true);
                     $postTags = $postMeta['tags'];
                     if (in_array($displayTag, $postTags)) {
@@ -89,8 +96,6 @@ final class CommonController
                 unset($taggedPosts);
             } elseif ($displayType === 'reblog') {
                 $result = json_encode($api->getDiscussionsByBlog($settings['author']), JSON_PRETTY_PRINT);
-            } elseif (strpos($settings['author'], 'hive-') === 0) {
-                $result = json_encode($api->getDiscussionsByCreated($settings['author']), JSON_PRETTY_PRINT);
             }
             file_put_contents($file, $result);
         }
