@@ -17,8 +17,12 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Controllers\CommonController as Common;
+use Embed\Embed;
 use Hive\PhpLib\Hive\Condenser as HiveCondenser;
-use League\CommonMark\GithubFlavoredMarkdownConverter;
+use League\CommonMark\Environment\Environment;
+use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
+use League\CommonMark\Extension\GithubFlavoredMarkdownExtension;
+use League\CommonMark\MarkdownConverter;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 
@@ -52,9 +56,13 @@ final class PostsController
         ];
 
         if (!empty($permlink)) {
-            $converter = new GithubFlavoredMarkdownConverter();
-            $parsedReplies = [];
 
+            $environment = new Environment();
+            $environment->addExtension(new CommonMarkCoreExtension());
+            $environment->addExtension(new GithubFlavoredMarkdownExtension());
+            $converter = new MarkdownConverter($environment);
+
+            $parsedReplies = [];
             $file = $this->app->get('blogfile');
             $articles = json_decode(file_get_contents($file), true);
             foreach ($articles as $index => $article) {

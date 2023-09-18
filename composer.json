@@ -35,7 +35,8 @@
     "slim/slim": "4.*",
     "slim/twig-view": "^3.0",
     "zeuxisoo/slim-whoops": "0.7.*",
-    "php-di/slim-bridge": "^3.3"
+    "php-di/slim-bridge": "^3.3",
+    "embed/embed": "^4.4"
   },
   "require-dev": {
     "ergebnis/composer-normalize": "^2.31",
