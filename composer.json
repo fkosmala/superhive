@@ -61,7 +61,7 @@
       "vendor/bin/pds-skeleton validate"
     ],
     "psr": [
-      "vendor/bin/phpcs --standard=PSR1,PSR2,PSR12 ./src"
+      "vendor/bin/phpcs --standard=PSR1,PSR12 ./src"
     ],
     "start": "php -S localhost:8080 -t public"
   }

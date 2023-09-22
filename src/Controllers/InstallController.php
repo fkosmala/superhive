@@ -104,7 +104,7 @@ final class InstallController
                 $response->getBody()->write('ok');
             }
         }
-        
+
         return $response;
     }
 }

@@ -78,7 +78,7 @@ final class AdminController
         $settings = $this->app->get('settings');
         $accountFile = $this->app->get('accountfile');
         $blogFile = $this->app->get('blogfile');
-        
+
         $posts = json_decode(file_get_contents($blogFile), true);
         $nbPosts = count($posts);
 

@@ -67,11 +67,16 @@ final class HomeController
             //Get featured image
             $meta = json_decode($article['json_metadata'], true);
 
-            if (isset($meta['image']) && (array_key_exists(0, $meta['image']))) {
+            if (
+                array_key_exists('image', $meta)
+                && is_array($meta['image'])
+                && array_key_exists(0, $meta['image'])
+            ) {
                 $featured = $meta['image'][0];
             } else {
                 $featured = '/themes/' . $settings['theme'] . '/no-img.png';
             }
+
             $article['featured'] = $featured;
 
             $parsedPosts[] = $article;

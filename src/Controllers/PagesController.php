@@ -141,13 +141,12 @@ final class PagesController
         } else {
             $pageTitle = "No Title";
         }
-        
+
         if (!empty($data['mde'])) {
             $pageContent = $data['mde'];
         } else {
             $pageContent = 'No content in this page';
         }
-        
 
         // Some functions to slugify title to create very cool URL
         $acc = 'àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ';
