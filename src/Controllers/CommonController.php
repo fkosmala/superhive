@@ -143,7 +143,7 @@ final class CommonController
         $data = json_decode(file_get_contents($file), true);
 
         uasort($data, function ($a, $b) {
-            if(strpos($a['body'],'cross post') === false) {
+            if (strpos($a['body'], 'cross post') === false) {
                 $a = count($a['active_votes']);
                 $b = count($b['active_votes']);
                 return ($a == $b) ? 0 : (($a > $b) ? -1 : 1);

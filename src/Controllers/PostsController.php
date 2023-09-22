@@ -99,7 +99,8 @@ final class PostsController
 
                     // Check if comments exists for this post
                     $cmts = $this->app->get('commentsdir') . $permlink . '.comments';
-                    if ((!file_exists($cmts)) || (file_exists($cmts)) && (time() - filemtime($cmts) > $settings['delay'])) {
+                    $delay = $settings['delay'];
+                    if ((!file_exists($cmts)) || (file_exists($cmts)) && (time() - filemtime($cmts) > $delay)) {
                         $api = new HiveCondenser($apiConfig);
                         $replies = $api->getContentReplies($article['author'], $permlink);
                         $result = json_encode($replies, JSON_PRETTY_PRINT);

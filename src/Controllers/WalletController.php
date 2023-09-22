@@ -83,7 +83,7 @@ final class WalletController
             file_put_contents($accountFile, $result);
         }
 
-        if ((!file_exists($bcFile)) || ($current_time - filemtime($bcFile) > ($cache_interval*2))) {
+        if ((!file_exists($bcFile)) || ($current_time - filemtime($bcFile) > ($cache_interval * 2))) {
             $result = json_encode($api->getDynamicGlobalProperties(), JSON_PRETTY_PRINT);
             file_put_contents($bcFile, $result);
         }
