@@ -20,5 +20,10 @@
     "api": "anyx.io",
     "devMode": true,
     "displayedPosts": 15,
-    "delay": 300
+    "delay": 300,
+    "analytics": {
+        "name": "",
+        "id": "",
+        "url": "" 
+    }
 }

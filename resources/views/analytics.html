@@ -1,0 +1,27 @@
+{% if settings.analytics.name is not empty %}
+    {% if settings.analytics.name is same as 'Plausible' %}
+        <script defer data-domain="{{ settings.analytics.url }}" src="https://plausible.io/js/script.js"></script>
+    {% elseif settings.analytics.name is same as 'Matomo' %}
+        <script type="text/javascript">
+        var _paq = window._paq = window._paq || [];
+        _paq.push(['trackPageView']);
+        _paq.push(['enableLinkTracking']);
+        (function() {
+            var u="//{{ settings.analytics.url }}/";
+            _paq.push(['setTrackerUrl', u+'matomo.php']);
+            _paq.push(['setSiteId', {{ settings.analytics.id }}]);
+            var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+            g.type='text/javascript'; g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+        })();
+        </script>
+    {% elseif settings.analytics.name is same as 'Google' %}
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ settings.analytics.id }}"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', '{{ settings.analytics.id }}');
+        </script>
+    {% endif %}
+{% endif %}

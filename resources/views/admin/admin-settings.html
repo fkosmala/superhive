@@ -68,10 +68,34 @@
             </article>
 		</div>
         
-        <article>
-            <h2>Advanced settings</h2>
-            <div class="grid">
+        <div class="grid">
+            <article>
+                <h2>Analytics</h2>
+                <p>European users : don't forget you can't use Google Analytics</p>
+                {{ settings.analytics.name }}
                 <div>
+                    <label for="anaytics-name"></label>
+                    <select name="analytics-name" id="analytics-name">
+                        <option value="None">None</option>
+                        <option value="Google" {% if settings.analytics.name is same as 'Google' %}selected{% endif %}>Google Analytics</option>
+                        <option value="Matomo" {% if settings.analytics.name is same as "Matomo" %}selected="selected"{% endif %}>Matomo</option>
+                        <option value="Plausible" {% if settings.analytics.name is same as 'Plausible' %}selected{% endif %}>Plausible</option>
+                    </select>
+                </div>
+
+                <div id="analyticsSettings">
+                    <label for="analytics-url">Link / Domain (without https://)</label>
+                    <input id="analytics-url" name="analytics-url" type="text" value="{{ settings.analytics.url }}">
+
+                    <div id="idAnalytics">
+                        <label for="analytics-id">ID</label>
+                        <input id="analytics-id" name="analytics-id" type="text" value="{{ settings.analytics.id }}">
+                    </div>
+                </div>
+
+            </article>
+            <article>
+                <h2>Advanced settings</h2>
                     <label for="displayedPosts">Number of displayed post on homepage</label>
                     <input name="displayedPosts" id="displayedPosts" type="number" value="{{ settings.displayedPosts }}">
                     
@@ -86,20 +110,19 @@
                         <input type="checkbox" id="develMode" name="develMode" {% if settings.devMode == true %}checked{% endif %}>Developer mode</label>
                         <input type="hidden" id="devMode" name="devMode" {% if settings.devMode == true %}value="true"{% else %}value="false"{% endif %} />
                     </div>
-                </div>
-                
-                <div>
-                    <label for="api">API Endpoint</label>
-                    <select name="api" id="api">
-                        {% for node in nodes %}<option value="{{ node }}" {% if node == settings.api %}selected{% endif %}>{{ node }}</option>{% endfor %}
-                    </select>
+                    <hr>
+                    <div>
+                        <label for="api">API Endpoint</label>
+                        <select name="api" id="api">
+                            {% for node in nodes %}<option value="{{ node }}" {% if node == settings.api %}selected{% endif %}>{{ node }}</option>{% endfor %}
+                        </select>
 
-                    <label for="delay">Delay (to take data from blockchain)</label>
-                    <input id="delay" name="delay" type="number" value="{{ settings.delay }}">
-                </div>
-                
-            </div>
-        </article>
+                        <label for="delay">Delay (to take data from blockchain)</label>
+                        <input id="delay" name="delay" type="number" value="{{ settings.delay }}">
+                    </div>
+
+            </article>
+        </div>
 		<input type="submit" value="Save">
 	</form>
 </div>
@@ -131,6 +154,24 @@
 			if($('#displayType-type option:selected').val() == 'tag') {
 				$('#tagPosts').show();
 			} else $('#tagPosts').hide();
+		});
+
+        if($('#analytics-name option:selected').val() != 'Plausible') {
+			$('#idAnalytics').show();
+		};
+        $( "#analytics-name" ).change(function() {
+			if($('#analytics-name option:selected').val() != 'Plausible') {
+				$('#idAnalytics').show();
+			} else $('#idAnalytics').hide();
+		});
+
+        if($('#analytics-name option:selected').val() != 'None') {
+			$('#analyticsSettings').show();
+		};
+        $( "#analytics-name" ).change(function() {
+			if($('#analytics-name option:selected').val() != 'None') {
+				$('#analyticsSettings').show();
+			} else $('#analyticsSettings').hide();
 		});
 	});
 </script>
