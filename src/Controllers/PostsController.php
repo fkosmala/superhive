@@ -24,6 +24,8 @@ use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 use League\CommonMark\Extension\Embed\EmbedExtension;
 use League\CommonMark\Extension\Embed\Bridge\OscaroteroEmbedAdapter;
 use League\CommonMark\Extension\GithubFlavoredMarkdownExtension;
+use League\CommonMark\Extension\HeadingPermalink\HeadingPermalinkExtension;
+use League\CommonMark\Extension\TableOfContents\TableOfContentsExtension;
 use League\CommonMark\MarkdownConverter;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -71,11 +73,19 @@ final class PostsController
                     'adapter' => new OscaroteroEmbedAdapter($embedLibrary),
                     'fallback' => 'link',
                 ],
+                'heading_permalink' => [
+                    'html_class' => 'heading-permalink',
+                    'insert' => 'before',
+                    'symbol' => '#',
+                    'title' => "Permalink",
+                    'id_prefix' => ''
+                ]
             ];
 
             $environment = new Environment($markdownConfig);
             $environment->addExtension(new CommonMarkCoreExtension());
             $environment->addExtension(new GithubFlavoredMarkdownExtension());
+            $environment->addExtension(new HeadingPermalinkExtension());
             $environment->addExtension(new EmbedExtension());
             $converter = new MarkdownConverter($environment);
 
