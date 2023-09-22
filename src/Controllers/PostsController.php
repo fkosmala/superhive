@@ -21,6 +21,8 @@ use Embed\Embed;
 use Hive\PhpLib\Hive\Condenser as HiveCondenser;
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
+use League\CommonMark\Extension\Embed\EmbedExtension;
+use League\CommonMark\Extension\Embed\Bridge\OscaroteroEmbedAdapter;
 use League\CommonMark\Extension\GithubFlavoredMarkdownExtension;
 use League\CommonMark\MarkdownConverter;
 use Psr\Container\ContainerInterface;
@@ -56,10 +58,25 @@ final class PostsController
         ];
 
         if (!empty($permlink)) {
+            $embedLibrary = new Embed();
+            $embedLibrary->setSettings([
+                'oembed:query_parameters' => [
+                    'maxwidth' => 800,
+                    'maxheight' => 600,
+                ]
+            ]);
 
-            $environment = new Environment();
+            $markdownConfig = [
+                'embed' => [
+                    'adapter' => new OscaroteroEmbedAdapter($embedLibrary),
+                    'fallback' => 'link',
+                ],
+            ];
+
+            $environment = new Environment($markdownConfig);
             $environment->addExtension(new CommonMarkCoreExtension());
             $environment->addExtension(new GithubFlavoredMarkdownExtension());
+            $environment->addExtension(new EmbedExtension());
             $converter = new MarkdownConverter($environment);
 
             $parsedReplies = [];
