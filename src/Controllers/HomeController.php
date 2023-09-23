@@ -207,8 +207,8 @@ final class HomeController
                 $cred = unserialize($passFile);
                 $passwd = $cred[$author];
                 if (($data['username'] === $author) && ($data['passwd'] === $passwd)) {
-                    $session['sh_author'] = $author;
-                    $session['sh_sign'] = $passwd;
+                    $session['sh_author'] = $data['username'];
+                    $session['sh_sign'] = $data['passwd'];
                     $msg = 'OK';
                 } else {
                     $session::destroy();

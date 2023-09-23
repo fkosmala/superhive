@@ -27,6 +27,13 @@ final class PagesController
     public function __construct(ContainerInterface $app)
     {
         $this->app = $app;
+
+        $session = $this->app->get('session');
+
+        $this->app->get('view')->getEnvironment()->addGlobal("user", [
+            'author' => $session['sh_author'],
+            'signature' => $session['sh_sign'],
+        ]);
     }
 
     /**

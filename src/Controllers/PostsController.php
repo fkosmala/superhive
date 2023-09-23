@@ -39,6 +39,13 @@ final class PostsController
         $this->app = $app;
         $genPosts = new Common($this->app);
         $genPosts->genPostsFile();
+
+        $session = $this->app->get('session');
+
+        $this->app->get('view')->getEnvironment()->addGlobal("user", [
+            'author' => $session['sh_author'],
+            'signature' => $session['sh_sign'],
+        ]);
     }
 
     /**
