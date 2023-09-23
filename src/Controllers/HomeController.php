@@ -197,21 +197,27 @@ final class HomeController
         $author = $settings['author'];
         $data = $request->getParsedBody();
 
-        if (isset($data['username']) && $data['username'] === $author) {
-            $passFile = file_get_contents($this->app->get('password'));
-            $cred = unserialize($passFile);
-            $passwd = $cred[$author];
-            if ($data['passwd'] === $passwd) {
-                $session['sh_author'] = $author;
-                $session['sh_sign'] = $passwd;
+        if (isset($data['username'])) {
+            if (preg_match('/(hive-\d{6})/i', $author) == 1) {
+                $session['sh_author'] = $data['username'];
+                $session['sh_sign'] = $data['passwd'];
                 $msg = 'OK';
             } else {
-                $session::destroy();
-                $msg = 'Not Ok';
+                $passFile = file_get_contents($this->app->get('password'));
+                $cred = unserialize($passFile);
+                $passwd = $cred[$author];
+                if (($data['username'] === $author) && ($data['passwd'] === $passwd)) {
+                    $session['sh_author'] = $author;
+                    $session['sh_sign'] = $passwd;
+                    $msg = 'OK';
+                } else {
+                    $session::destroy();
+                    $msg = 'Not Ok';
+                }
             }
         } else {
             $session::destroy();
-                $msg = 'Not Ok';
+            $msg = 'Not Ok';
         }
 
         $response->getBody()->write($msg);

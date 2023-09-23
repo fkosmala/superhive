@@ -1,13 +1,17 @@
 {% extends "admin/admin-layout.html" %}
 
 {% block styles %}
-<style>
-	#tagPosts { display:none;}
-</style>
 {% endblock %}
 
 {% block content %}
-    <h1>Welcome to your panel!</h1>
+    <h1>Welcome to the {{ settings.title }} panel!</h1>
+    {% if settings.author is not same as user.author %}
+    <article>
+        <p>Hello <strong>{{ user.author|capitalize }}</strong>!</p>
+        <p>This is the <strong>{{ settings.title }}</strong> blog. You're not the owner but you can publish on this community blog.</p>
+        <a href="{{ url_for('admin-newpost') }}"><button>Write a post</button></a>
+    </article>
+    {% else %}
     <div class="grid">
         <article>
             <p>Posts:</p>
@@ -26,38 +30,11 @@
             <h3>{{ account.savings_balance }}</h3>
             <h3>{{ account.savings_hbd_balance }}</h3>
             <a href="{{ url_for('admin-wallet') }}"><button>Wallet</button></a>
-        </article>
-        
+        </article>   
     </div>
+    {% endif %}
     
 {% endblock %}
 
 {% block scripts %}
-<script>
-	$(function() {
-        $('#devMode').on('change', function() {
-            if($(this).prop('checked')) {
-                $('#devel').val(1);
-            } else {
-                $('#devel').val(0);
-            }
-        });
-        $('#crosspost').on('change', function() {
-            if($(this).prop('checked')) {
-                $('#cross').val(1);
-            } else {
-                $('#cross').val(0);
-            }
-        });
-        
-		if($('#displayTypes option:selected').val() == 'tag') {
-			$('#tagPosts').show();
-		};
-		$( "#displayTypes" ).change(function() {
-			if($('#displayTypes option:selected').val() == 'tag') {
-				$('#tagPosts').show();
-			} else $('#tagPosts').hide();
-		});
-	});
-</script>
 {% endblock %}

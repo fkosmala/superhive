@@ -39,7 +39,7 @@
 			username = $('#account').val();
 			if (username.length < 3) {
 				$('#signEvent').text('Please enter a real hive account (min 3 letters)');
-			} else if (username != "{{ settings.author }}") {
+			} else if ((username != "{{ settings.author }}") && ("{{ settings.author }}".match(/(hive-\d{6})/) == null)) {
 				$('#signEvent').text('Please enter the original installation account');
 			} else {
 				hive_keychain.requestSignBuffer(

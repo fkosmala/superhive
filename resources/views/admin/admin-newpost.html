@@ -31,10 +31,7 @@
 <p>Don't forget : this post will be posted on Blockchain and cannot be deleted (but you can edit it)</p>
 
 {% if 'hive-' in settings.author %}
-<article>
-	<label for="postTitle">HIVE account</label>
-	<input name="postAuthor" id="postAuthor" type="text" placeholder="Enter your HIVE author account">
-</article>
+<input id="postAuthor" type="hidden" value="{{ user.author }}">
 {% else %}
 <input id="postAuthor" type="hidden" value="{{ settings.author }}">
 {% endif %}
@@ -51,8 +48,13 @@
 		<h2>
 			<label for="postTags">Tags</label>
 		</h2>
+		{% set regex = '/^hive-[0-9]{6}$/' %}
 		{% if postTags %}
-		<span id="tag1">{{ postTags[0] }}</span> <input name="postTags" id="postTags" type="text" placeholder="Find some tags" value="{% for tag in postTags %}{% if loop.index > 1 %}{{ tag }} {% endif %}{% endfor %}">
+		<span id="tag1">{{ postTags[0] }}</span>
+		<input name="postTags" id="postTags" type="text" placeholder="Find some tags" value="{% for tag in postTags %}{% if loop.index > 1 %}{{ tag }} {% endif %}{% endfor %}">
+		{% elseif settings.author matches regex %}
+		<span id="tag1">{{ settings.author }}</span>
+		<input name="postTags" id="postTags" type="text" placeholder="Find some tags">
 		{% else %}
 		<input name="postTags" id="postTags" type="text" placeholder="Find some tags">
 		{% endif %}

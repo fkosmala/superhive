@@ -115,19 +115,11 @@ $container->set('view', static function () {
     ];
     // Disable Cache on DevMode
     if ($settings['devMode'] === true) {
-        return Twig::create(
-            $tpls,
-            [
-                'cache' => false,
-            ]
-        );
+        $cache = false;
+    } else {
+        $cache = __DIR__ . '/../cache/';
     }
-    return Twig::create(
-        $tpls,
-        [
-            'cache' => __DIR__ . '/../cache/',
-        ]
-    );
+    return Twig::create($tpls, ['cache' => $cache]);
 });
 
 //Set Session engine
@@ -139,14 +131,6 @@ $container->set('session', static function () {
 $app = Bridge::create($container);
 $app->add(TwigMiddleware::createFromContainer($app));
 
-// Add Error Middleware on DevMode
-if ($settings['devMode'] === true) {
-    $app->add(new Whoops());
-    $minify = false;
-} else {
-    $minify = true;
-}
-
 // Add Basic Auth for admin panel
 $app->add(
     new Session([
@@ -155,6 +139,14 @@ $app->add(
         'lifetime' => '1 hour',
     ])
 );
+
+// Add Error Middleware on DevMode
+if ($settings['devMode'] === true) {
+    $app->add(new Whoops());
+    $minify = false;
+} else {
+    $minify = true;
+}
 
 // create vars to see if install is needed
 $scheme = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http');

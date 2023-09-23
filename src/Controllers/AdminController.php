@@ -46,9 +46,11 @@ final class AdminController
          */
         $settings = $this->app->get('settings');
         $session = $this->app->get('session');
-        $cred = unserialize(file_get_contents($this->app->get('password')));
-        $author = $settings['author'];
-        $passwd = $cred[$author];
+
+        $this->app->get('view')->getEnvironment()->addGlobal("user", [
+            'author' => $session['sh_author'],
+            'signature' => $session['sh_sign'],
+        ]);
 
         /* If sessons keys are not set */
         if (!isset($session['sh_author']) || (!isset($session['sh_sign']))) {
@@ -56,9 +58,15 @@ final class AdminController
             die;
         }
         /* If session keys are not good */
-        if (($settings['author'] !== $session['sh_author']) || ($passwd !== $session['sh_sign'])) {
-            header('Location: /login');
-            die;
+        if (preg_match('/(hive-\d{6})/i', $settings['author']) != 1) {
+            $cred = unserialize(file_get_contents($this->app->get('password')));
+            $author = $settings['author'];
+            $passwd = $cred[$author];
+
+            if (($settings['author'] !== $session['sh_author']) || ($passwd !== $session['sh_sign'])) {
+                header('Location: /login');
+                die;
+            }
         }
     }
 

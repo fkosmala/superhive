@@ -19,11 +19,15 @@
           <summary>Menu</summary>
           <ul>
             <li><a href="{{ url_for('admin') }}"><i class="fas fa-home fa-fw"></i> Dashboard</a></li>
+            {% if settings.author is not same as user.author %}
+            <li><a href="{{ url_for('admin-newpost') }}"><i class="fas fa-pen fa-fw"></i> New post</a></li>
+            {% else %}
             <li><a href="{{ url_for('admin-posts') }}"><i class="fas fa-paste fa-fw"></i> Posts</a></li>
             <li><a href="{{ url_for('admin-pages') }}"><i class="fas fa-file-alt fa-fw"></i> Pages</a></li>
             <li><a href="{{ url_for('admin-wallet') }}"><i class="fas fa-wallet fa-fw"></i> Wallet</a></li>
             <li><a href="{{ url_for('admin-settings') }}"><i class="fas fa-wrench fa-fw"></i> Settings</a></li>
             <li><a href="{{ url_for('admin-themes') }}"><i class="fas fa-paint-brush fa-fw"></i> Themes</a></li>
+            {% endif %}
             <li><a href="{{ url_for('admin-logout') }}"><i class="fas fa-times-circle fa-fw"></i> Log out</a></li>
           </ul>
         </details>
