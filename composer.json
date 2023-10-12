@@ -7,7 +7,8 @@
     "hive",
     "blog",
     "blockchain",
-    "generator"
+    "generator",
+    "cms"
   ],
   "authors": [
     {
@@ -20,16 +21,18 @@
   "homepage": "https://github.com/fkosmala/superhive",
   "support": {
     "email": "contact@florent-kosmala.fr",
+    "source": "https://github.com/fkosmala/superhive/",
     "issues": "https://github.com/fkosmala/superhive/issues",
     "docs": "https://docs.superhive.me/",
-    "rss": "https://blog.superhive.me/feed"
+    "rss": "https://blog.superhive.me/feed",
+    "chat": "https://discord.gg/u2qfuaFMwt"
   },
   "require": {
-    "php": ">=7.4",
+    "php": ">=8.1",
     "bryanjhv/slim-session": "~4.0",
     "christianklisch/slim-minify": "^0.7.0",
     "hive/hive-php-lib": "dev-main",
-    "league/commonmark": "2.4.x-dev",
+    "league/commonmark": "2.4.x",
     "php-di/php-di": "^6.1",
     "slim/psr7": "^1.0",
     "slim/slim": "4.*",
@@ -43,7 +46,7 @@
     "pds/skeleton": "^1.0",
     "squizlabs/php_codesniffer": "^3.7"
   },
-  "minimum-stability": "stable",
+  "minimum-stability": "dev",
   "prefer-stable": true,
   "autoload": {
     "psr-4": {
@@ -64,5 +67,11 @@
       "vendor/bin/phpcs --standard=PSR1,PSR12 ./src"
     ],
     "start": "php -S localhost:8080 -t public"
-  }
+  },
+  "funding": [
+    {
+      "type": "hive",
+      "url": "https://stream.hivelive.me/donate/bambukah"
+    }
+  ]
 }

@@ -43,7 +43,7 @@ final class InstallController
         $requirements = [];
 
         /* Check if PHP version is ok tu run SuperHive */
-        if (version_compare(PHP_VERSION, '7.4.0', '>=')) {
+        if (version_compare(PHP_VERSION, '8.1.0', '>=')) {
             $req = [
                 'status' => 'success',
                 'message' => 'Your PHP version can run SuperHive. PHP version: ' . PHP_VERSION,
@@ -51,7 +51,7 @@ final class InstallController
         } else {
             $req = [
                 'status' => 'error',
-                'message' => 'Please, update your PHP version to run SuperHive. (PHP 7.4 minimum)',
+                'message' => 'Please, update your PHP version to run SuperHive. (PHP 8.1 minimum)',
             ];
         }
         $requirements[] = $req;
