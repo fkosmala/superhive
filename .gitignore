@@ -2,5 +2,7 @@ composer.phar
 /cache/
 /composer/
 /config/
+/public/themes/
+!/public/themes/minimal/
 /resources/blog/
 /vendor/

@@ -148,6 +148,19 @@ final class HomeController
 
         foreach ($articles as $article) {
             if (in_array($article['title'], $result)) {
+                //Get featured image
+                $meta = json_decode($article['json_metadata'], true);
+                if (
+                    array_key_exists('image', $meta)
+                    && is_array($meta['image'])
+                    && array_key_exists(0, $meta['image'])
+                ) {
+                    $featured = $meta['image'][0];
+                } else {
+                    $featured = '/themes/' . $settings['theme'] . '/no-img.png';
+                }
+                $article['featured'] = $featured;
+
                 $posts[] = $article;
             }
         }

@@ -15,7 +15,6 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use phpseclib3\File\ASN1\Maps\UserNotice;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -86,8 +85,6 @@ final class InstallController
      */
     public function install(Request $request, Response $response): Response
     {
-        $response->getBody()->write('notok');
-
         if (!file_exists($this->app->get('password'))) {
             $data = $request->getParsedBody();
             // Create password file with username and password (signed msg))
@@ -103,6 +100,8 @@ final class InstallController
 
                 $response->getBody()->write('ok');
             }
+        } else {
+            $response->getBody()->write('notok');
         }
 
         return $response;

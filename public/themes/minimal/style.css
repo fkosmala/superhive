@@ -1,10 +1,11 @@
 .title {font-size: 2.35em;margin: 0;}
 .subtitle {font-size: 1.35em;}
 .social {font-size:1.5rem;}
-.inline{display:inline;}
+.inline, aside li a {display:inline;}
 .output {text-align:center;margin:1% 10%;padding:1%;border:2px solid #1095c1}
 main{padding:0 !important;}
 footer{border-top: 1px solid #AAA}
+.thumb{max-width: 20%;}
 
 @media (min-width: 992px) {
   main .grid {

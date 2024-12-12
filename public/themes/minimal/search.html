@@ -5,15 +5,22 @@
     <h1>Search about "{{ term }}"</h1>
     
     {% if posts %}
-	<ul>
+	<section>
 		{% for post in posts %}
-			<h2>
-				<a href="{{ url_for('post', { 'permlink': post.permlink }) }}">{{ post.title }}</a>
-			</h2>
-			<p>{{ post.body|striptags|slice(0,200) }}...</p>
-			<hr>
+		<div class="grid">
+			<div>
+				<h2>
+					<a href="{{ url_for('post', { 'permlink': post.permlink }) }}">{{ post.title }}</a>
+				</h2>
+				<p>{{ post.body|striptags|slice(0,200) }}...</p>
+			</div>
+			<div>
+				<img src="{{ post.featured }}" alt="Picture of post : {{ post.title }}">
+			</div>
+		</div>
+		<hr>
 		{% endfor %}
-	</ul>
+	</section>
     {% else %}
 		<p>No post found ! Sorry :(</p>
     {% endif %}
