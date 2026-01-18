@@ -44,28 +44,31 @@ final class AdminController
         /*
          *  Check security in session for admin functions
          */
-        $settings = $this->app->get('settings');
-        $session = $this->app->get('session');
+        $settings = $this->app->get("settings");
+        $session = $this->app->get("session");
 
-        $this->app->get('view')->getEnvironment()->addGlobal("user", [
-            'author' => $session['sh_author'],
-            'signature' => $session['sh_sign'],
-        ]);
+        $this->app
+            ->get("view")
+            ->getEnvironment()
+            ->addGlobal("user", [
+                "author" => $session["sh_author"],
+                "signature" => $session["sh_sign"],
+            ]);
 
         /* If sessons keys are not set */
-        if (!isset($session['sh_author']) || (!isset($session['sh_sign']))) {
-            header('Location: /login');
-            die;
+        if (!isset($session["sh_author"]) || !isset($session["sh_sign"])) {
+            header("Location: /login");
+            die();
         }
         /* If session keys are not good */
-        if (preg_match('/(hive-\d{6})/i', $settings['author']) != 1) {
-            $cred = unserialize(file_get_contents($this->app->get('password')));
-            $author = $settings['author'];
+        if (preg_match("/(hive-\d{6})/i", $settings["author"]) != 1) {
+            $cred = unserialize(file_get_contents($this->app->get("password")));
+            $author = $settings["author"];
             $passwd = $cred[$author];
 
-            if (($settings['author'] !== $session['sh_author']) || ($passwd !== $session['sh_sign'])) {
-                header('Location: /login');
-                die;
+            if ($settings["author"] !== $session["sh_author"] || $passwd !== $session["sh_sign"]) {
+                header("Location: /login");
+                die();
             }
         }
     }
@@ -83,33 +86,36 @@ final class AdminController
     public function adminIndex(Response $response): Response
     {
         // Create array from config file
-        $settings = $this->app->get('settings');
-        $accountFile = $this->app->get('accountfile');
-        $blogFile = $this->app->get('blogfile');
+        $settings = $this->app->get("settings");
+        $accountFile = $this->app->get("accountfile");
+        $blogFile = $this->app->get("blogfile");
 
         $posts = json_decode(file_get_contents($blogFile), true);
         $nbPosts = count($posts);
 
         $apiConfig = [
-            'hiveNode' => $settings['api'],
-            'debug' => false,
+            "hiveNode" => $settings["api"],
+            "debug" => false,
         ];
         $api = new HiveCondenser($apiConfig);
 
-        $cache_interval = $settings['delay'];
+        $cache_interval = $settings["delay"];
 
         $current_time = time();
-        if ((!file_exists($accountFile)) || ($current_time - filemtime($accountFile) > $cache_interval)) {
-            $result = json_encode($api->getAccounts($settings['author']), JSON_PRETTY_PRINT);
+        if (
+            !file_exists($accountFile) ||
+            $current_time - filemtime($accountFile) > $cache_interval
+        ) {
+            $result = json_encode($api->getAccounts([$settings["author"]]), JSON_PRETTY_PRINT);
             file_put_contents($accountFile, $result);
         }
 
         $account = json_decode(file_get_contents($accountFile), true);
 
-        return $this->app->get('view')->render($response, '/admin/admin-index.html', [
-            'settings' => $settings,
-            'account' => $account[0],
-            'nbPosts' => $nbPosts
+        return $this->app->get("view")->render($response, "/admin/admin-index.html", [
+            "settings" => $settings,
+            "account" => $account[0],
+            "nbPosts" => $nbPosts,
         ]);
     }
 
@@ -126,22 +132,25 @@ final class AdminController
     public function adminSettings(Response $response): Response
     {
         // Create array from config file
-        $settings = $this->app->get('settings');
-        $accountFile = $this->app->get('accountfile');
-        $langFile = $this->app->get('basedir') . 'resources/languages.json';
-        $nodesFile = $this->app->get('basedir') . 'resources/nodes.json';
+        $settings = $this->app->get("settings");
+        $accountFile = $this->app->get("accountfile");
+        $langFile = $this->app->get("basedir") . "resources/languages.json";
+        $nodesFile = $this->app->get("basedir") . "resources/nodes.json";
 
         $apiConfig = [
-            'hiveNode' => $settings['api'],
-            'debug' => false,
+            "hiveNode" => $settings["api"],
+            "debug" => false,
         ];
         $api = new HiveCondenser($apiConfig);
 
-        $cache_interval = $settings['delay'];
+        $cache_interval = $settings["delay"];
 
         $current_time = time();
-        if ((!file_exists($accountFile)) || ($current_time - filemtime($accountFile) > $cache_interval)) {
-            $result = json_encode($api->getAccounts($settings['author']), JSON_PRETTY_PRINT);
+        if (
+            !file_exists($accountFile) ||
+            $current_time - filemtime($accountFile) > $cache_interval
+        ) {
+            $result = json_encode($api->getAccounts([$settings["author"]]), JSON_PRETTY_PRINT);
             file_put_contents($accountFile, $result);
         }
 
@@ -149,11 +158,11 @@ final class AdminController
         $langs = json_decode(file_get_contents($langFile), true);
         $nodes = json_decode(file_get_contents($nodesFile), true);
 
-        return $this->app->get('view')->render($response, '/admin/admin-settings.html', [
-            'settings' => $settings,
-            'account' => $account[0],
-            'languages' => $langs,
-            'nodes' => $nodes,
+        return $this->app->get("view")->render($response, "/admin/admin-settings.html", [
+            "settings" => $settings,
+            "account" => $account[0],
+            "languages" => $langs,
+            "nodes" => $nodes,
         ]);
     }
 
@@ -169,12 +178,12 @@ final class AdminController
     public function adminThemes(Response $response): Response
     {
         // Create array from config file
-        $settings = $this->app->get('settings');
+        $settings = $this->app->get("settings");
 
-        $themes = array_map('basename', glob($this->app->get('themesdir') . '*', GLOB_ONLYDIR));
-        return $this->app->get('view')->render($response, '/admin/admin-themes.html', [
-            'settings' => $settings,
-            'themes' => $themes,
+        $themes = array_map("basename", glob($this->app->get("themesdir") . "*", GLOB_ONLYDIR));
+        return $this->app->get("view")->render($response, "/admin/admin-themes.html", [
+            "settings" => $settings,
+            "themes" => $themes,
         ]);
     }
 
@@ -189,13 +198,13 @@ final class AdminController
      *  */
     public function logout(Response $response): Response
     {
-        $session = $this->app->get('session');
+        $session = $this->app->get("session");
 
-        $session->delete('sh_author');
-        $session->delete('sh_sign');
+        $session->delete("sh_author");
+        $session->delete("sh_sign");
         $session::destroy();
 
-        return $response->withHeader('Location', '/login')->withStatus(302);
+        return $response->withHeader("Location", "/login")->withStatus(302);
     }
 
     /**
@@ -212,12 +221,12 @@ final class AdminController
     public function save(Request $request, Response $response): Response
     {
         $data = $request->getParsedBody();
-        if (isset($data['redirect'])) {
-            $redirect = $data['redirect'];
+        if (isset($data["redirect"])) {
+            $redirect = $data["redirect"];
         } else {
-            $redirect = '/admin/';
+            $redirect = "/admin/";
         }
-        $settings = $this->app->get('settings');
+        $settings = $this->app->get("settings");
 
         foreach ($data as $key => $value) {
             if ($value === "true") {
@@ -240,10 +249,10 @@ final class AdminController
 
         $file = json_encode($settings, JSON_PRETTY_PRINT);
         // Create array from config file
-        file_put_contents($this->app->get('configfile'), $file);
-        unlink($this->app->get('blogfile'));
+        file_put_contents($this->app->get("configfile"), $file);
+        unlink($this->app->get("blogfile"));
 
-        return $response->withHeader('Location', $redirect)->withStatus(302);
+        return $response->withHeader("Location", $redirect)->withStatus(302);
     }
 
     /**
@@ -258,10 +267,10 @@ final class AdminController
      *  */
     public function saveTheme(string $theme, Response $response): Response
     {
-        $settings = $this->app->get('settings');
-        $settings['theme'] = $theme;
+        $settings = $this->app->get("settings");
+        $settings["theme"] = $theme;
         $file = json_encode($settings, JSON_PRETTY_PRINT);
-        file_put_contents($this->app->get('configfile'), $file);
-        return $response->withHeader('Location', '/admin/themes')->withStatus(302);
+        file_put_contents($this->app->get("configfile"), $file);
+        return $response->withHeader("Location", "/admin/themes")->withStatus(302);
     }
 }

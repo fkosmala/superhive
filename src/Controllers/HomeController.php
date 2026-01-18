@@ -31,7 +31,7 @@ final class HomeController
     public function __construct(ContainerInterface $app)
     {
         $this->app = $app;
-        $this->settings = $app->get('settings');
+        $this->settings = $app->get("settings");
 
         $common = new Common($this->app);
         $common->genPostsFile();
@@ -51,7 +51,7 @@ final class HomeController
         $settings = $this->settings;
 
         // The file with the latest posts.
-        $file = $this->app->get('blogfile');
+        $file = $this->app->get("blogfile");
 
         // Get the JSON
         $articles = json_decode(file_get_contents($file), true);
@@ -62,22 +62,22 @@ final class HomeController
 
         foreach ($articles as &$article) {
             // Create HTML from Markdown
-            $article['body'] = $converter->convert($article['body']);
+            $article["body"] = $converter->convert($article["body"]);
 
             //Get featured image
-            $meta = json_decode($article['json_metadata'], true);
+            $meta = json_decode($article["json_metadata"], true);
 
             if (
-                array_key_exists('image', $meta)
-                && is_array($meta['image'])
-                && array_key_exists(0, $meta['image'])
+                array_key_exists("image", $meta) &&
+                is_array($meta["image"]) &&
+                array_key_exists(0, $meta["image"])
             ) {
-                $featured = $meta['image'][0];
+                $featured = $meta["image"][0];
             } else {
-                $featured = '/themes/' . $settings['theme'] . '/no-img.png';
+                $featured = "/themes/" . $settings["theme"] . "/no-img.png";
             }
 
-            $article['featured'] = $featured;
+            $article["featured"] = $featured;
 
             $parsedPosts[] = $article;
         }
@@ -88,12 +88,12 @@ final class HomeController
         $lastPosts = $common->getLastPosts();
 
         // Return view with articles
-        return $this->app->get('view')->render($response, $settings['theme'] . '/index.html', [
-            'articles' => $parsedPosts,
-            'tags' => $mostUsedTags,
-            'popular' => $popular,
-            'last' => $lastPosts,
-            'settings' => $settings,
+        return $this->app->get("view")->render($response, $settings["theme"] . "/index.html", [
+            "articles" => $parsedPosts,
+            "tags" => $mostUsedTags,
+            "popular" => $popular,
+            "last" => $lastPosts,
+            "settings" => $settings,
         ]);
     }
 
@@ -115,60 +115,60 @@ final class HomeController
         $posts = [];
         $result = [];
 
-        if (isset($data['term'])) {
-            $term = $data['term'];
+        if (isset($data["term"])) {
+            $term = $data["term"];
         } else {
-            $term = 'nerd';
+            $term = "nerd";
         }
 
-        $file = $this->app->get('blogfile');
+        $file = $this->app->get("blogfile");
         $articles = json_decode(file_get_contents($file), true);
 
         $matches = [];
 
         foreach ($articles as $article) {
             // Check in Title
-            if (preg_match("/\b{$term}\b/i", $article['title'])) {
-                $matches[] = $article['title'];
+            if (preg_match("/\b{$term}\b/i", $article["title"])) {
+                $matches[] = $article["title"];
             }
 
             // Check in Body
-            if (preg_match("/\b{$term}\b/i", $article['body'])) {
-                $matches[] = $article['title'];
+            if (preg_match("/\b{$term}\b/i", $article["body"])) {
+                $matches[] = $article["title"];
             }
 
             //Check in Tags
-            $metadata = json_decode($article['json_metadata'], true);
-            $tags = implode(',', $metadata['tags']);
+            $metadata = json_decode($article["json_metadata"], true);
+            $tags = implode(",", $metadata["tags"]);
             if (preg_match("/\b{$term}\b/i", $tags)) {
-                $matches[] = $article['title'];
+                $matches[] = $article["title"];
             }
         }
         $result = array_unique($matches);
 
         foreach ($articles as $article) {
-            if (in_array($article['title'], $result)) {
+            if (in_array($article["title"], $result)) {
                 //Get featured image
-                $meta = json_decode($article['json_metadata'], true);
+                $meta = json_decode($article["json_metadata"], true);
                 if (
-                    array_key_exists('image', $meta)
-                    && is_array($meta['image'])
-                    && array_key_exists(0, $meta['image'])
+                    array_key_exists("image", $meta) &&
+                    is_array($meta["image"]) &&
+                    array_key_exists(0, $meta["image"])
                 ) {
-                    $featured = $meta['image'][0];
+                    $featured = $meta["image"][0];
                 } else {
-                    $featured = '/themes/' . $settings['theme'] . '/no-img.png';
+                    $featured = "/themes/" . $settings["theme"] . "/no-img.png";
                 }
-                $article['featured'] = $featured;
+                $article["featured"] = $featured;
 
                 $posts[] = $article;
             }
         }
 
-        return $this->app->get('view')->render($response, $settings['theme'] . '/search.html', [
-            'term' => $term,
-            'posts' => $posts,
-            'settings' => $settings,
+        return $this->app->get("view")->render($response, $settings["theme"] . "/search.html", [
+            "term" => $term,
+            "posts" => $posts,
+            "settings" => $settings,
         ]);
     }
 
@@ -186,8 +186,8 @@ final class HomeController
     {
         $settings = $this->settings;
 
-        return $this->app->get('view')->render($response, 'login.html', [
-            'settings' => $settings,
+        return $this->app->get("view")->render($response, "login.html", [
+            "settings" => $settings,
         ]);
     }
 
@@ -206,31 +206,31 @@ final class HomeController
     public function loginPost(Request $request, Response $response): Response
     {
         $settings = $this->settings;
-        $session = $this->app->get('session');
-        $author = $settings['author'];
+        $session = $this->app->get("session");
+        $author = $settings["author"];
         $data = $request->getParsedBody();
 
-        if (isset($data['username'])) {
-            if (preg_match('/(hive-\d{6})/i', $author) == 1) {
-                $session['sh_author'] = $data['username'];
-                $session['sh_sign'] = $data['passwd'];
-                $msg = 'OK';
+        if (isset($data["username"])) {
+            if (preg_match("/(hive-\d{6})/i", $author) == 1) {
+                $session["sh_author"] = $data["username"];
+                $session["sh_sign"] = $data["passwd"];
+                $msg = "OK";
             } else {
-                $passFile = file_get_contents($this->app->get('password'));
+                $passFile = file_get_contents($this->app->get("password"));
                 $cred = unserialize($passFile);
                 $passwd = $cred[$author];
-                if (($data['username'] === $author) && ($data['passwd'] === $passwd)) {
-                    $session['sh_author'] = $data['username'];
-                    $session['sh_sign'] = $data['passwd'];
-                    $msg = 'OK';
+                if ($data["username"] === $author && $data["passwd"] === $passwd) {
+                    $session["sh_author"] = $data["username"];
+                    $session["sh_sign"] = $data["passwd"];
+                    $msg = "OK";
                 } else {
                     $session::destroy();
-                    $msg = 'Not Ok';
+                    $msg = "Not Ok";
                 }
             }
         } else {
             $session::destroy();
-            $msg = 'Not Ok';
+            $msg = "Not Ok";
         }
 
         $response->getBody()->write($msg);
@@ -238,31 +238,31 @@ final class HomeController
     }
 
     /**
-     * Feed function
-     *
+     * Feed function
+     *
      * Generate the RSS feed of account's posts
      *
      * @param Request  $request
      * @param Response $response
      *
      * @return Response $response
-     */
+     */
     public function feed(Request $request, Response $response): Response
     {
         $settings = $this->settings;
         $data = $request->getQueryParams();
-        $tag = $data['tag'] ?? null;
+        $tag = $data["tag"] ?? null;
         $matches = [];
 
-        $file = $this->app->get('blogfile');
+        $file = $this->app->get("blogfile");
         $articles = json_decode(file_get_contents($file), true);
 
         if ($tag !== null) {
             foreach ($articles as $article) {
-                $metadata = json_decode($article['json_metadata'], true);
-                $tags = implode(',', $metadata['tags']);
+                $metadata = json_decode($article["json_metadata"], true);
+                $tags = implode(",", $metadata["tags"]);
                 if (preg_match("/\b{$tag}\b/i", $tags)) {
-                    $matches[] = $article['title'];
+                    $matches[] = $article["title"];
                 }
             }
         }
@@ -270,9 +270,9 @@ final class HomeController
         $result = array_unique($matches);
 
         if (!empty($result)) {
-            $posts = array();
+            $posts = [];
             foreach ($articles as $article) {
-                if (in_array($article['title'], $result)) {
+                if (in_array($article["title"], $result)) {
                     $posts[] = $article;
                 }
             }
@@ -281,10 +281,10 @@ final class HomeController
             $articles = $posts;
         }
 
-        header('Content-Type: text/xml');
-        return $this->app->get('view')->render($response, '/feed.xml', [
-            'articles' => $articles,
-            'settings' => $settings,
+        header("Content-Type: text/xml");
+        return $this->app->get("view")->render($response, "/feed.xml", [
+            "articles" => $articles,
+            "settings" => $settings,
         ]);
     }
 
@@ -303,23 +303,23 @@ final class HomeController
 
         $pages = [];
 
-        $file = $this->app->get('blogfile');
+        $file = $this->app->get("blogfile");
         $articles = json_decode(file_get_contents($file), true);
 
-        $pagesDir = $this->app->get('pagesdir');
+        $pagesDir = $this->app->get("pagesdir");
         $files = preg_grep('~\.(html)$~', scandir($pagesDir));
         foreach ($files as $file) {
             $page = [];
-            $page['created'] = filemtime($pagesDir . $file);
-            $page['name'] = mb_substr($file, 0, -5);
+            $page["created"] = filemtime($pagesDir . $file);
+            $page["name"] = mb_substr($file, 0, -5);
             $pages[] = $page;
         }
 
-        header('Content-Type: text/xml');
-        return $this->app->get('view')->render($response, '/sitemap.xml', [
-            'articles' => $articles,
-            'pages' => $pages,
-            'settings' => $settings,
+        header("Content-Type: text/xml");
+        return $this->app->get("view")->render($response, "/sitemap.xml", [
+            "articles" => $articles,
+            "pages" => $pages,
+            "settings" => $settings,
         ]);
     }
 
@@ -335,15 +335,15 @@ final class HomeController
     public function about(Response $response): Response
     {
         $settings = $this->settings;
-        $accountFile = $this->app->get('accountfile');
+        $accountFile = $this->app->get("accountfile");
         $account = json_decode(file_get_contents($accountFile), true);
 
-        $accountBio = json_decode($account[0]['posting_json_metadata'], true);
+        $accountBio = json_decode($account[0]["posting_json_metadata"], true);
 
-        return $this->app->get('view')->render($response, $settings['theme'] . '/about.html', [
-            'settings' => $settings,
-            'data' => $account[0],
-            'account' => $accountBio['profile'],
+        return $this->app->get("view")->render($response, $settings["theme"] . "/about.html", [
+            "settings" => $settings,
+            "data" => $account[0],
+            "account" => $accountBio["profile"],
         ]);
     }
 }
